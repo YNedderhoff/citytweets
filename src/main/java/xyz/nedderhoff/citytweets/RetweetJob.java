@@ -27,7 +27,7 @@ public class RetweetJob {
     @Autowired
     public RetweetJob(Twitter twitter,
                       RetweetCache retweetCache,
-                      @Value("${search:defaultsearch}") String search) {
+                      @Value("${search}") String search) {
         this.twitter = twitter;
         this.retweetCache = retweetCache;
         this.search = search;
