@@ -1,0 +1,22 @@
+### Ports
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      base-path: /
+    endpoint:
+      health:
+        show-details: always
+
+spring:
+  ### Profiles
+  profiles:
+    active: textlogs
+
+  ### Turn off Spring Boot banner
+  main:
+    banner-mode: off

@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+twitter4j.properties
+/.idea
 ### STS ###
 .apt_generated
 .classpath
@@ -26,7 +28,7 @@ target/
 /nbdist/
 /.nb-gradle/
 build/
-!**/src/main/**/build/
+!**/src/main/**/builds
 !**/src/test/**/build/
 
 ### VS Code ###

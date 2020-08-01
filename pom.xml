@@ -16,6 +16,8 @@
 
 	<properties>
 		<java.version>11</java.version>
+		<twitter4j-version>4.0.7</twitter4j-version>
+		<ecs-logging-java-version>0.4.0</ecs-logging-java-version>
 	</properties>
 
 	<dependencies>
@@ -39,6 +41,22 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+			<groupId>org.twitter4j</groupId>
+			<artifactId>twitter4j-stream</artifactId>
+			<version>${twitter4j-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.twitter4j</groupId>
+			<artifactId>twitter4j-core</artifactId>
+			<version>${twitter4j-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>co.elastic.logging</groupId>
+			<artifactId>logback-ecs-encoder</artifactId>
+			<version>${ecs-logging-java-version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
