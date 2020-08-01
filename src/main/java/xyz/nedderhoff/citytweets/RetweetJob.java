@@ -44,7 +44,7 @@ public class RetweetJob {
                 .filter(tweet -> !retweetCache.contains(tweet.getId()))
                 .filter(tweet -> !tweet.getText().startsWith("RT @"))
                 .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
-                        tweet.getId(), tweet.getUser().getName(), tweet.getLang(), tweet.getGeoLocation(), tweet.getText())
+                        tweet.getId(), tweet.getUser().getName(), tweet.getLang(), tweet.getUser().getLocation(), tweet.getText())
                 )
                 .map(Status::getId)
                 .forEach(this::retweet);
