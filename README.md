@@ -1,2 +1,4 @@
 # citytweets
 Retweet bot, currently powering twitter.com/luebbecketweets and twitter.com/mindentweets
+
+CI based on https://medium.com/@alexander.volminger/ci-cd-for-java-maven-using-github-actions-d009a7cb4b8f
