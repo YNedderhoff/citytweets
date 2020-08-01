@@ -20,3 +20,7 @@ spring:
   ### Turn off Spring Boot banner
   main:
     banner-mode: off
+
+search: "stupidSearchThatHopefullyNeverMatches"
+location-search: "stupidLocationSearchThatHopefullyNeverMatches"
+location-to-follow: "stupidToFollowThatHopefullyNeverMatches"
