@@ -1,6 +1,6 @@
 #!/bin/bash
 
-exec java -Dinst.type=citytweets \
+exec /usr/local/openjdk-11/java -Dinst.type=citytweets \
     -Dcitytweets.inst.id=$HOSTNAME \
     ${JVM_PARAMETERS:-} \
     ${JAVA_OPTS:-} \
