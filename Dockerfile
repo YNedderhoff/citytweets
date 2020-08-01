@@ -1,4 +1,4 @@
-FROM openjdk:11.0.8-jre-slim
+FROM adoptopenjdk/openjdk11:debianslim
 
 RUN apt-get update \
     && apt-get install curl=7.64.0-4+deb10u1 jq=1.5+dfsg-2+b1 tini=0.18.0-1 --assume-yes --no-install-recommends \
