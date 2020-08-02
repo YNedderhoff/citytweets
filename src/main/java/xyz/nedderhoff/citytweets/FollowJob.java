@@ -16,23 +16,23 @@ import twitter4j.User;
 
 @Component
 @EnableScheduling
-public class FollowerJob {
-    private static final Logger logger = LoggerFactory.getLogger(FollowerJob.class);
+public class FollowJob {
+    private static final Logger logger = LoggerFactory.getLogger(FollowJob.class);
     private static final int FOLLOW_RATE = 1000 * 60 * 60 * 24;
 
-    private final FollowerCache followerCache;
+    private final FriendCache friendCache;
     private final Twitter twitter;
     private final String locationSearch;
     private final String locationToFollow;
     private final String ownHandle;
 
     @Autowired
-    public FollowerJob(FollowerCache followerCache,
-                       Twitter twitter,
-                       @Value("${location-search}") String locationSearch,
-                       @Value("${location-to-follow}") String locationToFollow,
-                       @Value("${own-handle}") String ownHandle) {
-        this.followerCache = followerCache;
+    public FollowJob(FriendCache friendCache,
+                     Twitter twitter,
+                     @Value("${location-search}") String locationSearch,
+                     @Value("${location-to-follow}") String locationToFollow,
+                     @Value("${own-handle}") String ownHandle) {
+        this.friendCache = friendCache;
         this.twitter = twitter;
         this.locationSearch = locationSearch;
         this.locationToFollow = locationToFollow;
@@ -50,7 +50,7 @@ public class FollowerJob {
         result.getTweets().stream()
                 .filter(tweet -> !tweet.getUser().getName().toLowerCase().equals(ownHandle.toLowerCase()))
                 .filter(tweet -> tweet.getUser().getLocation().toLowerCase().contains(locationToFollow.toLowerCase()))
-                .filter(tweet -> !followerCache.contains(tweet.getUser().getId()))
+                .filter(tweet -> !friendCache.contains(tweet.getUser().getId()))
                 .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
                         tweet.getId(), tweet.getUser().getName(), tweet.getLang(), tweet.getUser().getLocation(), tweet.getText())
                 )
@@ -62,7 +62,7 @@ public class FollowerJob {
         try {
             twitter.createFriendship(user.getId());
             logger.info("Successfully followed user {}", user.getName());
-            followerCache.add(user.getId());
+            friendCache.add(user.getId());
         } catch (TwitterException e) {
             logger.error("Error trying to follow user {}", user, e);
         }

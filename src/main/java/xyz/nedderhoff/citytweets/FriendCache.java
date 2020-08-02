@@ -1,16 +1,13 @@
 package xyz.nedderhoff.citytweets;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -21,15 +18,15 @@ import twitter4j.TwitterException;
 
 @Component
 @EnableScheduling
-public class FollowerCache {
-    private static final Logger logger = LoggerFactory.getLogger(FollowerCache.class);
+public class FriendCache {
+    private static final Logger logger = LoggerFactory.getLogger(FriendCache.class);
     private static final int FRIEND_UPDATE_RATE = 1000 * 60 * 60 * 24;
     private static final Set<Long> cache = new ConcurrentSkipListSet<>();
 
     private final Twitter twitter;
 
     @Autowired
-    public FollowerCache(Twitter twitter) {
+    public FriendCache(Twitter twitter) {
         this.twitter = twitter;
     }
 
