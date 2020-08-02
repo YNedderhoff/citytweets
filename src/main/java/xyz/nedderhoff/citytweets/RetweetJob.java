@@ -23,17 +23,14 @@ public class RetweetJob {
     private final Twitter twitter;
     private final RetweetCache retweetCache;
     private final String search;
-    private final String ownHandle;
 
     @Autowired
     public RetweetJob(Twitter twitter,
                       RetweetCache retweetCache,
-                      @Value("${search}") String search,
-                      @Value("${own-handle}") String ownHandle) {
+                      @Value("${search}") String search) {
         this.twitter = twitter;
         this.retweetCache = retweetCache;
         this.search = search;
-        this.ownHandle = ownHandle;
     }
 
     @Scheduled(fixedRate = FETCHING_RATE)
@@ -44,8 +41,10 @@ public class RetweetJob {
         query.setCount(100);
         QueryResult result = twitter.search(query);
 
+        long myId = twitter.getId();
+
         result.getTweets().stream()
-                .filter(tweet -> !tweet.getUser().getName().toLowerCase().equals(ownHandle.toLowerCase()))
+                .filter(tweet -> tweet.getUser().getId() != myId)
                 .filter(tweet -> !retweetCache.contains(tweet.getId()))
                 .filter(tweet -> !tweet.getText().startsWith("RT @"))
                 .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",

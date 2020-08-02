@@ -38,7 +38,7 @@ jobs:
         id: buildx
         uses: crazy-max/ghaction-docker-buildx@v3.2.0
         with:
-          version: latest
+          buildx-version: latest
       - name: Login to Docker Hub
         run: docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
       - name: Build & Push Docker Image
