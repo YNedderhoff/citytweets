@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import twitter4j.Query;
 import twitter4j.QueryResult;
+import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.User;
@@ -45,18 +46,23 @@ public class FollowerJob {
         QueryResult result = twitter.search(query);
 
         result.getTweets().stream()
-                .peek(tweet -> logger.info("Found Tweet Candidate: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
-                        tweet.getId(), tweet.getUser().getName(), tweet.getLang(), tweet.getUser().getLocation(), tweet.getText())
-                )
                 .filter(tweet -> !tweet.getUser().getName().toLowerCase().equals(ownHandle.toLowerCase()))
-                .filter(tweet -> tweet.getUser().getLocation().toLowerCase().contains(locationToFollow.toLowerCase()))
+                .filter(this::hasRequiredLocation)
                 .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
                         tweet.getId(), tweet.getUser().getName(), tweet.getLang(), tweet.getUser().getLocation(), tweet.getText())
                 )
-                .forEach(tweet -> retweet(tweet.getUser()));
+                .forEach(tweet -> follow(tweet.getUser()));
     }
 
-    private void retweet(User user) {
+    private boolean hasRequiredLocation(Status tweet) {
+        String userLocation = tweet.getUser().getLocation().toLowerCase();
+        String requiredLocation = locationToFollow.toLowerCase();
+        boolean locationMatch = userLocation.contains(requiredLocation);
+        logger.info("Candidate Tweet, User Location: {}, Required Location: {}, Match: {}", userLocation, requiredLocation, locationMatch);
+        return locationMatch;
+    }
+
+    private void follow(User user) {
         logger.info("Following user \"{}\"", user.getName());
         try {
             twitter.createFriendship(user.getId());
