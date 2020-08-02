@@ -38,6 +38,7 @@ public class RetweetJob {
         logger.info("Looking for unseen tweets for search {}", search);
 
         Query query = new Query(search);
+        query.setCount(100);
         QueryResult result = twitter.search(query);
 
         result.getTweets().stream()
