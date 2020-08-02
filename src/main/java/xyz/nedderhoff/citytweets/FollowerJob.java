@@ -38,6 +38,7 @@ public class FollowerJob {
         logger.info("Looking for tweets for search {} in order to find followers", locationSearch);
 
         Query query = new Query(locationSearch);
+        query.setCount(100);
         QueryResult result = twitter.search(query);
 
         result.getTweets().stream()
