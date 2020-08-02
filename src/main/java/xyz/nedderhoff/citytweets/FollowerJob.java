@@ -45,6 +45,9 @@ public class FollowerJob {
         QueryResult result = twitter.search(query);
 
         result.getTweets().stream()
+                .peek(tweet -> logger.info("Found Tweet Candidate: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
+                        tweet.getId(), tweet.getUser().getName(), tweet.getLang(), tweet.getUser().getLocation(), tweet.getText())
+                )
                 .filter(tweet -> !tweet.getUser().getName().toLowerCase().equals(ownHandle.toLowerCase()))
                 .filter(tweet -> tweet.getUser().getLocation().toLowerCase().contains(locationToFollow.toLowerCase()))
                 .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
