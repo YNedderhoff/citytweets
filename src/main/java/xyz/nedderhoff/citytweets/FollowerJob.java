@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import twitter4j.Query;
 import twitter4j.QueryResult;
-import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.User;
@@ -21,16 +20,19 @@ public class FollowerJob {
     private static final Logger logger = LoggerFactory.getLogger(FollowerJob.class);
     private static final int FOLLOW_RATE = 1000 * 60 * 60 * 24;
 
+    private final FollowerCache followerCache;
     private final Twitter twitter;
     private final String locationSearch;
     private final String locationToFollow;
     private final String ownHandle;
 
     @Autowired
-    public FollowerJob(Twitter twitter,
+    public FollowerJob(FollowerCache followerCache,
+                       Twitter twitter,
                        @Value("${location-search}") String locationSearch,
                        @Value("${location-to-follow}") String locationToFollow,
                        @Value("${own-handle}") String ownHandle) {
+        this.followerCache = followerCache;
         this.twitter = twitter;
         this.locationSearch = locationSearch;
         this.locationToFollow = locationToFollow;
@@ -47,19 +49,12 @@ public class FollowerJob {
 
         result.getTweets().stream()
                 .filter(tweet -> !tweet.getUser().getName().toLowerCase().equals(ownHandle.toLowerCase()))
-                .filter(this::hasRequiredLocation)
+                .filter(tweet -> tweet.getUser().getLocation().toLowerCase().contains(locationToFollow.toLowerCase()))
+                .filter(tweet -> !followerCache.contains(tweet.getUser().getId()))
                 .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
                         tweet.getId(), tweet.getUser().getName(), tweet.getLang(), tweet.getUser().getLocation(), tweet.getText())
                 )
                 .forEach(tweet -> follow(tweet.getUser()));
-    }
-
-    private boolean hasRequiredLocation(Status tweet) {
-        String userLocation = tweet.getUser().getLocation().toLowerCase();
-        String requiredLocation = locationToFollow.toLowerCase();
-        boolean locationMatch = userLocation.contains(requiredLocation);
-        logger.info("Candidate Tweet, User Location: {}, Required Location: {}, Match: {}", userLocation, requiredLocation, locationMatch);
-        return locationMatch;
     }
 
     private void follow(User user) {
@@ -67,6 +62,7 @@ public class FollowerJob {
         try {
             twitter.createFriendship(user.getId());
             logger.info("Successfully followed user {}", user.getName());
+            followerCache.add(user.getId());
         } catch (TwitterException e) {
             logger.error("Error trying to follow user {}", user, e);
         }
