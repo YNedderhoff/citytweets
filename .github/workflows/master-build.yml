@@ -42,4 +42,4 @@ jobs:
       - name: Login to Docker Hub
         run: docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
       - name: Build & Push Docker Image
-        run: docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --tag ${{ secrets.DOCKER_REPO }}:latest .
+        run: docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --tag ${{ secrets.DOCKER_REPO }}:latest --tag ${{ secrets.DOCKER_REPO }}:${{ github.run_number }}-${{ github.sha }} .
