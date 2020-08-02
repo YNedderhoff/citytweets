@@ -23,14 +23,17 @@ public class FollowerJob {
     private final Twitter twitter;
     private final String locationSearch;
     private final String locationToFollow;
+    private final String ownHandle;
 
     @Autowired
     public FollowerJob(Twitter twitter,
                        @Value("${location-search}") String locationSearch,
-                       @Value("${location-to-follow}") String locationToFollow) {
+                       @Value("${location-to-follow}") String locationToFollow,
+                       @Value("${own-handle}") String ownHandle) {
         this.twitter = twitter;
         this.locationSearch = locationSearch;
         this.locationToFollow = locationToFollow;
+        this.ownHandle = ownHandle;
     }
 
     @Scheduled(fixedRate = FOLLOW_RATE)
@@ -42,6 +45,7 @@ public class FollowerJob {
         QueryResult result = twitter.search(query);
 
         result.getTweets().stream()
+                .filter(tweet -> !tweet.getUser().getName().toLowerCase().equals(ownHandle.toLowerCase()))
                 .filter(tweet -> tweet.getUser().getLocation().toLowerCase().contains(locationToFollow.toLowerCase()))
                 .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
                         tweet.getId(), tweet.getUser().getName(), tweet.getLang(), tweet.getUser().getLocation(), tweet.getText())
