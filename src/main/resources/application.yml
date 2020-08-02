@@ -24,3 +24,4 @@ spring:
 search: "stupidSearchThatHopefullyNeverMatches"
 location-search: "stupidLocationSearchThatHopefullyNeverMatches"
 location-to-follow: "stupidToFollowThatHopefullyNeverMatches"
+own-handle: "stupidHandleThatHopefullyDoesntExist"
