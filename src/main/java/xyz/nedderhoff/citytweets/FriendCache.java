@@ -32,14 +32,17 @@ public class FriendCache {
 
     @Scheduled(fixedRate = FRIEND_UPDATE_RATE)
     private void fetchFollowers() {
+        logger.info("Populating Friends Cache");
         try {
             long cursor = -1;
             boolean finished = false;
             Set<Long> friendIds = new HashSet<>();
             while (!finished) {
+                logger.info("Doing iteration with cursor {}", cursor);
                 IDs friends = twitter.getFriendsIDs(cursor);
                 long[] ids = friends.getIDs();
                 if (ids.length == 0) {
+                    logger.info("Full friends list fetched, total size: {}", friendIds.size());
                     finished = true;
                 } else {
                     cursor = friends.getNextCursor();
@@ -47,6 +50,7 @@ public class FriendCache {
                 }
             }
             cache.addAll(friendIds);
+            logger.info("Cache updated, total size: {}", cache.size());
         } catch (TwitterException e) {
             logger.info("Exception occurred while fetching friend list", e);
         }
