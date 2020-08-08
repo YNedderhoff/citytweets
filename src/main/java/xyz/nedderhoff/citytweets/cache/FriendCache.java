@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets;
+package xyz.nedderhoff.citytweets.cache;
 
 import java.util.Arrays;
 import java.util.HashSet;
