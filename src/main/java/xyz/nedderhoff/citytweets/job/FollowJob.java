@@ -24,42 +24,41 @@ public class FollowJob {
     private final FriendCache friendCache;
     private final String locationToFollow;
     private final Query query;
-    private final long myId;
 
     @Autowired
     public FollowJob(TwitterService twitter,
                      FriendCache friendCache,
                      @Value("${location-search}") String locationSearch,
-                     @Value("${location-to-follow}") String locationToFollow) throws TwitterException {
+                     @Value("${location-to-follow}") String locationToFollow) {
         this.friendCache = friendCache;
         this.twitter = twitter;
         this.locationToFollow = locationToFollow;
 
         this.query = new Query(locationSearch);
         this.query.setCount(100);
-        this.myId = twitter.getId();
     }
 
     @Scheduled(fixedRate = FOLLOW_RATE)
     public void findPotentialFollowers() throws TwitterException {
         logger.info("Looking for tweets for search {} in order to find followers", query.getQuery());
+        long myId = twitter.getId();
 
         twitter.search(query).getTweets().stream()
-                .filter(this::shouldFollow)
+                .filter(tweet -> shouldFollow(tweet, myId))
                 .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
                         tweet.getId(), tweet.getUser().getName(), tweet.getLang(), tweet.getUser().getLocation(), tweet.getText())
                 )
                 .forEach(twitter::follow);
     }
 
-    private boolean shouldFollow(Status tweet) {
-        return !isTweetFromMe(tweet)
+    private boolean shouldFollow(Status tweet, long myId) {
+        return !isTweetFromMe(tweet, myId)
                 && isMaybeFromDesiredLocation(tweet)
                 && !hasBeenSeen(tweet);
 
     }
 
-    private boolean isTweetFromMe(Status tweet) {
+    private boolean isTweetFromMe(Status tweet, long myId) {
         return tweet.getUser().getId() == myId;
     }
 

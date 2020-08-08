@@ -23,40 +23,39 @@ public class RetweetJob {
     private final TwitterService twitter;
     private final RetweetCache retweetCache;
     private final Query query;
-    private final long myId;
 
     @Autowired
     public RetweetJob(
             TwitterService twitter,
             RetweetCache retweetCache,
-            @Value("${search}") String search) throws TwitterException {
+            @Value("${search}") String search) {
         this.twitter = twitter;
         this.retweetCache = retweetCache;
 
         this.query = new Query(search);
         this.query.setCount(100);
-        this.myId = this.twitter.getId();
     }
 
     @Scheduled(fixedRate = FETCHING_RATE)
     public void searchTweets() throws TwitterException {
         logger.info("Looking for unseen tweets for search {}", query.getQuery());
+        long myId = twitter.getId();
 
         twitter.search(query).getTweets().stream()
-                .filter(this::shouldRetweet)
+                .filter(tweet -> shouldRetweet(tweet, myId))
                 .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
                         tweet.getId(), tweet.getUser().getName(), tweet.getLang(), tweet.getUser().getLocation(), tweet.getText())
                 )
                 .forEach(twitter::retweet);
     }
 
-    private boolean shouldRetweet(Status tweet) {
-        return !isTweetFromMe(tweet)
+    private boolean shouldRetweet(Status tweet, long myId) {
+        return !isTweetFromMe(tweet, myId)
                 && !isRetweet(tweet)
                 && !hasBeenSeen(tweet);
     }
 
-    private boolean isTweetFromMe(Status tweet) {
+    private boolean isTweetFromMe(Status tweet, long myId) {
         return tweet.getUser().getId() == myId;
     }
 
