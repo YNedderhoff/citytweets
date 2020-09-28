@@ -42,6 +42,9 @@ public class RetweetJob {
         long myId = twitter.getId();
 
         twitter.search(query).getTweets().stream()
+                .peek(tweet -> logger.info("Found unfiltered Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
+                        tweet.getId(), tweet.getUser().getName(), tweet.getLang(), tweet.getUser().getLocation(), tweet.getText())
+                )
                 .filter(tweet -> shouldRetweet(tweet, myId))
                 .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
                         tweet.getId(), tweet.getUser().getName(), tweet.getLang(), tweet.getUser().getLocation(), tweet.getText())
