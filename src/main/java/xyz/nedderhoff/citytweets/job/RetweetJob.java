@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import twitter4j.Query;
-import twitter4j.Status;
 import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.cache.RetweetCache;
-import xyz.nedderhoff.citytweets.twitter.TwitterService;
+import xyz.nedderhoff.citytweets.domain.Tweet;
+import xyz.nedderhoff.citytweets.twitter.api1.MeEndpoint;
+import xyz.nedderhoff.citytweets.twitter.api1.RetweetEndpoint;
+import xyz.nedderhoff.citytweets.twitter.api2.RecentTweetsEndpoint;
 
 @Component
 @EnableScheduling
@@ -20,53 +20,52 @@ public class RetweetJob {
     private static final Logger logger = LoggerFactory.getLogger(RetweetJob.class);
     private static final int FETCHING_RATE = 1000 * 60 * 5;
 
-    private final TwitterService twitter;
+    private final RecentTweetsEndpoint recentTweetsEndpoint;
+    private final RetweetEndpoint retweetEndpoint;
+    private final MeEndpoint meEndpoint;
     private final RetweetCache retweetCache;
-    private final Query query;
+    private final String search;
 
     @Autowired
     public RetweetJob(
-            TwitterService twitter,
-            RetweetCache retweetCache,
+            RecentTweetsEndpoint recentTweetsEndpoint,
+            RetweetEndpoint retweetEndpoint, MeEndpoint meEndpoint, RetweetCache retweetCache,
             @Value("${search}") String search) {
-        this.twitter = twitter;
+        this.recentTweetsEndpoint = recentTweetsEndpoint;
+        this.retweetEndpoint = retweetEndpoint;
+        this.meEndpoint = meEndpoint;
         this.retweetCache = retweetCache;
-
-        this.query = new Query(search);
-        this.query.setCount(100);
+        this.search = search;
     }
 
     @Scheduled(fixedRate = FETCHING_RATE)
     public void searchTweets() throws TwitterException {
-        logger.info("Looking for unseen tweets for search {}", query.getQuery());
-        long myId = twitter.getId();
+        logger.info("Looking for unseen tweets for search {}", search);
+        long myId = meEndpoint.getId();
 
-        twitter.search(query).getTweets().stream()
-                .peek(tweet -> logger.info("Found unfiltered Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
-                        tweet.getId(), tweet.getUser().getName(), tweet.getLang(), tweet.getUser().getLocation(), tweet.getText())
-                )
+        recentTweetsEndpoint.search(search).stream()
                 .filter(tweet -> shouldRetweet(tweet, myId))
                 .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
                         tweet.getId(), tweet.getUser().getName(), tweet.getLang(), tweet.getUser().getLocation(), tweet.getText())
                 )
-                .forEach(twitter::retweet);
+                .forEach(retweetEndpoint::retweet);
     }
 
-    private boolean shouldRetweet(Status tweet, long myId) {
+    private boolean shouldRetweet(Tweet tweet, long myId) {
         return !isTweetFromMe(tweet, myId)
                 && !isRetweet(tweet)
                 && !hasBeenSeen(tweet);
     }
 
-    private boolean isTweetFromMe(Status tweet, long myId) {
+    private boolean isTweetFromMe(Tweet tweet, long myId) {
         return tweet.getUser().getId() == myId;
     }
 
-    private boolean isRetweet(Status tweet) {
+    private boolean isRetweet(Tweet tweet) {
         return tweet.getText().startsWith("RT @");
     }
 
-    private boolean hasBeenSeen(Status tweet) {
+    private boolean hasBeenSeen(Tweet tweet) {
         return retweetCache.contains(tweet.getId());
     }
 }

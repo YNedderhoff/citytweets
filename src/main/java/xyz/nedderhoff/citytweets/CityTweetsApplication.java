@@ -2,8 +2,10 @@ package xyz.nedderhoff.citytweets;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 
+import org.springframework.web.client.RestTemplate;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 
@@ -17,6 +19,11 @@ public class CityTweetsApplication {
 	@Bean
 	public Twitter twitter(){
 		return new TwitterFactory().getInstance();
+	}
+
+	@Bean
+	public RestTemplate restTemplate(RestTemplateBuilder builder) {
+		return builder.build();
 	}
 
 }
