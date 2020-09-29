@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 
 twitter4j.properties
+pom.xml.bak
 /.idea
 ### STS ###
 .apt_generated
