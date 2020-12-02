@@ -1,4 +1,4 @@
-FROM adoptopenjdk:11
+FROM adoptopenjdk:15
 
 RUN apt-get update \
     && apt-get install curl jq --assume-yes --no-install-recommends \
