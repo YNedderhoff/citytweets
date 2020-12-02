@@ -5,7 +5,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build-and-test:
+  build-and-test-maven:
 
     name: Build and Test
     runs-on: ubuntu-latest
@@ -24,22 +24,46 @@ jobs:
 
     name: Publish to Docker Hub
     runs-on: ubuntu-latest
-    needs: [build-and-test]
+    needs: [build-and-test-maven]
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v1
+        with:
+          platforms: linux/amd64,linux/arm/v7,linux/arm64
+      - name: Available QEMU platforms
+        run: echo ${{ steps.qemu.outputs.platforms }}
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+      - name: buildx builder instance name
+        run: echo ${{ steps.buildx.outputs.name }}
+      - name: Available buildx platforms
+        run: echo ${{ steps.buildx.outputs.platforms }}
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
       - name: Set up JDK 11
         uses: actions/setup-java@v1
         with:
           java-version: 11
       - name: Build project with Maven
         run: mvn -B package --file pom.xml
-      - name: install buildx
-        id: buildx
-        uses: crazy-max/ghaction-docker-buildx@v3.3.1
+      - name: Build image and push to Dockerhub
+        id: docker_build
+        uses: docker/build-push-action@v2
         with:
-          buildx-version: latest
-      - name: Login to Docker Hub
-        run: docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
-      - name: Build & Push Docker Image
-        run: docker buildx build --push --platform linux/arm/v7,linux/arm64/v8,linux/amd64 --tag ${{ secrets.DOCKER_REPO }}:${{ github.run_number }}-${{ github.sha }} --tag ${{ secrets.DOCKER_REPO }}:latest .
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm/v7,linux/arm64
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_REPO }}:${{ github.run_number }}-${{ github.sha }}
+            ${{ secrets.DOCKER_REPO }}:latest
+      - name: Docker image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
