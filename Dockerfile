@@ -1,7 +1,7 @@
 FROM adoptopenjdk:11
 
 RUN apt-get update \
-    && apt-get install curl jq --assume-yes --no-install-recommends \
+    && apt-get install curl jq tini --assume-yes --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
