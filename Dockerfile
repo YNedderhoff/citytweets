@@ -1,6 +1,6 @@
 # The official adoptopenjdk image (adoptopenjdk:11) is ubuntu-based which is tricky on arm/v7,
 # so I am using an unoffical debian one instead that has at least arm/v7, arm64, and amd64:
-#https://github.com/AdoptOpenJDK/openjdk-docker#official-and-unofficial-images
+# https://github.com/AdoptOpenJDK/openjdk-docker#official-and-unofficial-images
 FROM adoptopenjdk/openjdk11:jre-11.0.8_10-debian
 
 RUN apt-get update \
