@@ -10,10 +10,6 @@ enabled = true
   dockerfile_paths = ["Dockerfile"]
 
 [[analyzers]]
-name = "shell"
-enabled = true
-
-[[analyzers]]
 name = "java"
 enabled = true
 
