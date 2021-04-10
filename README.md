@@ -5,7 +5,7 @@
 ## About
 citytweets is a Twitter retweet bot currently powering my accounts [@luebbecketweets](https://twitter.com/luebbecketweets), [@mindentweets](https://twitter.com/mindentweets) and [@herfordtweets](https://twitter.com/herfordtweets). In addition to my accounts, it also powers [@TweetsFuerMiLB](https://twitter.com/TweetsFuerMiLB), which is not owned by me.
 
-It retweets everything the search finds. It is intended to be used with searches like `@mindentweets` so that everyone can at-mention the account `@mindentweets` and will get a retweet, thus reach every follower of `@mindentweets`
+It retweets everything the search finds. It is intended to be used with searches like `@mindentweets` so that everyone can at-mention the account `@mindentweets` and will get a retweet, thus reach every follower of `@mindentweets`.
 
 ## Tech
 For some calls it still relies on the deprecated [Twitter API 1.1](https://developer.twitter.com/en/docs/twitter-api/v1). For calls to this API it uses [Twitter4J](https://github.com/Twitter4J/Twitter4J), which does not seem to be maintained anymore as well.
