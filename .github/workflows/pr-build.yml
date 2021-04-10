@@ -62,7 +62,7 @@ jobs:
           platforms: linux/amd64,linux/arm/v7,linux/arm64
           push: false
           tags: |
-            ${{ secrets.DOCKER_REPO }}:${{ github.run_number }}-${{ github.sha }}
-            ${{ secrets.DOCKER_REPO }}:latest
+            ${{ github.run_number }}-${{ github.sha }}
+            latest
       - name: Docker image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
