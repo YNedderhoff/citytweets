@@ -10,6 +10,12 @@
 #
 # shellcheck disable=SC2086
 #
+# Ignoring shellcheck SC2068 errors. It would otherwise complain about missing quotes on $@:
+#
+# SC2068: Double quote array expansions to avoid re-splitting elements.
+#
+# shellcheck disable=SC2068
+#
 
 exec /opt/java/openjdk/bin/java -Dinst.type=citytweets \
     -Dcitytweets.inst.id=$HOSTNAME \
