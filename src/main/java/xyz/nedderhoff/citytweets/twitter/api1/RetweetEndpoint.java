@@ -9,6 +9,7 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.cache.RetweetCache;
 import xyz.nedderhoff.citytweets.domain.Tweet;
+import xyz.nedderhoff.citytweets.twitter.TwitterApi1Endpoint;
 
 @Component
 public class RetweetEndpoint extends TwitterApi1Endpoint {

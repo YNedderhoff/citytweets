@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import xyz.nedderhoff.citytweets.converter.RecentTweetsConverter;
 import xyz.nedderhoff.citytweets.domain.Tweet;
 import xyz.nedderhoff.citytweets.domain.http.recentsearch.RecentSearchResponse;
+import xyz.nedderhoff.citytweets.twitter.TwitterApi2Endpoint;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import twitter4j.IDs;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
+import xyz.nedderhoff.citytweets.twitter.TwitterApi1Endpoint;
 
 import java.util.Arrays;
 import java.util.HashSet;

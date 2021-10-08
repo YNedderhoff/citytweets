@@ -9,6 +9,7 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.cache.FriendCache;
 import xyz.nedderhoff.citytweets.domain.User;
+import xyz.nedderhoff.citytweets.twitter.TwitterApi1Endpoint;
 
 @Component
 public class FollowEndpoint extends TwitterApi1Endpoint {

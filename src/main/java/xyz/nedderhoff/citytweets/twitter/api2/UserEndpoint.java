@@ -16,6 +16,7 @@ import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.converter.UserConverter;
 import xyz.nedderhoff.citytweets.domain.User;
 import xyz.nedderhoff.citytweets.domain.http.userlookup.UserLookupResponse;
+import xyz.nedderhoff.citytweets.twitter.TwitterApi2Endpoint;
 
 @Component
 public class UserEndpoint extends TwitterApi2Endpoint {
