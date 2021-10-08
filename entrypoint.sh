@@ -27,5 +27,5 @@ exec /opt/java/openjdk/bin/java -Dinst.type=citytweets \
     -XX:OnOutOfMemoryError='kill -9 %p' \
     -XX:+HeapDumpOnOutOfMemoryError \
     -XX:HeapDumpPath=/dumps/citytweets.bin \
-    -jar citytweets.jar \
+    -jar /citytweets/citytweets.jar \
     $@
