@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17
+FROM openjdk:17
 
 # hadolint ignore=DL3018
 RUN apt-get update \
