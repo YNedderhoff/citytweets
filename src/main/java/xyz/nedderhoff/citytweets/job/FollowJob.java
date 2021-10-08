@@ -52,9 +52,9 @@ public class FollowJob {
         recentTweetsEndpoint.search(query).stream()
                 .filter(tweet -> shouldFollow(tweet, myId))
                 .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
-                        tweet.getId(), tweet.getUser().getName(), tweet.getLang(), tweet.getUser().getLocation(), tweet.getText())
+                        tweet.id(), tweet.user().name(), tweet.lang(), tweet.user().location(), tweet.text())
                 )
-                .forEach(tweet -> followEndpoint.follow(tweet.getUser()));
+                .forEach(tweet -> followEndpoint.follow(tweet.user()));
     }
 
     private boolean shouldFollow(Tweet tweet, long myId) {
@@ -65,14 +65,14 @@ public class FollowJob {
     }
 
     private boolean isTweetFromMe(Tweet tweet, long myId) {
-        return tweet.getUser().getId() == myId;
+        return tweet.user().id() == myId;
     }
 
     private boolean isMaybeFromDesiredLocation(Tweet tweet) {
-        return tweet.getUser().getLocation().toLowerCase().contains(locationToFollow.toLowerCase());
+        return tweet.user().location().toLowerCase().contains(locationToFollow.toLowerCase());
     }
 
     private boolean hasBeenSeen(Tweet tweet) {
-        return friendCache.contains(tweet.getUser().getId());
+        return friendCache.contains(tweet.user().id());
     }
 }

@@ -47,8 +47,8 @@ public class RecentTweetsEndpoint extends TwitterApi2Endpoint {
         ResponseEntity<RecentSearchResponse> response = rt.exchange(uri, HttpMethod.GET, recentTweetsResponseEntity, RecentSearchResponse.class);
 
         List<Tweet> result = new ArrayList<>();
-        if (response.getBody() != null && response.getBody().getData() != null) {
-            result = recentTweetsConverter.toTweets(response.getBody().getData());
+        if (response.getBody() != null && response.getBody().data() != null) {
+            result = recentTweetsConverter.toTweets(response.getBody().data());
         }
 
         logger.info("Found {} tweets matching search {}", result.size(), query);

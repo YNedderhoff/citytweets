@@ -57,8 +57,8 @@ public class UserEndpoint extends TwitterApi2Endpoint {
                 rt.exchange(uri, HttpMethod.GET, userResponseEntity, UserLookupResponse.class);
 
         User result = null;
-        if (response.getBody() != null && response.getBody().getData() != null) {
-            result = userConverter.toUsers(response.getBody().getData());
+        if (response.getBody() != null && response.getBody().data() != null) {
+            result = userConverter.toUsers(response.getBody().data());
         } else {
             logger.warn("No user found with id {}", id);
         }
@@ -73,8 +73,8 @@ public class UserEndpoint extends TwitterApi2Endpoint {
                 rt.exchange(uri, HttpMethod.GET, userResponseEntity, UserLookupResponse.class);
 
         User result = null;
-        if (response.getBody() != null && response.getBody().getData() != null) {
-            result = userConverter.toUsers(response.getBody().getData());
+        if (response.getBody() != null && response.getBody().data() != null) {
+            result = userConverter.toUsers(response.getBody().data());
         } else {
             logger.warn("No user found with name {}", name);
         }

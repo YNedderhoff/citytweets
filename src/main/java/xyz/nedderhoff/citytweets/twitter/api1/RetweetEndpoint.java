@@ -28,7 +28,7 @@ public class RetweetEndpoint extends TwitterApi1Endpoint {
     }
 
     public void retweet(Tweet tweet) {
-        long id = tweet.getId();
+        long id = tweet.id();
         logger.info("Retweeting tweet with id {} ...", id);
         try {
             twitter.retweetStatus(id);

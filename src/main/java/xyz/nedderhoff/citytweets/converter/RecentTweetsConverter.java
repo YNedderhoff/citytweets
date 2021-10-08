@@ -6,7 +6,6 @@ import xyz.nedderhoff.citytweets.domain.Tweet;
 import xyz.nedderhoff.citytweets.domain.http.recentsearch.RecentSearchData;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class RecentTweetsConverter {
@@ -21,12 +20,12 @@ public class RecentTweetsConverter {
         return data.stream()
                 .map(d ->
                         new Tweet(
-                                d.getId(),
-                                d.getLang(),
-                                d.getText(),
-                                userCache.getById(d.getAuthorId())
+                                d.id(),
+                                d.lang(),
+                                d.text(),
+                                userCache.getById(d.authorId())
                         )
                 )
-                .collect(Collectors.toList());
+                .toList();
     }
 }
