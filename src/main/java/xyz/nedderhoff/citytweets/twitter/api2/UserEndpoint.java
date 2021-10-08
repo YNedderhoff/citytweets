@@ -16,6 +16,7 @@ import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.converter.UserConverter;
 import xyz.nedderhoff.citytweets.domain.User;
 import xyz.nedderhoff.citytweets.domain.http.userlookup.UserLookupResponse;
+import xyz.nedderhoff.citytweets.twitter.TwitterApi2Endpoint;
 
 @Component
 public class UserEndpoint extends TwitterApi2Endpoint {
@@ -38,7 +39,7 @@ public class UserEndpoint extends TwitterApi2Endpoint {
         this.twitter = twitter;
         this.userConverter = userConverter;
 
-        HttpHeaders headers = new HttpHeaders();
+        final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + bearerToken);
 
@@ -52,13 +53,17 @@ public class UserEndpoint extends TwitterApi2Endpoint {
     public User getById(long id) {
         logger.info("Requesting user by id {}", id);
 
-        String uri = String.format(BASE_QUERY_USER_BY_ID, id);
-        ResponseEntity<UserLookupResponse> response =
-                rt.exchange(uri, HttpMethod.GET, userResponseEntity, UserLookupResponse.class);
+        final String uri = String.format(BASE_QUERY_USER_BY_ID, id);
+        final ResponseEntity<UserLookupResponse> response = rt.exchange(
+                uri,
+                HttpMethod.GET,
+                userResponseEntity,
+                UserLookupResponse.class
+        );
 
         User result = null;
-        if (response.getBody() != null && response.getBody().getData() != null) {
-            result = userConverter.toUsers(response.getBody().getData());
+        if (response.getBody() != null && response.getBody().data() != null) {
+            result = userConverter.toUsers(response.getBody().data());
         } else {
             logger.warn("No user found with id {}", id);
         }
@@ -68,13 +73,17 @@ public class UserEndpoint extends TwitterApi2Endpoint {
     public User getByName(String name) {
         logger.info("Requesting user by name {}", name);
 
-        String uri = String.format(BASE_QUERY_USER_BY_NAME, name);
-        ResponseEntity<UserLookupResponse> response =
-                rt.exchange(uri, HttpMethod.GET, userResponseEntity, UserLookupResponse.class);
+        final String uri = String.format(BASE_QUERY_USER_BY_NAME, name);
+        final ResponseEntity<UserLookupResponse> response = rt.exchange(
+                uri,
+                HttpMethod.GET,
+                userResponseEntity,
+                UserLookupResponse.class
+        );
 
         User result = null;
-        if (response.getBody() != null && response.getBody().getData() != null) {
-            result = userConverter.toUsers(response.getBody().getData());
+        if (response.getBody() != null && response.getBody().data() != null) {
+            result = userConverter.toUsers(response.getBody().data());
         } else {
             logger.warn("No user found with name {}", name);
         }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
+import xyz.nedderhoff.citytweets.twitter.TwitterApi1Endpoint;
 
 @Component
 public class MeEndpoint extends TwitterApi1Endpoint {

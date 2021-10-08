@@ -29,8 +29,11 @@ public class RetweetJob {
     @Autowired
     public RetweetJob(
             RecentTweetsEndpoint recentTweetsEndpoint,
-            RetweetEndpoint retweetEndpoint, MeEndpoint meEndpoint, RetweetCache retweetCache,
-            @Value("${search}") String search) {
+            RetweetEndpoint retweetEndpoint,
+            MeEndpoint meEndpoint,
+            RetweetCache retweetCache,
+            @Value("${search}") String search
+    ) {
         this.recentTweetsEndpoint = recentTweetsEndpoint;
         this.retweetEndpoint = retweetEndpoint;
         this.meEndpoint = meEndpoint;
@@ -41,12 +44,12 @@ public class RetweetJob {
     @Scheduled(fixedRate = FETCHING_RATE)
     public void searchTweets() throws TwitterException {
         logger.info("Looking for unseen tweets for search {}", search);
-        long myId = meEndpoint.getId();
+        final long myId = meEndpoint.getId();
 
         recentTweetsEndpoint.search(search).stream()
                 .filter(tweet -> shouldRetweet(tweet, myId))
                 .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
-                        tweet.getId(), tweet.getUser().getName(), tweet.getLang(), tweet.getUser().getLocation(), tweet.getText())
+                        tweet.id(), tweet.user().name(), tweet.lang(), tweet.user().location(), tweet.text())
                 )
                 .forEach(retweetEndpoint::retweet);
     }
@@ -58,14 +61,14 @@ public class RetweetJob {
     }
 
     private boolean isTweetFromMe(Tweet tweet, long myId) {
-        return tweet.getUser().getId() == myId;
+        return tweet.user().id() == myId;
     }
 
     private boolean isRetweet(Tweet tweet) {
-        return tweet.getText().startsWith("RT @");
+        return tweet.text().startsWith("RT @");
     }
 
     private boolean hasBeenSeen(Tweet tweet) {
-        return retweetCache.contains(tweet.getId());
+        return retweetCache.contains(tweet.id());
     }
 }

@@ -1,7 +1,5 @@
-# The official adoptopenjdk image (adoptopenjdk:11) is ubuntu-based which is tricky on arm/v7,
-# so I am using an unoffical debian one instead that has at least arm/v7, arm64, and amd64:
-# https://github.com/AdoptOpenJDK/openjdk-docker#official-and-unofficial-images
-FROM adoptopenjdk/openjdk11:jre-11.0.8_10-debian
+# Using focal over eclipse-temurin:17 as it works for armv7 and arm64 as well.
+FROM eclipse-temurin:17-focal
 
 RUN apt-get update \
     && apt-get install curl jq tini --assume-yes --no-install-recommends \

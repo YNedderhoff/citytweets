@@ -9,6 +9,7 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.cache.FriendCache;
 import xyz.nedderhoff.citytweets.domain.User;
+import xyz.nedderhoff.citytweets.twitter.TwitterApi1Endpoint;
 
 @Component
 public class FollowEndpoint extends TwitterApi1Endpoint {
@@ -28,11 +29,11 @@ public class FollowEndpoint extends TwitterApi1Endpoint {
     }
 
     public void follow(User user) {
-        logger.info("Following user \"{}\"", user.getName());
+        logger.info("Following user \"{}\"", user.name());
         try {
-            twitter.createFriendship(user.getId());
-            logger.info("Successfully followed user {}", user.getName());
-            friendCache.add(user.getId());
+            twitter.createFriendship(user.id());
+            logger.info("Successfully followed user {}", user.name());
+            friendCache.add(user.id());
         } catch (TwitterException e) {
             logger.error("Error trying to follow user {}", user, e);
         }

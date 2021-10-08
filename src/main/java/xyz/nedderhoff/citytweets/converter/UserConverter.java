@@ -8,10 +8,10 @@ import xyz.nedderhoff.citytweets.domain.http.userlookup.UserLookupData;
 public class UserConverter {
     public User toUsers(UserLookupData data) {
         return new User(
-                data.getId(),
-                data.getName(),
-                data.getUsername(),
-                data.getLocation() == null ? "" : data.getLocation()
+                data.id(),
+                data.name(),
+                data.username(),
+                data.location() == null ? "" : data.location()
         );
     }
 }
