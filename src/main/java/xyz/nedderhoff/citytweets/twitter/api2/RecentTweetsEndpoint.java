@@ -35,7 +35,7 @@ public class RecentTweetsEndpoint extends TwitterApi2Endpoint {
         super(rt, bearerToken);
         this.recentTweetsConverter = recentTweetsConverter;
 
-        HttpHeaders headers = new HttpHeaders();
+        final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + this.bearerToken);
 
@@ -43,8 +43,13 @@ public class RecentTweetsEndpoint extends TwitterApi2Endpoint {
     }
 
     public List<Tweet> search(String query) {
-        String uri = BASE_QUERY_RECENT_TWEETS + query;
-        ResponseEntity<RecentSearchResponse> response = rt.exchange(uri, HttpMethod.GET, recentTweetsResponseEntity, RecentSearchResponse.class);
+        final String uri = BASE_QUERY_RECENT_TWEETS + query;
+        final ResponseEntity<RecentSearchResponse> response = rt.exchange(
+                uri,
+                HttpMethod.GET,
+                recentTweetsResponseEntity,
+                RecentSearchResponse.class
+        );
 
         List<Tweet> result = new ArrayList<>();
         if (response.getBody() != null && response.getBody().data() != null) {

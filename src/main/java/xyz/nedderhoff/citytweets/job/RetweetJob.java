@@ -29,8 +29,11 @@ public class RetweetJob {
     @Autowired
     public RetweetJob(
             RecentTweetsEndpoint recentTweetsEndpoint,
-            RetweetEndpoint retweetEndpoint, MeEndpoint meEndpoint, RetweetCache retweetCache,
-            @Value("${search}") String search) {
+            RetweetEndpoint retweetEndpoint,
+            MeEndpoint meEndpoint,
+            RetweetCache retweetCache,
+            @Value("${search}") String search
+    ) {
         this.recentTweetsEndpoint = recentTweetsEndpoint;
         this.retweetEndpoint = retweetEndpoint;
         this.meEndpoint = meEndpoint;
@@ -41,7 +44,7 @@ public class RetweetJob {
     @Scheduled(fixedRate = FETCHING_RATE)
     public void searchTweets() throws TwitterException {
         logger.info("Looking for unseen tweets for search {}", search);
-        long myId = meEndpoint.getId();
+        final long myId = meEndpoint.getId();
 
         recentTweetsEndpoint.search(search).stream()
                 .filter(tweet -> shouldRetweet(tweet, myId))

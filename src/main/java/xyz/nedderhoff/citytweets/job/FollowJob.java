@@ -47,7 +47,7 @@ public class FollowJob {
     @Scheduled(fixedRate = FOLLOW_RATE)
     public void findPotentialFollowers() throws TwitterException {
         logger.info("Looking for tweets for search {} in order to find followers", query);
-        long myId = meEndpoint.getId();
+        final long myId = meEndpoint.getId();
 
         recentTweetsEndpoint.search(query).stream()
                 .filter(tweet -> shouldFollow(tweet, myId))
