@@ -1,16 +1,15 @@
-# Using focal over eclipse-temurin:17 as it works for armv7 and arm64 as well.
-FROM eclipse-temurin:17-focal
+FROM eclipse-temurin:17
 
+# hadolint ignore=DL3018
 RUN apt-get update \
     && apt-get install curl jq tini --assume-yes --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY target/citytweets-*.jar /opt/citytweets/citytweets.jar
-COPY entrypoint.sh /opt/citytweets
+RUN mkdir /dumps
 
-EXPOSE 8080
+COPY entrypoint.sh /citytweets/entrypoint.sh
+COPY target/citytweets-*[0-9T].jar /citytweets/citytweets.jar
 
-WORKDIR /opt/citytweets
-
-ENTRYPOINT ["tini", "--", "/opt/citytweets/entrypoint.sh"]
+WORKDIR /citytweets
+ENTRYPOINT ["tini", "--", "sh", "/citytweets/entrypoint.sh"]
