@@ -1,4 +1,6 @@
-FROM eclipse-temurin:17
+# Currently using -focal as it supports linux/amd64, linux/arm/v7, and linux/arm64/v8
+# May switch back to -alpine once it does as well
+FROM eclipse-temurin:17-focal
 
 # hadolint ignore=DL3018
 RUN apt-get update \
