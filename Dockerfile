@@ -4,7 +4,7 @@ FROM openjdk:17-slim
 
 # hadolint ignore=DL3018
 RUN apt-get update \
-    && apt-get install curl jq tini --assume-yes --no-install-recommends \
+    && apt-get install curl jq tini procps htop --assume-yes --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
