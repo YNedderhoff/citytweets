@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.cache.FriendCache;
+import xyz.nedderhoff.citytweets.config.AccountProperties;
 import xyz.nedderhoff.citytweets.domain.Tweet;
 import xyz.nedderhoff.citytweets.twitter.api1.FollowEndpoint;
 import xyz.nedderhoff.citytweets.twitter.api1.MeEndpoint;
@@ -24,6 +25,7 @@ public class FollowJob {
     private final RecentTweetsEndpoint recentTweetsEndpoint;
     private final FollowEndpoint followEndpoint;
     private final FriendCache friendCache;
+    private final AccountProperties accountProperties;
     private final String locationToFollow;
     private final String query;
 
@@ -33,6 +35,7 @@ public class FollowJob {
             RecentTweetsEndpoint recentTweetsEndpoint,
             FollowEndpoint followEndpoint,
             FriendCache friendCache,
+            AccountProperties accountProperties,
             @Value("${location-search}") String locationSearch,
             @Value("${location-to-follow}") String locationToFollow
     ) {
@@ -40,6 +43,7 @@ public class FollowJob {
         this.recentTweetsEndpoint = recentTweetsEndpoint;
         this.followEndpoint = followEndpoint;
         this.friendCache = friendCache;
+        this.accountProperties = accountProperties;
         this.locationToFollow = locationToFollow;
         this.query = locationSearch;
     }
