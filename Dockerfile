@@ -1,6 +1,6 @@
 # Currently using openjdk as it supports linux/amd64 and linux/arm64/v8
 # May switch back to temurin once it does as well
-FROM openjdk:17-slim
+FROM openjdk:18-slim
 
 # hadolint ignore=DL3018
 RUN apt-get update \
