@@ -23,7 +23,7 @@ public class MeEndpoint extends TwitterApi1Endpoint {
     }
 
     public long getId(Account account) throws TwitterException {
-        logger.info("Fetching own id ...");
+        logger.info("Fetching own id for account {} ...", account.name());
         return connections.getConnection(account).getId();
     }
 }

@@ -2,6 +2,8 @@ package xyz.nedderhoff.citytweets.cache;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import xyz.nedderhoff.citytweets.domain.User;
@@ -11,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class UserCache {
+    private static final Logger logger = LoggerFactory.getLogger(UserCache.class);
     private final LoadingCache<Long, User> cacheById;
     private final LoadingCache<String, User> cacheByName;
 
@@ -30,10 +33,12 @@ public class UserCache {
     }
 
     public User getById(long id) {
+        logger.info("Requesting user by id {} (current cache size {})", id, cacheById.estimatedSize());
         return cacheById.get(id);
     }
 
     public User getByName(String username) {
+        logger.info("Requesting user by name {} ((current cache size {})", username, cacheByName.estimatedSize());
         return cacheByName.get(username);
     }
 }

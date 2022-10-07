@@ -28,13 +28,13 @@ public class FollowEndpoint extends TwitterApi1Endpoint {
     }
 
     public void follow(User user, Account account) {
-        logger.info("Following user \"{}\"", user.name());
+        logger.info("Following user \"{}\" for account {}", user.name(), account.name());
         try {
             connections.getConnection(account).createFriendship(user.id());
-            logger.info("Successfully followed user {}", user.name());
+            logger.info("Successfully followed user {} for account {}", user.name(), account.name());
             friendCache.add(user.id(), account);
         } catch (TwitterException e) {
-            logger.error("Error trying to follow user {}", user, e);
+            logger.error("Error trying to follow user {} for account {}", user, account.name(), e);
         }
     }
 }

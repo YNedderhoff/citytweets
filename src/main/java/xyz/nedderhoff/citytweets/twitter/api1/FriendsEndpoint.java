@@ -28,16 +28,16 @@ public class FriendsEndpoint extends TwitterApi1Endpoint {
     }
 
     public Set<Long> getFriends(Account account) throws TwitterException {
-        logger.info("Fetching friends ...");
+        logger.info("Fetching friends for account {} ...", account.name());
         long cursor = -1;
         boolean finished = false;
         Set<Long> friendIds = new HashSet<>();
         while (!finished) {
-            logger.info("Doing iteration with cursor {}", cursor);
+            logger.info("Doing iteration with cursor {} for account {}", cursor, account.name());
             IDs friends = connections.getConnection(account).getFriendsIDs(cursor);
             long[] ids = friends.getIDs();
             if (ids.length == 0) {
-                logger.info("Full friends list fetched, total size: {}", friendIds.size());
+                logger.info("Full friends list fetched for account {}, total size: {}", account.name(), friendIds.size());
                 finished = true;
             } else {
                 cursor = friends.getNextCursor();
