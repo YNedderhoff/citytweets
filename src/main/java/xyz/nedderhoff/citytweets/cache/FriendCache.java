@@ -7,42 +7,49 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import twitter4j.TwitterException;
+import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
+import xyz.nedderhoff.citytweets.service.AccountService;
 import xyz.nedderhoff.citytweets.twitter.api1.FriendsEndpoint;
 
+import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 @Component
 @EnableScheduling
 public class FriendCache {
     private static final Logger logger = LoggerFactory.getLogger(FriendCache.class);
     private static final int FRIEND_UPDATE_RATE = 1000 * 60 * 60 * 24;
-    private static final Set<Long> cache = new ConcurrentSkipListSet<>();
+    private static final Map<String, Set<Long>> cache = new ConcurrentSkipListMap<>();
 
     private final FriendsEndpoint friendsEndpoint;
+    private final AccountService accountService;
 
     @Autowired
-    public FriendCache(FriendsEndpoint friendsEndpoint) {
+    public FriendCache(FriendsEndpoint friendsEndpoint, AccountService accountService) {
         this.friendsEndpoint = friendsEndpoint;
+        this.accountService = accountService;
     }
 
     @Scheduled(fixedRate = FRIEND_UPDATE_RATE)
     private void fetchFollowers() {
-        logger.info("Populating Friends Cache");
-        try {
-            cache.addAll(friendsEndpoint.getFriends());
-            logger.info("Cache updated, total size: {}", cache.size());
-        } catch (TwitterException e) {
-            logger.info("Exception occurred while fetching friend list", e);
-        }
+        accountService.getAccounts().forEach(account -> {
+            logger.info("Populating Friends Cache for account {}", account.name());
+            try {
+                cache.put(account.name(), friendsEndpoint.getFriends(account));
+                logger.info("Cache updated for account {}, total size: {}", account.name(), cache.size());
+            } catch (TwitterException e) {
+                logger.info("Exception occurred while fetching friend list for account {}", account.name(), e);
+            }
+        });
     }
 
-    public boolean contains(Long id) {
-        return cache.contains(id);
+    public boolean contains(Long id, Account account) {
+        return cache.get(account.name()).contains(id);
     }
 
-    public void add(Long id) {
-        logger.info("Adding friend {}", id);
-        cache.add(id);
+    public void add(Long id, Account account) {
+        logger.info("Adding friend {} to account {}", id, account.name());
+        cache.get(account.name()).add(id);
     }
 }
