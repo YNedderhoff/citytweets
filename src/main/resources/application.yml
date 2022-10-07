@@ -21,6 +21,35 @@ spring:
   main:
     banner-mode: off
 
-search: "stupidSearchThatHopefullyNeverMatches"
-location-search: "stupidLocationSearchThatHopefullyNeverMatches"
-location-to-follow: "stupidToFollowThatHopefullyNeverMatches"
+
+account-properties:
+  accounts:
+    -
+      name: stupidAccount
+      bearerToken: stupidbearerToken
+      twitter4j:
+        oauth:
+          accessToken: stupidAccessToken
+          accessTokenSecret: stupidAccessTokenSecret
+          consumerKey: stupidConsumerKey
+          consumerSecret: stupidConsumerSecret
+      search: stupidSearchThatHopefullyNeverMatches
+      location-search: stupidLocationSearchThatHopefullyNeverMatches
+      location-to-follow: stupidLocationToFollowThatHopefullyNeverMatches
+      ignored-accounts:
+        - stupidAccount1ThatHopefullyNeverMatches
+        - stupidAccount2ThatHopefullyNeverMatches
+    - name: stupidAccount
+      bearerToken: stupidbearerToken
+      twitter4j:
+        oauth:
+          accessToken: stupidAccessToken
+          accessTokenSecret: stupidAccessTokenSecret
+          consumerKey: stupidConsumerKey
+          consumerSecret: stupidConsumerSecret
+      search: stupidSearchThatHopefullyNeverMatches
+      location-search: stupidLocationSearchThatHopefullyNeverMatches
+      location-to-follow: stupidLocationToFollowThatHopefullyNeverMatches
+      ignored-accounts:
+        - stupidAccount1ThatHopefullyNeverMatches
+        - stupidAccount2ThatHopefullyNeverMatches

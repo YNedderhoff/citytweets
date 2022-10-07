@@ -1,17 +1,29 @@
 package xyz.nedderhoff.citytweets.twitter;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
+import xyz.nedderhoff.citytweets.service.AccountService;
+
 
 // https://developer.twitter.com/en/docs/twitter-api/early-access
-public abstract non-sealed class TwitterApi2Endpoint extends TwitterHttpEndpoint {
+public abstract non-sealed class TwitterApi2Endpoint<T> extends TwitterHttpEndpoint {
     protected static final String BASE_TWITTER_API_2_URI = BASE_TWITTER_API_URI + "2/";
-    protected final String bearerToken;
+    private final AccountService accountService;
 
     public TwitterApi2Endpoint(
             RestTemplate rt,
-            String bearerToken
+            AccountService accountService
     ) {
         super(rt);
-        this.bearerToken = bearerToken;
+        this.accountService = accountService;
+    }
+
+    protected HttpEntity<T> getResponseHttpEntity() {
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "Bearer " + accountService.getRandomBearerToken());
+        return new HttpEntity<>(headers);
     }
 }

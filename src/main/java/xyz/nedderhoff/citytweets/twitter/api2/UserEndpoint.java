@@ -3,28 +3,27 @@ package xyz.nedderhoff.citytweets.twitter.api2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
+import xyz.nedderhoff.citytweets.cache.Twitter4jConnectionsCache;
 import xyz.nedderhoff.citytweets.converter.UserConverter;
 import xyz.nedderhoff.citytweets.domain.User;
 import xyz.nedderhoff.citytweets.domain.http.userlookup.UserLookupResponse;
+import xyz.nedderhoff.citytweets.service.AccountService;
 import xyz.nedderhoff.citytweets.twitter.TwitterApi2Endpoint;
 
 @Component
-public class UserEndpoint extends TwitterApi2Endpoint {
+public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
     private static final Logger logger = LoggerFactory.getLogger(UserEndpoint.class);
     public static final String BASE_QUERY_USER_BY_ID = BASE_TWITTER_API_2_URI + "users/%d?user.fields=location";
     public static final String BASE_QUERY_USER_BY_NAME = BASE_TWITTER_API_2_URI + "users/by/username/%s?user.fields=location";
 
-    private final Twitter twitter;
+    private final Twitter4jConnectionsCache connections;
     private final UserConverter userConverter;
     private final HttpEntity<UserLookupResponse> userResponseEntity;
 
@@ -32,22 +31,18 @@ public class UserEndpoint extends TwitterApi2Endpoint {
     public UserEndpoint(
             Twitter twitter,
             RestTemplate rt,
-            @Value("${bearerToken}") String bearerToken,
+            Twitter4jConnectionsCache connections,
+            AccountService accountService,
             UserConverter userConverter
     ) {
-        super(rt, bearerToken);
-        this.twitter = twitter;
+        super(rt, accountService);
+        this.connections = connections;
         this.userConverter = userConverter;
-
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer " + bearerToken);
-
-        userResponseEntity = new HttpEntity<>(headers);
+        this.userResponseEntity = getResponseHttpEntity();
     }
 
     public long getId() throws TwitterException {
-        return twitter.getId();
+        return connections.getRandomConnection().getId();
     }
 
     public User getById(long id) {

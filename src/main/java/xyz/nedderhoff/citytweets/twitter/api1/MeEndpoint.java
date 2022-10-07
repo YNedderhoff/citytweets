@@ -5,27 +5,25 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import twitter4j.Twitter;
 import twitter4j.TwitterException;
+import xyz.nedderhoff.citytweets.cache.Twitter4jConnectionsCache;
+import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
 import xyz.nedderhoff.citytweets.twitter.TwitterApi1Endpoint;
 
 @Component
 public class MeEndpoint extends TwitterApi1Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(MeEndpoint.class);
 
-    private final Twitter twitter;
-
     @Autowired
     public MeEndpoint(
-            Twitter twitter,
-            RestTemplate rt
+            RestTemplate rt,
+            Twitter4jConnectionsCache connections
     ) {
-        super(rt);
-        this.twitter = twitter;
+        super(rt, connections);
     }
 
-    public long getId() throws TwitterException {
-        logger.info("Fetching own id ...");
-        return twitter.getId();
+    public long getId(Account account) throws TwitterException {
+        logger.info("Fetching own id for account {} ...", account.name());
+        return connections.getConnection(account).getId();
     }
 }

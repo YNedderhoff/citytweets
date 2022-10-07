@@ -3,13 +3,14 @@ package xyz.nedderhoff.citytweets.job;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.cache.FriendCache;
+import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
 import xyz.nedderhoff.citytweets.domain.Tweet;
+import xyz.nedderhoff.citytweets.service.AccountService;
 import xyz.nedderhoff.citytweets.twitter.api1.FollowEndpoint;
 import xyz.nedderhoff.citytweets.twitter.api1.MeEndpoint;
 import xyz.nedderhoff.citytweets.twitter.api2.RecentTweetsEndpoint;
@@ -24,8 +25,7 @@ public class FollowJob {
     private final RecentTweetsEndpoint recentTweetsEndpoint;
     private final FollowEndpoint followEndpoint;
     private final FriendCache friendCache;
-    private final String locationToFollow;
-    private final String query;
+    private final AccountService accountService;
 
     @Autowired
     public FollowJob(
@@ -33,34 +33,38 @@ public class FollowJob {
             RecentTweetsEndpoint recentTweetsEndpoint,
             FollowEndpoint followEndpoint,
             FriendCache friendCache,
-            @Value("${location-search}") String locationSearch,
-            @Value("${location-to-follow}") String locationToFollow
+            AccountService accountService
     ) {
         this.meEndpoint = meEndpoint;
         this.recentTweetsEndpoint = recentTweetsEndpoint;
         this.followEndpoint = followEndpoint;
         this.friendCache = friendCache;
-        this.locationToFollow = locationToFollow;
-        this.query = locationSearch;
+        this.accountService = accountService;
     }
 
     @Scheduled(fixedRate = FOLLOW_RATE)
-    public void findPotentialFollowers() throws TwitterException {
-        logger.info("Looking for tweets for search {} in order to find followers", query);
-        final long myId = meEndpoint.getId();
-
-        recentTweetsEndpoint.search(query).stream()
-                .filter(tweet -> shouldFollow(tweet, myId))
-                .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
-                        tweet.id(), tweet.user().name(), tweet.lang(), tweet.user().location(), tweet.text())
-                )
-                .forEach(tweet -> followEndpoint.follow(tweet.user()));
+    public void findPotentialFollowers() {
+        accountService.getAccounts().forEach(account -> {
+            logger.info("Looking for tweets for search {} in order to find followers for account {}", account.locationSearch(), account.name());
+            final long myId;
+            try {
+                myId = meEndpoint.getId(account);
+                recentTweetsEndpoint.search(account.locationSearch()).stream()
+                        .filter(tweet -> shouldFollow(tweet, myId, account))
+                        .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
+                                tweet.id(), tweet.user().name(), tweet.lang(), tweet.user().location(), tweet.text())
+                        )
+                        .forEach(tweet -> followEndpoint.follow(tweet.user(), account));
+            } catch (TwitterException e) {
+                logger.error("Exception during follow job", e);
+            }
+        });
     }
 
-    private boolean shouldFollow(Tweet tweet, long myId) {
+    private boolean shouldFollow(Tweet tweet, long myId, Account account) {
         return !isTweetFromMe(tweet, myId)
-                && isMaybeFromDesiredLocation(tweet)
-                && !hasBeenSeen(tweet);
+                && isMaybeFromDesiredLocation(tweet, account)
+                && !hasBeenSeen(tweet, account);
 
     }
 
@@ -68,11 +72,11 @@ public class FollowJob {
         return tweet.user().id() == myId;
     }
 
-    private boolean isMaybeFromDesiredLocation(Tweet tweet) {
-        return tweet.user().location().toLowerCase().contains(locationToFollow.toLowerCase());
+    private boolean isMaybeFromDesiredLocation(Tweet tweet, Account account) {
+        return tweet.user().location().toLowerCase().contains(account.locationToFollow().toLowerCase());
     }
 
-    private boolean hasBeenSeen(Tweet tweet) {
-        return friendCache.contains(tweet.user().id());
+    private boolean hasBeenSeen(Tweet tweet, Account account) {
+        return friendCache.contains(tweet.user().id(), account);
     }
 }
