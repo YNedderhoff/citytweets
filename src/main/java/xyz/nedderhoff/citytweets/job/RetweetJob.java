@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.cache.RetweetCache;
 import xyz.nedderhoff.citytweets.domain.Tweet;
+import xyz.nedderhoff.citytweets.platform.twitter.api1.MeEndpoint;
+import xyz.nedderhoff.citytweets.platform.twitter.api1.RetweetEndpoint;
+import xyz.nedderhoff.citytweets.platform.twitter.api2.RecentTweetsEndpoint;
 import xyz.nedderhoff.citytweets.service.AccountService;
-import xyz.nedderhoff.citytweets.twitter.api1.MeEndpoint;
-import xyz.nedderhoff.citytweets.twitter.api1.RetweetEndpoint;
-import xyz.nedderhoff.citytweets.twitter.api2.RecentTweetsEndpoint;
 
 @Component
 @EnableScheduling

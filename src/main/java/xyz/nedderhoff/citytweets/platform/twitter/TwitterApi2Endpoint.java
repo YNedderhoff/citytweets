@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.twitter;
+package xyz.nedderhoff.citytweets.platform.twitter;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

@@ -10,10 +10,10 @@ import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.cache.FriendCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
 import xyz.nedderhoff.citytweets.domain.Tweet;
+import xyz.nedderhoff.citytweets.platform.twitter.api1.FollowEndpoint;
+import xyz.nedderhoff.citytweets.platform.twitter.api1.MeEndpoint;
+import xyz.nedderhoff.citytweets.platform.twitter.api2.RecentTweetsEndpoint;
 import xyz.nedderhoff.citytweets.service.AccountService;
-import xyz.nedderhoff.citytweets.twitter.api1.FollowEndpoint;
-import xyz.nedderhoff.citytweets.twitter.api1.MeEndpoint;
-import xyz.nedderhoff.citytweets.twitter.api2.RecentTweetsEndpoint;
 
 @Component
 @EnableScheduling

@@ -8,8 +8,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
+import xyz.nedderhoff.citytweets.platform.twitter.api1.FriendsEndpoint;
 import xyz.nedderhoff.citytweets.service.AccountService;
-import xyz.nedderhoff.citytweets.twitter.api1.FriendsEndpoint;
 
 import java.util.Map;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.twitter;
+package xyz.nedderhoff.citytweets.platform.twitter;
 
 import org.springframework.web.client.RestTemplate;
 import xyz.nedderhoff.citytweets.cache.Twitter4jConnectionsCache;

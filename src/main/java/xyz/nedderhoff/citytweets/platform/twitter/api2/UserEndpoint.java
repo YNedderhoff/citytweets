@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.twitter.api2;
+package xyz.nedderhoff.citytweets.platform.twitter.api2;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +14,8 @@ import xyz.nedderhoff.citytweets.cache.Twitter4jConnectionsCache;
 import xyz.nedderhoff.citytweets.converter.UserConverter;
 import xyz.nedderhoff.citytweets.domain.User;
 import xyz.nedderhoff.citytweets.domain.http.userlookup.UserLookupResponse;
+import xyz.nedderhoff.citytweets.platform.twitter.TwitterApi2Endpoint;
 import xyz.nedderhoff.citytweets.service.AccountService;
-import xyz.nedderhoff.citytweets.twitter.TwitterApi2Endpoint;
 
 @Component
 public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {

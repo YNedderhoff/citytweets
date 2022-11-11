@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import xyz.nedderhoff.citytweets.domain.User;
-import xyz.nedderhoff.citytweets.twitter.api2.UserEndpoint;
+import xyz.nedderhoff.citytweets.platform.twitter.api2.UserEndpoint;
 
 import java.util.concurrent.TimeUnit;
 
