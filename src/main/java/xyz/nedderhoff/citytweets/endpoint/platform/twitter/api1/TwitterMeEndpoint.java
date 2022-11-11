@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.platform.twitter.api1;
+package xyz.nedderhoff.citytweets.endpoint.platform.twitter.api1;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,14 +8,14 @@ import org.springframework.web.client.RestTemplate;
 import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.cache.Twitter4jConnectionsCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
-import xyz.nedderhoff.citytweets.platform.twitter.TwitterApi1Endpoint;
+import xyz.nedderhoff.citytweets.endpoint.platform.twitter.TwitterApi1Endpoint;
 
 @Component
-public class MeEndpoint extends TwitterApi1Endpoint {
-    private static final Logger logger = LoggerFactory.getLogger(MeEndpoint.class);
+public class TwitterMeEndpoint extends TwitterApi1Endpoint {
+    private static final Logger logger = LoggerFactory.getLogger(TwitterMeEndpoint.class);
 
     @Autowired
-    public MeEndpoint(
+    public TwitterMeEndpoint(
             RestTemplate rt,
             Twitter4jConnectionsCache connections
     ) {

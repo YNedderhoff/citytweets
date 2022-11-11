@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.cache.RetweetCache;
 import xyz.nedderhoff.citytweets.domain.Tweet;
-import xyz.nedderhoff.citytweets.platform.twitter.api1.MeEndpoint;
-import xyz.nedderhoff.citytweets.platform.twitter.api1.RetweetEndpoint;
-import xyz.nedderhoff.citytweets.platform.twitter.api2.RecentTweetsEndpoint;
+import xyz.nedderhoff.citytweets.endpoint.MeEndpoint;
+import xyz.nedderhoff.citytweets.endpoint.SearchEndpoint;
+import xyz.nedderhoff.citytweets.endpoint.ShareEndpoint;
+import xyz.nedderhoff.citytweets.exceptions.PlatformException;
 import xyz.nedderhoff.citytweets.service.AccountService;
 
 @Component
@@ -20,22 +20,22 @@ public class RetweetJob {
     private static final Logger logger = LoggerFactory.getLogger(RetweetJob.class);
     private static final int FETCHING_RATE = 1000 * 60 * 5;
 
-    private final RecentTweetsEndpoint recentTweetsEndpoint;
-    private final RetweetEndpoint retweetEndpoint;
+    private final SearchEndpoint searchEndpoint;
+    private final ShareEndpoint shareEndpoint;
     private final MeEndpoint meEndpoint;
     private final RetweetCache retweetCache;
     private final AccountService accountService;
 
     @Autowired
     public RetweetJob(
-            RecentTweetsEndpoint recentTweetsEndpoint,
-            RetweetEndpoint retweetEndpoint,
+            SearchEndpoint searchEndpoint,
+            ShareEndpoint shareEndpoint,
             MeEndpoint meEndpoint,
             RetweetCache retweetCache,
             AccountService accountService
     ) {
-        this.recentTweetsEndpoint = recentTweetsEndpoint;
-        this.retweetEndpoint = retweetEndpoint;
+        this.searchEndpoint = searchEndpoint;
+        this.shareEndpoint = shareEndpoint;
         this.meEndpoint = meEndpoint;
         this.retweetCache = retweetCache;
         this.accountService = accountService;
@@ -48,13 +48,13 @@ public class RetweetJob {
             final long myId;
             try {
                 myId = meEndpoint.getId(account);
-                recentTweetsEndpoint.search(account.search()).stream()
+                searchEndpoint.search(account.search()).stream()
                         .filter(tweet -> shouldRetweet(tweet, myId))
                         .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
                                 tweet.id(), tweet.user().name(), tweet.lang(), tweet.user().location(), tweet.text())
                         )
-                        .forEach(t -> retweetEndpoint.retweet(t, account));
-            } catch (TwitterException e) {
+                        .forEach(t -> shareEndpoint.retweet(t, account));
+            } catch (PlatformException e) {
                 logger.error("Exception during retweet job", e);
             }
         });

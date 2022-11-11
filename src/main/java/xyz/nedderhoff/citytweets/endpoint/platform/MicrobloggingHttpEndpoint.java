@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.platform;
+package xyz.nedderhoff.citytweets.endpoint.platform;
 
 import org.springframework.web.client.RestTemplate;
 

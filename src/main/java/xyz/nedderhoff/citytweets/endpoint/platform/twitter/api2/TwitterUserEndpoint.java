@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.platform.twitter.api2;
+package xyz.nedderhoff.citytweets.endpoint.platform.twitter.api2;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,12 +14,12 @@ import xyz.nedderhoff.citytweets.cache.Twitter4jConnectionsCache;
 import xyz.nedderhoff.citytweets.converter.UserConverter;
 import xyz.nedderhoff.citytweets.domain.User;
 import xyz.nedderhoff.citytweets.domain.http.userlookup.UserLookupResponse;
-import xyz.nedderhoff.citytweets.platform.twitter.TwitterApi2Endpoint;
+import xyz.nedderhoff.citytweets.endpoint.platform.twitter.TwitterApi2Endpoint;
 import xyz.nedderhoff.citytweets.service.AccountService;
 
 @Component
-public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
-    private static final Logger logger = LoggerFactory.getLogger(UserEndpoint.class);
+public class TwitterUserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
+    private static final Logger logger = LoggerFactory.getLogger(TwitterUserEndpoint.class);
     public static final String BASE_QUERY_USER_BY_ID = BASE_TWITTER_API_2_URI + "users/%d?user.fields=location";
     public static final String BASE_QUERY_USER_BY_NAME = BASE_TWITTER_API_2_URI + "users/by/username/%s?user.fields=location";
 
@@ -28,7 +28,7 @@ public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
     private final HttpEntity<UserLookupResponse> userResponseEntity;
 
     @Autowired
-    public UserEndpoint(
+    public TwitterUserEndpoint(
             Twitter twitter,
             RestTemplate rt,
             Twitter4jConnectionsCache connections,

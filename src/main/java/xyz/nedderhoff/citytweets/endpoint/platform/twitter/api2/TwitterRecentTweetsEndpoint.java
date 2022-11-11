@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.platform.twitter.api2;
+package xyz.nedderhoff.citytweets.endpoint.platform.twitter.api2;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,22 +11,22 @@ import org.springframework.web.client.RestTemplate;
 import xyz.nedderhoff.citytweets.converter.RecentTweetsConverter;
 import xyz.nedderhoff.citytweets.domain.Tweet;
 import xyz.nedderhoff.citytweets.domain.http.recentsearch.RecentSearchResponse;
-import xyz.nedderhoff.citytweets.platform.twitter.TwitterApi2Endpoint;
+import xyz.nedderhoff.citytweets.endpoint.platform.twitter.TwitterApi2Endpoint;
 import xyz.nedderhoff.citytweets.service.AccountService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class RecentTweetsEndpoint extends TwitterApi2Endpoint<RecentSearchResponse> {
-    private static final Logger logger = LoggerFactory.getLogger(RecentTweetsEndpoint.class);
+public class TwitterRecentTweetsEndpoint extends TwitterApi2Endpoint<RecentSearchResponse> {
+    private static final Logger logger = LoggerFactory.getLogger(TwitterRecentTweetsEndpoint.class);
     private static final String BASE_QUERY_RECENT_TWEETS = BASE_TWITTER_API_2_URI + "tweets/search/recent?tweet.fields=author_id,lang&query=";
 
     private final RecentTweetsConverter recentTweetsConverter;
     private final HttpEntity<RecentSearchResponse> recentTweetsResponseEntity;
 
     @Autowired
-    public RecentTweetsEndpoint(
+    public TwitterRecentTweetsEndpoint(
             RecentTweetsConverter recentTweetsConverter,
             RestTemplate rt,
             AccountService accountService

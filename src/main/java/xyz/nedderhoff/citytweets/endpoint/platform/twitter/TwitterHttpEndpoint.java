@@ -1,7 +1,7 @@
-package xyz.nedderhoff.citytweets.platform.twitter;
+package xyz.nedderhoff.citytweets.endpoint.platform.twitter;
 
 import org.springframework.web.client.RestTemplate;
-import xyz.nedderhoff.citytweets.platform.MicrobloggingHttpEndpoint;
+import xyz.nedderhoff.citytweets.endpoint.platform.MicrobloggingHttpEndpoint;
 
 public abstract sealed class TwitterHttpEndpoint
         extends MicrobloggingHttpEndpoint

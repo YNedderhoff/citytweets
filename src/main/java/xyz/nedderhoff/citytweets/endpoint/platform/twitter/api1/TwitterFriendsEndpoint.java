@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.platform.twitter.api1;
+package xyz.nedderhoff.citytweets.endpoint.platform.twitter.api1;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,18 +9,18 @@ import twitter4j.IDs;
 import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.cache.Twitter4jConnectionsCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
-import xyz.nedderhoff.citytweets.platform.twitter.TwitterApi1Endpoint;
+import xyz.nedderhoff.citytweets.endpoint.platform.twitter.TwitterApi1Endpoint;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 @Component
-public class FriendsEndpoint extends TwitterApi1Endpoint {
-    private static final Logger logger = LoggerFactory.getLogger(FriendsEndpoint.class);
+public class TwitterFriendsEndpoint extends TwitterApi1Endpoint {
+    private static final Logger logger = LoggerFactory.getLogger(TwitterFriendsEndpoint.class);
 
     @Autowired
-    public FriendsEndpoint(
+    public TwitterFriendsEndpoint(
             RestTemplate rt,
             Twitter4jConnectionsCache connections
     ) {

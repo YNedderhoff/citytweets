@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
-import xyz.nedderhoff.citytweets.platform.twitter.api1.FriendsEndpoint;
+import xyz.nedderhoff.citytweets.endpoint.FriendsEndpoint;
+import xyz.nedderhoff.citytweets.exceptions.PlatformException;
 import xyz.nedderhoff.citytweets.service.AccountService;
 
 import java.util.Map;
@@ -38,7 +38,7 @@ public class FriendCache {
             try {
                 cache.put(account.name(), friendsEndpoint.getFriends(account));
                 logger.info("Cache updated for account {}, total size: {}", account.name(), cache.get(account.name()).size());
-            } catch (TwitterException e) {
+            } catch (PlatformException e) {
                 logger.error("Exception occurred while fetching friend list for account {}", account.name(), e);
             }
         });
