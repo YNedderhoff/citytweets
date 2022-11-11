@@ -46,7 +46,7 @@ public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
     }
 
     public User getById(long id) {
-        logger.info("Requesting user by id {}", id);
+        logger.debug("Requesting user by id {}", id);
 
         final String uri = String.format(BASE_QUERY_USER_BY_ID, id);
         final ResponseEntity<UserLookupResponse> response = rt.exchange(
@@ -66,7 +66,7 @@ public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
     }
 
     public User getByName(String name) {
-        logger.info("Requesting user by name {}", name);
+        logger.debug("Requesting user by name {}", name);
 
         final String uri = String.format(BASE_QUERY_USER_BY_NAME, name);
         final ResponseEntity<UserLookupResponse> response = rt.exchange(

@@ -39,7 +39,7 @@ public class FriendCache {
                 cache.put(account.name(), friendsEndpoint.getFriends(account));
                 logger.info("Cache updated for account {}, total size: {}", account.name(), cache.get(account.name()).size());
             } catch (TwitterException e) {
-                logger.info("Exception occurred while fetching friend list for account {}", account.name(), e);
+                logger.error("Exception occurred while fetching friend list for account {}", account.name(), e);
             }
         });
     }

@@ -33,12 +33,12 @@ public class UserCache {
     }
 
     public User getById(long id) {
-        logger.info("Requesting user by id {} (current cache size {})", id, cacheById.estimatedSize());
+        logger.debug("Requesting user by id {} (current cache size {})", id, cacheById.estimatedSize());
         return cacheById.get(id);
     }
 
     public User getByName(String username) {
-        logger.info("Requesting user by name {} ((current cache size {})", username, cacheByName.estimatedSize());
+        logger.debug("Requesting user by name {} ((current cache size {})", username, cacheByName.estimatedSize());
         return cacheByName.get(username);
     }
 }
