@@ -24,7 +24,7 @@ public class FriendsEndpoint {
         try {
             return twitterFriendsEndpoint.getFriends(account);
         } catch (TwitterException e) {
-            throw new PlatformException(e);
+            throw new PlatformException("Error when talking to Twitter API", e);
         }
     }
 }
