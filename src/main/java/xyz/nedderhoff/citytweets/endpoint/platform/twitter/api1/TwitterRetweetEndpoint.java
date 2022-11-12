@@ -8,10 +8,9 @@ import org.springframework.web.client.RestTemplate;
 import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.cache.RetweetCache;
 import xyz.nedderhoff.citytweets.cache.Twitter4jConnectionsCache;
+import xyz.nedderhoff.citytweets.config.TwitterAccount;
 import xyz.nedderhoff.citytweets.domain.Tweet;
 import xyz.nedderhoff.citytweets.endpoint.platform.twitter.TwitterApi1Endpoint;
-
-import static xyz.nedderhoff.citytweets.config.AccountProperties.Account;
 
 @Component
 public class TwitterRetweetEndpoint extends TwitterApi1Endpoint {
@@ -28,7 +27,7 @@ public class TwitterRetweetEndpoint extends TwitterApi1Endpoint {
         this.retweetCache = retweetCache;
     }
 
-    public void retweet(Tweet tweet, Account account) {
+    public void retweet(Tweet tweet, TwitterAccount account) {
         final long id = tweet.id();
         logger.info("Retweeting tweet with id {} ...", id);
         try {

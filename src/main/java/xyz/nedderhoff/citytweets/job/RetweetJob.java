@@ -44,11 +44,11 @@ public class RetweetJob {
     @Scheduled(fixedRate = FETCHING_RATE)
     public void searchTweets() {
         accountService.getAccounts().forEach(account -> {
-            logger.info("Looking for unseen tweets for search {} on account {}", account.search(), account.name());
+            logger.info("Looking for unseen tweets for search {} on account {}", account.getSearch(), account.getName());
             final long myId;
             try {
                 myId = meEndpoint.getId(account);
-                searchEndpoint.search(account.search()).stream()
+                searchEndpoint.search(account.getSearch()).stream()
                         .filter(tweet -> shouldRetweet(tweet, myId))
                         .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
                                 tweet.id(), tweet.user().name(), tweet.lang(), tweet.user().location(), tweet.text())

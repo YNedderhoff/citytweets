@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.cache.Twitter4jConnectionsCache;
-import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
+import xyz.nedderhoff.citytweets.config.TwitterAccount;
 import xyz.nedderhoff.citytweets.endpoint.platform.twitter.TwitterApi1Endpoint;
 
 @Component
@@ -22,8 +22,8 @@ public class TwitterMeEndpoint extends TwitterApi1Endpoint {
         super(rt, connections);
     }
 
-    public long getId(Account account) throws TwitterException {
-        logger.debug("Fetching own id for account {} ...", account.name());
+    public long getId(TwitterAccount account) throws TwitterException {
+        logger.debug("Fetching own id for account {} ...", account.getName());
         return connections.getConnection(account).getId();
     }
 }

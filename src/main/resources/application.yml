@@ -22,34 +22,35 @@ spring:
     banner-mode: off
 
 
-account-properties:
+twitter-account-properties:
   accounts:
-    -
-      name: stupidAccount
-      bearerToken: stupidbearerToken
-      twitter4j:
-        oauth:
-          accessToken: stupidAccessToken
-          accessTokenSecret: stupidAccessTokenSecret
-          consumerKey: stupidConsumerKey
-          consumerSecret: stupidConsumerSecret
-      search: stupidSearchThatHopefullyNeverMatches
-      location-search: stupidLocationSearchThatHopefullyNeverMatches
-      location-to-follow: stupidLocationToFollowThatHopefullyNeverMatches
-      ignored-accounts:
-        - stupidAccount1ThatHopefullyNeverMatches
-        - stupidAccount2ThatHopefullyNeverMatches
     - name: stupidAccount
-      bearerToken: stupidbearerToken
-      twitter4j:
-        oauth:
-          accessToken: stupidAccessToken
-          accessTokenSecret: stupidAccessTokenSecret
-          consumerKey: stupidConsumerKey
-          consumerSecret: stupidConsumerSecret
       search: stupidSearchThatHopefullyNeverMatches
       location-search: stupidLocationSearchThatHopefullyNeverMatches
       location-to-follow: stupidLocationToFollowThatHopefullyNeverMatches
       ignored-accounts:
         - stupidAccount1ThatHopefullyNeverMatches
         - stupidAccount2ThatHopefullyNeverMatches
+      account-api-config:
+        bearerToken: stupidbearerToken
+        twitter4j:
+          oauth:
+            accessToken: stupidAccessToken
+            accessTokenSecret: stupidAccessTokenSecret
+            consumerKey: stupidConsumerKey
+            consumerSecret: stupidConsumerSecret
+    - name: stupidAccount
+      search: stupidSearchThatHopefullyNeverMatches
+      location-search: stupidLocationSearchThatHopefullyNeverMatches
+      location-to-follow: stupidLocationToFollowThatHopefullyNeverMatches
+      ignored-accounts:
+        - stupidAccount1ThatHopefullyNeverMatches
+        - stupidAccount2ThatHopefullyNeverMatches
+      account-api-config:
+        bearerToken: stupidbearerToken
+        twitter4j:
+          oauth:
+            accessToken: stupidAccessToken
+            accessTokenSecret: stupidAccessTokenSecret
+            consumerKey: stupidConsumerKey
+            consumerSecret: stupidConsumerSecret

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
+import xyz.nedderhoff.citytweets.config.TwitterAccount;
 import xyz.nedderhoff.citytweets.endpoint.FriendsEndpoint;
 import xyz.nedderhoff.citytweets.exceptions.PlatformException;
 import xyz.nedderhoff.citytweets.service.AccountService;
@@ -34,22 +34,22 @@ public class FriendCache {
     @Scheduled(fixedRate = FRIEND_UPDATE_RATE)
     private void fetchFollowers() {
         accountService.getAccounts().forEach(account -> {
-            logger.info("Populating Friends Cache for account {}", account.name());
+            logger.info("Populating Friends Cache for account {}", account.getName());
             try {
-                cache.put(account.name(), friendsEndpoint.getFriends(account));
-                logger.info("Cache updated for account {}, total size: {}", account.name(), cache.get(account.name()).size());
+                cache.put(account.getName(), friendsEndpoint.getFriends(account));
+                logger.info("Cache updated for account {}, total size: {}", account.getName(), cache.get(account.getName()).size());
             } catch (PlatformException e) {
-                logger.error("Exception occurred while fetching friend list for account {}", account.name(), e);
+                logger.error("Exception occurred while fetching friend list for account {}", account.getName(), e);
             }
         });
     }
 
-    public boolean contains(Long id, Account account) {
-        return cache.get(account.name()).contains(id);
+    public boolean contains(Long id, TwitterAccount account) {
+        return cache.get(account.getName()).contains(id);
     }
 
-    public void add(Long id, Account account) {
-        logger.info("Adding friend {} to account {}", id, account.name());
-        cache.get(account.name()).add(id);
+    public void add(Long id, TwitterAccount account) {
+        logger.info("Adding friend {} to account {}", id, account.getName());
+        cache.get(account.getName()).add(id);
     }
 }

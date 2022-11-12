@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import twitter4j.IDs;
 import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.cache.Twitter4jConnectionsCache;
-import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
+import xyz.nedderhoff.citytweets.config.TwitterAccount;
 import xyz.nedderhoff.citytweets.endpoint.platform.twitter.TwitterApi1Endpoint;
 
 import java.util.Arrays;
@@ -27,17 +27,17 @@ public class TwitterFriendsEndpoint extends TwitterApi1Endpoint {
         super(rt, connections);
     }
 
-    public Set<Long> getFriends(Account account) throws TwitterException {
-        logger.info("Fetching friends for account {} ...", account.name());
+    public Set<Long> getFriends(TwitterAccount account) throws TwitterException {
+        logger.info("Fetching friends for account {} ...", account.getName());
         long cursor = -1;
         boolean finished = false;
         Set<Long> friendIds = new HashSet<>();
         while (!finished) {
-            logger.info("Doing iteration with cursor {} for account {}", cursor, account.name());
+            logger.info("Doing iteration with cursor {} for account {}", cursor, account.getName());
             IDs friends = connections.getConnection(account).getFriendsIDs(cursor);
             long[] ids = friends.getIDs();
             if (ids.length == 0) {
-                logger.info("Full friends list fetched for account {}, total size: {}", account.name(), friendIds.size());
+                logger.info("Full friends list fetched for account {}, total size: {}", account.getName(), friendIds.size());
                 finished = true;
             } else {
                 cursor = friends.getNextCursor();

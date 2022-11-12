@@ -3,7 +3,7 @@ package xyz.nedderhoff.citytweets.endpoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import twitter4j.TwitterException;
-import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
+import xyz.nedderhoff.citytweets.config.TwitterAccount;
 import xyz.nedderhoff.citytweets.endpoint.platform.twitter.api1.TwitterMeEndpoint;
 import xyz.nedderhoff.citytweets.exceptions.PlatformException;
 
@@ -17,7 +17,7 @@ public class MeEndpoint {
         this.twitterMeEndpoint = twitterMeEndpoint;
     }
 
-    public long getId(Account account) throws PlatformException {
+    public long getId(TwitterAccount account) throws PlatformException {
         //TODO distinguish Account by platform and call platform specific endpoint for it
         try {
             return twitterMeEndpoint.getId(account);

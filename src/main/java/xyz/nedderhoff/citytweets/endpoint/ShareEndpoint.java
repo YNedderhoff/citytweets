@@ -2,7 +2,7 @@ package xyz.nedderhoff.citytweets.endpoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
+import xyz.nedderhoff.citytweets.config.TwitterAccount;
 import xyz.nedderhoff.citytweets.domain.Tweet;
 import xyz.nedderhoff.citytweets.endpoint.platform.twitter.api1.TwitterRetweetEndpoint;
 
@@ -16,7 +16,7 @@ public class ShareEndpoint {
         this.twitterRetweetEndpoint = twitterRetweetEndpoint;
     }
 
-    public void retweet(Tweet tweet, Account account) {
+    public void retweet(Tweet tweet, TwitterAccount account) {
         //TODO distinguish Account by platform and call platform specific endpoint for it. Return abstract Post class of some kind.
         twitterRetweetEndpoint.retweet(tweet, account);
     }

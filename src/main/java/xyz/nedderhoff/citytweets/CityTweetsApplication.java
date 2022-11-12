@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
-import xyz.nedderhoff.citytweets.config.AccountProperties;
+import xyz.nedderhoff.citytweets.config.TwitterAccountProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties(AccountProperties.class)
+@EnableConfigurationProperties(TwitterAccountProperties.class)
 public class CityTweetsApplication {
 
 	public static void main(String[] args) {

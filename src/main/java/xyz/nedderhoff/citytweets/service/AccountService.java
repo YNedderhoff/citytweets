@@ -2,22 +2,22 @@ package xyz.nedderhoff.citytweets.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import xyz.nedderhoff.citytweets.config.AccountProperties;
-import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
+import xyz.nedderhoff.citytweets.config.TwitterAccount;
+import xyz.nedderhoff.citytweets.config.TwitterAccountProperties;
 
 import java.util.List;
 import java.util.Random;
 
 @Component
 public class AccountService {
-    private final List<Account> accounts;
+    private final List<TwitterAccount> accounts;
 
     @Autowired
-    public AccountService(AccountProperties accountProperties) {
-        this.accounts = accountProperties.accounts();
+    public AccountService(TwitterAccountProperties twitterAccountProperties) {
+        this.accounts = twitterAccountProperties.getAccounts();
     }
 
-    public List<Account> getAccounts() {
+    public List<TwitterAccount> getAccounts() {
         return accounts;
     }
 
@@ -25,8 +25,8 @@ public class AccountService {
         int size = accounts.size();
         int randIdx = new Random().nextInt(size);
 
-        Account randomAccount = accounts.get(randIdx);
+        TwitterAccount randomAccount = accounts.get(randIdx);
 
-        return randomAccount.bearerToken();
+        return randomAccount.getAccountApiConfig().getBearerToken();
     }
 }

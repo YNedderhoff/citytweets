@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.cache.FriendCache;
 import xyz.nedderhoff.citytweets.cache.Twitter4jConnectionsCache;
-import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
+import xyz.nedderhoff.citytweets.config.TwitterAccount;
 import xyz.nedderhoff.citytweets.domain.User;
 import xyz.nedderhoff.citytweets.endpoint.platform.twitter.TwitterApi1Endpoint;
 
@@ -27,14 +27,14 @@ public class TwitterFollowEndpoint extends TwitterApi1Endpoint {
         this.friendCache = friendCache;
     }
 
-    public void follow(User user, Account account) {
-        logger.info("Following user \"{}\" for account {}", user.name(), account.name());
+    public void follow(User user, TwitterAccount account) {
+        logger.info("Following user \"{}\" for account {}", user.name(), account.getName());
         try {
             connections.getConnection(account).createFriendship(user.id());
-            logger.info("Successfully followed user {} for account {}", user.name(), account.name());
+            logger.info("Successfully followed user {} for account {}", user.name(), account.getName());
             friendCache.add(user.id(), account);
         } catch (TwitterException e) {
-            logger.error("Error trying to follow user {} for account {}", user, account.name(), e);
+            logger.error("Error trying to follow user {} for account {}", user, account.getName(), e);
         }
     }
 }
