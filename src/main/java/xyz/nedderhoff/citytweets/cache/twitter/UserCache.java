@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.cache;
+package xyz.nedderhoff.citytweets.cache.twitter;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import xyz.nedderhoff.citytweets.domain.User;
-import xyz.nedderhoff.citytweets.twitter.api2.UserEndpoint;
+import xyz.nedderhoff.citytweets.api.twitter.api2.UserEndpoint;
+import xyz.nedderhoff.citytweets.domain.twitter.User;
 
 import java.util.concurrent.TimeUnit;
 

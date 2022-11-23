@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.twitter.api1;
+package xyz.nedderhoff.citytweets.api.twitter.api1;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,12 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import twitter4j.TwitterException;
-import xyz.nedderhoff.citytweets.cache.RetweetCache;
-import xyz.nedderhoff.citytweets.cache.Twitter4jConnectionsCache;
-import xyz.nedderhoff.citytweets.domain.Tweet;
-import xyz.nedderhoff.citytweets.twitter.TwitterApi1Endpoint;
-
-import static xyz.nedderhoff.citytweets.config.AccountProperties.Account;
+import xyz.nedderhoff.citytweets.api.twitter.TwitterApi1Endpoint;
+import xyz.nedderhoff.citytweets.cache.twitter.RetweetCache;
+import xyz.nedderhoff.citytweets.cache.twitter.Twitter4jConnectionsCache;
+import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
+import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
 
 @Component
 public class RetweetEndpoint extends TwitterApi1Endpoint {
@@ -28,7 +27,7 @@ public class RetweetEndpoint extends TwitterApi1Endpoint {
         this.retweetCache = retweetCache;
     }
 
-    public void retweet(Tweet tweet, Account account) {
+    public void retweet(Tweet tweet, TwitterAccount account) {
         final long id = tweet.id();
         logger.info("Retweeting tweet with id {} ...", id);
         try {

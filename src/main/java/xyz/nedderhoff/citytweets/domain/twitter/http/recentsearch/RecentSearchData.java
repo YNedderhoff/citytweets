@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.domain.http.recentsearch;
+package xyz.nedderhoff.citytweets.domain.twitter.http.recentsearch;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

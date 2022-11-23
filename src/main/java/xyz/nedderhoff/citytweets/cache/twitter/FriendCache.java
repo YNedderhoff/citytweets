@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.cache;
+package xyz.nedderhoff.citytweets.cache.twitter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,9 +7,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import twitter4j.TwitterException;
-import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
+import xyz.nedderhoff.citytweets.api.twitter.api1.FriendsEndpoint;
+import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
 import xyz.nedderhoff.citytweets.service.AccountService;
-import xyz.nedderhoff.citytweets.twitter.api1.FriendsEndpoint;
 
 import java.util.Map;
 import java.util.Set;
@@ -33,7 +33,7 @@ public class FriendCache {
 
     @Scheduled(fixedRate = FRIEND_UPDATE_RATE)
     private void fetchFollowers() {
-        accountService.getAccounts().forEach(account -> {
+        accountService.getTwitterAccounts().forEach(account -> {
             logger.info("Populating Friends Cache for account {}", account.name());
             try {
                 cache.put(account.name(), friendsEndpoint.getFriends(account));
@@ -44,11 +44,11 @@ public class FriendCache {
         });
     }
 
-    public boolean contains(Long id, Account account) {
+    public boolean contains(Long id, TwitterAccount account) {
         return cache.get(account.name()).contains(id);
     }
 
-    public void add(Long id, Account account) {
+    public void add(Long id, TwitterAccount account) {
         logger.info("Adding friend {} to account {}", id, account.name());
         cache.get(account.name()).add(id);
     }

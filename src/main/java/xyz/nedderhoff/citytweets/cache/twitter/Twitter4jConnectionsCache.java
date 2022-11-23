@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.cache;
+package xyz.nedderhoff.citytweets.cache.twitter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
-import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
-import xyz.nedderhoff.citytweets.config.AccountProperties.Account.Twitter4j.Oauth;
+import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
+import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount.Twitter4j.Oauth;
 import xyz.nedderhoff.citytweets.service.AccountService;
 
 import java.util.ArrayList;
@@ -25,11 +25,11 @@ public class Twitter4jConnectionsCache {
 
     @Autowired
     public Twitter4jConnectionsCache(AccountService accountService) {
-        accountService.getAccounts()
+        accountService.getTwitterAccounts()
                 .forEach(account -> connections.put(account.name(), createTwitter4jConnection(account)));
     }
 
-    public Twitter getConnection(Account account) {
+    public Twitter getConnection(TwitterAccount account) {
         return connections.get(account.name());
     }
 
@@ -44,7 +44,7 @@ public class Twitter4jConnectionsCache {
         return connections.get(randomKey);
     }
 
-    private static Twitter createTwitter4jConnection(Account account) {
+    private static Twitter createTwitter4jConnection(TwitterAccount account) {
         logger.info("Creating Twitter4J connection for account {}", account.name());
         final Oauth oauth = account.twitter4j().oauth();
         ConfigurationBuilder cb = new ConfigurationBuilder();

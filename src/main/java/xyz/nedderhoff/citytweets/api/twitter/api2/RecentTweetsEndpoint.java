@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.twitter.api2;
+package xyz.nedderhoff.citytweets.api.twitter.api2;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,11 +8,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import xyz.nedderhoff.citytweets.api.twitter.TwitterApi2Endpoint;
 import xyz.nedderhoff.citytweets.converter.RecentTweetsConverter;
-import xyz.nedderhoff.citytweets.domain.Tweet;
-import xyz.nedderhoff.citytweets.domain.http.recentsearch.RecentSearchResponse;
+import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
+import xyz.nedderhoff.citytweets.domain.twitter.http.recentsearch.RecentSearchResponse;
 import xyz.nedderhoff.citytweets.service.AccountService;
-import xyz.nedderhoff.citytweets.twitter.TwitterApi2Endpoint;
 
 import java.util.ArrayList;
 import java.util.List;

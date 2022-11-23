@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.twitter;
+package xyz.nedderhoff.citytweets.api.twitter;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -23,7 +23,7 @@ public abstract non-sealed class TwitterApi2Endpoint<T> extends TwitterHttpEndpo
     protected HttpEntity<T> getResponseHttpEntity() {
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer " + accountService.getRandomBearerToken());
+        headers.set("Authorization", "Bearer " + accountService.getRandomBearerTokenTwitter());
         return new HttpEntity<>(headers);
     }
 }

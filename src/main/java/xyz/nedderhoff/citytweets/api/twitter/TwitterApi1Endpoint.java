@@ -1,7 +1,7 @@
-package xyz.nedderhoff.citytweets.twitter;
+package xyz.nedderhoff.citytweets.api.twitter;
 
 import org.springframework.web.client.RestTemplate;
-import xyz.nedderhoff.citytweets.cache.Twitter4jConnectionsCache;
+import xyz.nedderhoff.citytweets.cache.twitter.Twitter4jConnectionsCache;
 
 @Deprecated(forRemoval = true)
 // https://developer.twitter.com/en/docs/twitter-api/v1

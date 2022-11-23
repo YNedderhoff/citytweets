@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.domain.http.userlookup;
+package xyz.nedderhoff.citytweets.domain.twitter.http.userlookup;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

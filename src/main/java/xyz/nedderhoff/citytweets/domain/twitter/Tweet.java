@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.domain;
+package xyz.nedderhoff.citytweets.domain.twitter;
 
 public record Tweet(
         Long id,

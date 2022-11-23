@@ -6,9 +6,10 @@ import java.util.List;
 
 @ConfigurationProperties(prefix = "account-properties")
 public record AccountProperties(
-        List<Account> accounts
+        List<TwitterAccount> twitter,
+        List<MastodonAccount> mastodon
 ) {
-    public record Account(
+    public record TwitterAccount(
             String name,
             String bearerToken,
             Twitter4j twitter4j,
@@ -28,5 +29,23 @@ public record AccountProperties(
             ) {
             }
         }
+    }
+
+    public record MastodonAccount(
+            String name,
+            String instance,
+            Oauth oauth,
+            String redirectUri,
+            String locationSearch,
+            String locationToFollow,
+            List<String> ignoredAccounts
+    ) {
+
+        public record Oauth(
+                String accessToken,
+                String accessTokenSecret
+        ) {
+        }
+
     }
 }
