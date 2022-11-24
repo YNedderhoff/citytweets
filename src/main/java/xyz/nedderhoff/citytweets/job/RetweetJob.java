@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.api.mastodon.api1.AccountsEndpoint;
-import xyz.nedderhoff.citytweets.api.mastodon.api1.BoostEndpoint;
+import xyz.nedderhoff.citytweets.api.mastodon.api1.StatusEndpoint;
 import xyz.nedderhoff.citytweets.api.mastodon.api2.AuthEndpoint;
 import xyz.nedderhoff.citytweets.api.mastodon.api2.SearchEndpoint;
 import xyz.nedderhoff.citytweets.api.twitter.api1.MeEndpoint;
@@ -41,7 +41,7 @@ public class RetweetJob {
     private final AuthEndpoint authEndpoint;
     private final SearchEndpoint searchEndpoint;
     private final AccountsEndpoint accountsEndpoint;
-    private final BoostEndpoint boostEndpoint;
+    private final StatusEndpoint statusEndpoint;
     private final RetootCache retootCache;
 
 
@@ -55,7 +55,7 @@ public class RetweetJob {
             AuthEndpoint authEndpoint,
             SearchEndpoint searchEndpoint,
             AccountsEndpoint accountsEndpoint,
-            BoostEndpoint boostEndpoint,
+            StatusEndpoint statusEndpoint,
             RetootCache retootCache
     ) {
         this.recentTweetsEndpoint = recentTweetsEndpoint;
@@ -66,7 +66,7 @@ public class RetweetJob {
         this.authEndpoint = authEndpoint;
         this.searchEndpoint = searchEndpoint;
         this.accountsEndpoint = accountsEndpoint;
-        this.boostEndpoint = boostEndpoint;
+        this.statusEndpoint = statusEndpoint;
         this.retootCache = retootCache;
     }
 
@@ -126,7 +126,8 @@ public class RetweetJob {
                             .stream()
                             .flatMap(follower -> accountsEndpoint.getStatuses(follower, authedHeaders, mastodonAccount).stream())
                             .filter(status -> shouldRetoot(status, mastodonAccount))
-                            .forEach(status -> boostEndpoint.boost(status, authedHeaders, mastodonAccount)));
+                            .map(status -> statusEndpoint.boost(status, authedHeaders, mastodonAccount))
+                            .forEach(status ->  retootCache.add(status.id())));
         });
     }
 
