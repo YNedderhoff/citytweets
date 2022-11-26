@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -47,7 +47,7 @@ public class StatusEndpoint extends MastodonApi1Endpoint<Account[]> {
         );
 
         if (response.getBody() == null) {
-            final HttpStatus statusCode = response.getStatusCode();
+            final HttpStatusCode statusCode = response.getStatusCode();
             throw new MastodonException(String.format("Error boosting status. Status code %s: %s", statusCode, response));
         }
         return response.getBody();
