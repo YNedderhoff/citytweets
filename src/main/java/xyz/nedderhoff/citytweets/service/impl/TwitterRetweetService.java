@@ -3,26 +3,23 @@ package xyz.nedderhoff.citytweets.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.api.twitter.api1.MeEndpoint;
 import xyz.nedderhoff.citytweets.api.twitter.api1.RetweetEndpoint;
 import xyz.nedderhoff.citytweets.api.twitter.api2.RecentTweetsEndpoint;
 import xyz.nedderhoff.citytweets.cache.twitter.RetweetCache;
 import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
+import xyz.nedderhoff.citytweets.exception.twitter.TwitterException;
 import xyz.nedderhoff.citytweets.service.AccountService;
 import xyz.nedderhoff.citytweets.service.RepostService;
 
 @Component
-public class TwitterRetweetService implements RepostService {
+public class TwitterRetweetService extends AbstractRepostService<Long, RetweetCache> implements RepostService {
     private static final Logger logger = LoggerFactory.getLogger(TwitterRetweetService.class);
 
     private final AccountService accountService;
-
-    // Twitter Dependencies
     private final RecentTweetsEndpoint recentTweetsEndpoint;
     private final RetweetEndpoint retweetEndpoint;
     private final MeEndpoint meEndpoint;
-    private final RetweetCache retweetCache;
 
     public TwitterRetweetService(
             AccountService accountService,
@@ -31,11 +28,11 @@ public class TwitterRetweetService implements RepostService {
             MeEndpoint meEndpoint,
             RetweetCache retweetCache
     ) {
+        super(retweetCache);
         this.accountService = accountService;
         this.recentTweetsEndpoint = recentTweetsEndpoint;
         this.retweetEndpoint = retweetEndpoint;
         this.meEndpoint = meEndpoint;
-        this.retweetCache = retweetCache;
     }
 
     @Override
@@ -50,7 +47,8 @@ public class TwitterRetweetService implements RepostService {
                         .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
                                 tweet.id(), tweet.user().name(), tweet.lang(), tweet.user().location(), tweet.text())
                         )
-                        .forEach(t -> retweetEndpoint.retweet(t, account));
+                        .map(tweet -> retweetEndpoint.retweet(tweet, account))
+                        .forEach(tweet -> cache(tweet.id()));
             } catch (TwitterException e) {
                 logger.error("Exception during retweet job", e);
             }
@@ -58,20 +56,16 @@ public class TwitterRetweetService implements RepostService {
     }
 
     private boolean shouldRetweet(Tweet tweet, long myId) {
-        return !isTweetFromMe(tweet, myId)
+        return !isFromMe(tweet, myId)
                 && !isRetweet(tweet)
-                && !hasBeenSeen(tweet);
+                && !hasBeenSeen(tweet.id());
     }
 
-    private boolean isTweetFromMe(Tweet tweet, long myId) {
-        return tweet.user().id() == myId;
+    protected boolean isFromMe(Tweet postUserId, long myUserId) {
+        return postUserId.user().id() == myUserId;
     }
 
     private boolean isRetweet(Tweet tweet) {
         return tweet.text().startsWith("RT @");
-    }
-
-    private boolean hasBeenSeen(Tweet tweet) {
-        return retweetCache.contains(tweet.id());
     }
 }

@@ -6,13 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.api.twitter.api1.FollowEndpoint;
 import xyz.nedderhoff.citytweets.api.twitter.api1.MeEndpoint;
 import xyz.nedderhoff.citytweets.api.twitter.api2.RecentTweetsEndpoint;
 import xyz.nedderhoff.citytweets.cache.twitter.FriendCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
 import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
+import xyz.nedderhoff.citytweets.exception.twitter.TwitterException;
 import xyz.nedderhoff.citytweets.service.AccountService;
 
 @Component

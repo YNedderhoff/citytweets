@@ -16,7 +16,7 @@ import xyz.nedderhoff.citytweets.service.RepostService;
 import java.util.Collections;
 
 @Component
-public class MastodonBoostService implements RepostService {
+public class MastodonBoostService extends  AbstractRepostService<String, RetootCache> implements RepostService {
     private static final Logger logger = LoggerFactory.getLogger(MastodonBoostService.class);
 
     private final AccountService accountService;
@@ -24,7 +24,6 @@ public class MastodonBoostService implements RepostService {
     private final SearchEndpoint searchEndpoint;
     private final AccountsEndpoint accountsEndpoint;
     private final StatusEndpoint statusEndpoint;
-    private final RetootCache retootCache;
 
 
     public MastodonBoostService(
@@ -35,12 +34,12 @@ public class MastodonBoostService implements RepostService {
             StatusEndpoint statusEndpoint,
             RetootCache retootCache
     ) {
+        super(retootCache);
         this.accountService = accountService;
         this.authEndpoint = authEndpoint;
         this.searchEndpoint = searchEndpoint;
         this.accountsEndpoint = accountsEndpoint;
         this.statusEndpoint = statusEndpoint;
-        this.retootCache = retootCache;
     }
 
     public void run() {
@@ -58,7 +57,7 @@ public class MastodonBoostService implements RepostService {
                             .flatMap(follower -> accountsEndpoint.getStatuses(follower, authedHeaders, mastodonAccount).stream())
                             .filter(status -> shouldRetoot(status, mastodonAccount))
                             .map(status -> statusEndpoint.boost(status, authedHeaders, mastodonAccount))
-                            .forEach(status -> retootCache.add(status.id())));
+                            .forEach(status -> cache(status.id())));
         });
     }
 
@@ -69,15 +68,12 @@ public class MastodonBoostService implements RepostService {
 
     private boolean shouldRetoot(Status status, AccountProperties.MastodonAccount account) {
         return statusMentionsOwnAccount(status, account)
-                && !isTootFromMe(status, account)
-                && !hasBeenSeen(status);
+                && !isFromMe(status, account)
+                && !hasBeenSeen(status.id());
     }
 
-    private boolean isTootFromMe(Status status, AccountProperties.MastodonAccount account) {
+
+    protected boolean isFromMe(Status status, AccountProperties.MastodonAccount account) {
         return status.account().webfingerUri().equals(account.name() + "@" + account.instance());
-    }
-
-    private boolean hasBeenSeen(Status status) {
-        return retootCache.contains(status.id());
     }
 }
