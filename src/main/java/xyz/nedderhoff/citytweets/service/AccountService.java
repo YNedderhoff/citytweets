@@ -1,6 +1,5 @@
 package xyz.nedderhoff.citytweets.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import xyz.nedderhoff.citytweets.config.AccountProperties;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
@@ -13,7 +12,6 @@ public class AccountService {
     private final List<TwitterAccount> twitterAccounts;
     private final List<AccountProperties.MastodonAccount> mastodonAccounts;
 
-    @Autowired
     public AccountService(AccountProperties accountProperties) {
         this.twitterAccounts = accountProperties.twitter();
         this.mastodonAccounts = accountProperties.mastodon();

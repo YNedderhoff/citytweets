@@ -2,7 +2,6 @@ package xyz.nedderhoff.citytweets.job;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -27,7 +26,6 @@ public class FollowJob {
     private final FriendCache friendCache;
     private final AccountService accountService;
 
-    @Autowired
     public FollowJob(
             MeEndpoint meEndpoint,
             RecentTweetsEndpoint recentTweetsEndpoint,

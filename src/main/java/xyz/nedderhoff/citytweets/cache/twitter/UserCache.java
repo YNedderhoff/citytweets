@@ -4,7 +4,6 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import xyz.nedderhoff.citytweets.api.twitter.api2.UserEndpoint;
 import xyz.nedderhoff.citytweets.domain.twitter.User;
@@ -17,7 +16,6 @@ public class UserCache {
     private final LoadingCache<Long, User> cacheById;
     private final LoadingCache<String, User> cacheByName;
 
-    @Autowired
     public UserCache(UserEndpoint userEndpoint) {
         cacheById = Caffeine
                 .newBuilder()

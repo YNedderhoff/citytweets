@@ -2,7 +2,6 @@ package xyz.nedderhoff.citytweets.cache.twitter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
@@ -23,7 +22,6 @@ public class Twitter4jConnectionsCache {
 
     private final Map<String, Twitter> connections = new HashMap<>();
 
-    @Autowired
     public Twitter4jConnectionsCache(AccountService accountService) {
         accountService.getTwitterAccounts()
                 .forEach(account -> connections.put(account.name(), createTwitter4jConnection(account)));

@@ -2,7 +2,6 @@ package xyz.nedderhoff.citytweets.api.twitter.api2;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,6 @@ public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
     private final UserConverter userConverter;
     private final HttpEntity<UserLookupResponse> userResponseEntity;
 
-    @Autowired
     public UserEndpoint(
             Twitter twitter,
             RestTemplate rt,

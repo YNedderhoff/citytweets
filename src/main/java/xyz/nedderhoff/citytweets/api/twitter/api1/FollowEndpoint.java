@@ -2,7 +2,6 @@ package xyz.nedderhoff.citytweets.api.twitter.api1;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import twitter4j.TwitterException;
@@ -17,7 +16,6 @@ public class FollowEndpoint extends TwitterApi1Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(FollowEndpoint.class);
     private final FriendCache friendCache;
 
-    @Autowired
     public FollowEndpoint(
             FriendCache friendCache,
             RestTemplate rt,

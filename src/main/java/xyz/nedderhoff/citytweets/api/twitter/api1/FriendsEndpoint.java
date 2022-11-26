@@ -2,7 +2,6 @@ package xyz.nedderhoff.citytweets.api.twitter.api1;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import twitter4j.IDs;
@@ -19,7 +18,6 @@ import java.util.Set;
 public class FriendsEndpoint extends TwitterApi1Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(FriendsEndpoint.class);
 
-    @Autowired
     public FriendsEndpoint(
             RestTemplate rt,
             Twitter4jConnectionsCache connections

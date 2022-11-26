@@ -2,7 +2,6 @@ package xyz.nedderhoff.citytweets.api.twitter.api2;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,6 @@ public class RecentTweetsEndpoint extends TwitterApi2Endpoint<RecentSearchRespon
     private final RecentTweetsConverter recentTweetsConverter;
     private final HttpEntity<RecentSearchResponse> recentTweetsResponseEntity;
 
-    @Autowired
     public RecentTweetsEndpoint(
             RecentTweetsConverter recentTweetsConverter,
             RestTemplate rt,
