@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.api.twitter.api1.FriendsEndpoint;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
-import xyz.nedderhoff.citytweets.service.impl.TwitterAccountService;
+import xyz.nedderhoff.citytweets.service.twitter.TwitterAccountService;
 
 import java.util.Map;
 import java.util.Set;

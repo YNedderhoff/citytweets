@@ -11,7 +11,7 @@ import xyz.nedderhoff.citytweets.api.twitter.TwitterApi2Endpoint;
 import xyz.nedderhoff.citytweets.converter.RecentTweetsConverter;
 import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
 import xyz.nedderhoff.citytweets.domain.twitter.http.recentsearch.RecentSearchResponse;
-import xyz.nedderhoff.citytweets.service.impl.TwitterAccountService;
+import xyz.nedderhoff.citytweets.service.twitter.TwitterAccountService;
 
 import java.util.ArrayList;
 import java.util.List;

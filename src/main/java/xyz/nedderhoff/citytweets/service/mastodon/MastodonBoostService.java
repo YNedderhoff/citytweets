@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.service.impl;
+package xyz.nedderhoff.citytweets.service.mastodon;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +10,7 @@ import xyz.nedderhoff.citytweets.api.mastodon.api2.SearchEndpoint;
 import xyz.nedderhoff.citytweets.cache.mastodon.RetootCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Status;
+import xyz.nedderhoff.citytweets.service.AbstractRepostService;
 import xyz.nedderhoff.citytweets.service.RepostService;
 
 import java.util.Collections;

@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.service.impl;
+package xyz.nedderhoff.citytweets.service.twitter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +9,7 @@ import xyz.nedderhoff.citytweets.api.twitter.api2.RecentTweetsEndpoint;
 import xyz.nedderhoff.citytweets.cache.twitter.RetweetCache;
 import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
 import xyz.nedderhoff.citytweets.exception.twitter.TwitterException;
+import xyz.nedderhoff.citytweets.service.AbstractRepostService;
 import xyz.nedderhoff.citytweets.service.RepostService;
 
 @Component

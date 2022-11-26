@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.service.impl;
+package xyz.nedderhoff.citytweets.service.twitter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

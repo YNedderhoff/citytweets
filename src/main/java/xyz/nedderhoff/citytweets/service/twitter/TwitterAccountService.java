@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.service.impl;
+package xyz.nedderhoff.citytweets.service.twitter;
 
 import org.springframework.stereotype.Component;
 import xyz.nedderhoff.citytweets.config.AccountProperties;

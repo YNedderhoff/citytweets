@@ -4,7 +4,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
-import xyz.nedderhoff.citytweets.service.impl.TwitterAccountService;
+import xyz.nedderhoff.citytweets.service.twitter.TwitterAccountService;
 
 
 // https://developer.twitter.com/en/docs/twitter-api/early-access
