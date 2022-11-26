@@ -8,7 +8,7 @@ import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount.Twitter4j.Oauth;
-import xyz.nedderhoff.citytweets.service.AccountService;
+import xyz.nedderhoff.citytweets.service.impl.TwitterAccountService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,8 +22,8 @@ public class Twitter4jConnectionsCache {
 
     private final Map<String, Twitter> connections = new HashMap<>();
 
-    public Twitter4jConnectionsCache(AccountService accountService) {
-        accountService.getTwitterAccounts()
+    public Twitter4jConnectionsCache(TwitterAccountService twitterAccountService) {
+        twitterAccountService.getAccounts()
                 .forEach(account -> connections.put(account.name(), createTwitter4jConnection(account)));
     }
 

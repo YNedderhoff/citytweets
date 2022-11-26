@@ -4,26 +4,26 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
-import xyz.nedderhoff.citytweets.service.AccountService;
+import xyz.nedderhoff.citytweets.service.impl.TwitterAccountService;
 
 
 // https://developer.twitter.com/en/docs/twitter-api/early-access
 public abstract non-sealed class TwitterApi2Endpoint<T> extends TwitterHttpEndpoint {
     protected static final String BASE_TWITTER_API_2_URI = BASE_TWITTER_API_URI + "2/";
-    private final AccountService accountService;
+    private final TwitterAccountService twitterAccountService;
 
     public TwitterApi2Endpoint(
             RestTemplate rt,
-            AccountService accountService
+            TwitterAccountService twitterAccountService
     ) {
         super(rt);
-        this.accountService = accountService;
+        this.twitterAccountService = twitterAccountService;
     }
 
     protected HttpEntity<T> getResponseHttpEntity() {
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer " + accountService.getRandomBearerTokenTwitter());
+        headers.set("Authorization", "Bearer " + twitterAccountService.getRandomBearerTokenTwitter());
         return new HttpEntity<>(headers);
     }
 }

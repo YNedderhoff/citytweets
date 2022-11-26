@@ -9,7 +9,6 @@ import xyz.nedderhoff.citytweets.cache.twitter.FriendCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties;
 import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
 import xyz.nedderhoff.citytweets.exception.twitter.TwitterException;
-import xyz.nedderhoff.citytweets.service.AccountService;
 import xyz.nedderhoff.citytweets.service.FollowService;
 
 public class TwitterFollowService implements FollowService {
@@ -19,25 +18,25 @@ public class TwitterFollowService implements FollowService {
     private final RecentTweetsEndpoint recentTweetsEndpoint;
     private final FollowEndpoint followEndpoint;
     private final FriendCache friendCache;
-    private final AccountService accountService;
+    private final TwitterAccountService twitterAccountService;
 
     public TwitterFollowService(
             MeEndpoint meEndpoint,
             RecentTweetsEndpoint recentTweetsEndpoint,
             FollowEndpoint followEndpoint,
             FriendCache friendCache,
-            AccountService accountService
+            TwitterAccountService twitterAccountService
     ) {
         this.meEndpoint = meEndpoint;
         this.recentTweetsEndpoint = recentTweetsEndpoint;
         this.followEndpoint = followEndpoint;
         this.friendCache = friendCache;
-        this.accountService = accountService;
+        this.twitterAccountService = twitterAccountService;
     }
 
     @Override
     public void follow() {
-        accountService.getTwitterAccounts().forEach(account -> {
+        twitterAccountService.getAccounts().forEach(account -> {
             logger.info("Looking for tweets for search {} in order to find followers for account {}", account.locationSearch(), account.name());
             final long myId;
             try {

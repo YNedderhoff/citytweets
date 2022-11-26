@@ -10,7 +10,6 @@ import xyz.nedderhoff.citytweets.api.mastodon.api2.SearchEndpoint;
 import xyz.nedderhoff.citytweets.cache.mastodon.RetootCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Status;
-import xyz.nedderhoff.citytweets.service.AccountService;
 import xyz.nedderhoff.citytweets.service.RepostService;
 
 import java.util.Collections;
@@ -19,7 +18,7 @@ import java.util.Collections;
 public class MastodonBoostService extends AbstractRepostService<String, RetootCache> implements RepostService {
     private static final Logger logger = LoggerFactory.getLogger(MastodonBoostService.class);
 
-    private final AccountService accountService;
+    private final MastodonAccountService mastodonAccountService;
     private final AuthEndpoint authEndpoint;
     private final SearchEndpoint searchEndpoint;
     private final AccountsEndpoint accountsEndpoint;
@@ -27,7 +26,7 @@ public class MastodonBoostService extends AbstractRepostService<String, RetootCa
 
 
     public MastodonBoostService(
-            AccountService accountService,
+            MastodonAccountService twitterAccountService,
             AuthEndpoint authEndpoint,
             SearchEndpoint searchEndpoint,
             AccountsEndpoint accountsEndpoint,
@@ -35,7 +34,7 @@ public class MastodonBoostService extends AbstractRepostService<String, RetootCa
             RetootCache retootCache
     ) {
         super(retootCache);
-        this.accountService = accountService;
+        this.mastodonAccountService = twitterAccountService;
         this.authEndpoint = authEndpoint;
         this.searchEndpoint = searchEndpoint;
         this.accountsEndpoint = accountsEndpoint;
@@ -44,7 +43,7 @@ public class MastodonBoostService extends AbstractRepostService<String, RetootCa
 
     @Override
     public void repost() {
-        if (accountService.getMastodonAccounts() == null) {
+        if (mastodonAccountService.getAccounts() == null) {
             logger.info("No Mastodon accounts configured - skipping ...");
         } else {
             logger.warn("Mastodon accounts configured, but skipped in code!");
@@ -53,7 +52,7 @@ public class MastodonBoostService extends AbstractRepostService<String, RetootCa
     }
 
     private void boost() {
-        accountService.getMastodonAccounts().forEach(mastodonAccount -> {
+        mastodonAccountService.getAccounts().forEach(mastodonAccount -> {
             logger.info("Looking for unseen toots mentioning Mastodon account {}", mastodonAccount.name());
             authEndpoint.getHttpHeadersWithAuth(mastodonAccount)
                     .ifPresent(authedHeaders -> searchEndpoint.searchAccountId(authedHeaders, mastodonAccount)

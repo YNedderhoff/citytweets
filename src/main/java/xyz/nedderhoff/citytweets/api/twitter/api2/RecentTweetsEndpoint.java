@@ -11,7 +11,7 @@ import xyz.nedderhoff.citytweets.api.twitter.TwitterApi2Endpoint;
 import xyz.nedderhoff.citytweets.converter.RecentTweetsConverter;
 import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
 import xyz.nedderhoff.citytweets.domain.twitter.http.recentsearch.RecentSearchResponse;
-import xyz.nedderhoff.citytweets.service.AccountService;
+import xyz.nedderhoff.citytweets.service.impl.TwitterAccountService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +27,9 @@ public class RecentTweetsEndpoint extends TwitterApi2Endpoint<RecentSearchRespon
     public RecentTweetsEndpoint(
             RecentTweetsConverter recentTweetsConverter,
             RestTemplate rt,
-            AccountService accountService
+            TwitterAccountService twitterAccountService
     ) {
-        super(rt, accountService);
+        super(rt, twitterAccountService);
         this.recentTweetsConverter = recentTweetsConverter;
         this.recentTweetsResponseEntity = getResponseHttpEntity();
     }

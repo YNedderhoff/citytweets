@@ -9,27 +9,26 @@ import xyz.nedderhoff.citytweets.api.twitter.api2.RecentTweetsEndpoint;
 import xyz.nedderhoff.citytweets.cache.twitter.RetweetCache;
 import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
 import xyz.nedderhoff.citytweets.exception.twitter.TwitterException;
-import xyz.nedderhoff.citytweets.service.AccountService;
 import xyz.nedderhoff.citytweets.service.RepostService;
 
 @Component
 public class TwitterRetweetService extends AbstractRepostService<Long, RetweetCache> implements RepostService {
     private static final Logger logger = LoggerFactory.getLogger(TwitterRetweetService.class);
 
-    private final AccountService accountService;
+    private final TwitterAccountService twitterAccountService;
     private final RecentTweetsEndpoint recentTweetsEndpoint;
     private final RetweetEndpoint retweetEndpoint;
     private final MeEndpoint meEndpoint;
 
     public TwitterRetweetService(
-            AccountService accountService,
+            TwitterAccountService twitterAccountService,
             RecentTweetsEndpoint recentTweetsEndpoint,
             RetweetEndpoint retweetEndpoint,
             MeEndpoint meEndpoint,
             RetweetCache retweetCache
     ) {
         super(retweetCache);
-        this.accountService = accountService;
+        this.twitterAccountService = twitterAccountService;
         this.recentTweetsEndpoint = recentTweetsEndpoint;
         this.retweetEndpoint = retweetEndpoint;
         this.meEndpoint = meEndpoint;
@@ -37,7 +36,7 @@ public class TwitterRetweetService extends AbstractRepostService<Long, RetweetCa
 
     @Override
     public void repost() {
-        if (accountService.getTwitterAccounts() == null) {
+        if (twitterAccountService.getAccounts() == null) {
             logger.info("No Twitter accounts configured - skipping ...");
         }
 
@@ -45,7 +44,7 @@ public class TwitterRetweetService extends AbstractRepostService<Long, RetweetCa
     }
 
     private void retweet() {
-        accountService.getTwitterAccounts().forEach(account -> {
+        twitterAccountService.getAccounts().forEach(account -> {
             logger.info("Looking for unseen tweets for search {} on Twitter account {}", account.search(), account.name());
             final long myId;
             try {
