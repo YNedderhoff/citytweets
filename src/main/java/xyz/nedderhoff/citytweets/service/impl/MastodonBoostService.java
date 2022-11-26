@@ -42,6 +42,7 @@ public class MastodonBoostService extends AbstractRepostService<String, RetootCa
         this.statusEndpoint = statusEndpoint;
     }
 
+    @Override
     public void repost() {
         if (accountService.getMastodonAccounts() == null) {
             logger.info("No Mastodon accounts configured - skipping ...");
