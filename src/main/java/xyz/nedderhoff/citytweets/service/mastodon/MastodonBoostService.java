@@ -1,4 +1,4 @@
-package xyz.nedderhoff.citytweets.service.impl;
+package xyz.nedderhoff.citytweets.service.mastodon;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,16 +10,16 @@ import xyz.nedderhoff.citytweets.api.mastodon.api2.SearchEndpoint;
 import xyz.nedderhoff.citytweets.cache.mastodon.RetootCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Status;
-import xyz.nedderhoff.citytweets.service.AccountService;
+import xyz.nedderhoff.citytweets.service.AbstractRepostService;
 import xyz.nedderhoff.citytweets.service.RepostService;
 
 import java.util.Collections;
 
 @Component
-public class MastodonBoostService extends  AbstractRepostService<String, RetootCache> implements RepostService {
+public class MastodonBoostService extends AbstractRepostService<String, RetootCache> implements RepostService {
     private static final Logger logger = LoggerFactory.getLogger(MastodonBoostService.class);
 
-    private final AccountService accountService;
+    private final MastodonAccountService mastodonAccountService;
     private final AuthEndpoint authEndpoint;
     private final SearchEndpoint searchEndpoint;
     private final AccountsEndpoint accountsEndpoint;
@@ -27,7 +27,7 @@ public class MastodonBoostService extends  AbstractRepostService<String, RetootC
 
 
     public MastodonBoostService(
-            AccountService accountService,
+            MastodonAccountService twitterAccountService,
             AuthEndpoint authEndpoint,
             SearchEndpoint searchEndpoint,
             AccountsEndpoint accountsEndpoint,
@@ -35,15 +35,25 @@ public class MastodonBoostService extends  AbstractRepostService<String, RetootC
             RetootCache retootCache
     ) {
         super(retootCache);
-        this.accountService = accountService;
+        this.mastodonAccountService = twitterAccountService;
         this.authEndpoint = authEndpoint;
         this.searchEndpoint = searchEndpoint;
         this.accountsEndpoint = accountsEndpoint;
         this.statusEndpoint = statusEndpoint;
     }
 
-    public void run() {
-        accountService.getMastodonAccounts().forEach(mastodonAccount -> {
+    @Override
+    public void repost() {
+        if (mastodonAccountService.getAccounts() == null) {
+            logger.info("No Mastodon accounts configured - skipping ...");
+        } else {
+            logger.warn("Mastodon accounts configured, but skipped in code!");
+            // boost();
+        }
+    }
+
+    private void boost() {
+        mastodonAccountService.getAccounts().forEach(mastodonAccount -> {
             logger.info("Looking for unseen toots mentioning Mastodon account {}", mastodonAccount.name());
             authEndpoint.getHttpHeadersWithAuth(mastodonAccount)
                     .ifPresent(authedHeaders -> searchEndpoint.searchAccountId(authedHeaders, mastodonAccount)

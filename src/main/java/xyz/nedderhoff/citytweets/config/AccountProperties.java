@@ -9,6 +9,16 @@ public record AccountProperties(
         List<TwitterAccount> twitter,
         List<MastodonAccount> mastodon
 ) {
+    public interface Account {
+        String name();
+
+        String locationSearch();
+
+        String locationToFollow();
+
+        List<String> ignoredAccounts();
+    }
+
     public record TwitterAccount(
             String name,
             String bearerToken,
@@ -17,7 +27,7 @@ public record AccountProperties(
             String locationSearch,
             String locationToFollow,
             List<String> ignoredAccounts
-    ) {
+    ) implements Account {
         public record Twitter4j(
                 Oauth oauth
         ) {
@@ -39,7 +49,7 @@ public record AccountProperties(
             String locationSearch,
             String locationToFollow,
             List<String> ignoredAccounts
-    ) {
+    ) implements Account {
 
         public record Oauth(
                 String accessToken,

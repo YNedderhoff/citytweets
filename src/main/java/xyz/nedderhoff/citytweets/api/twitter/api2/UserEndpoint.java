@@ -2,7 +2,6 @@ package xyz.nedderhoff.citytweets.api.twitter.api2;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,7 @@ import xyz.nedderhoff.citytweets.cache.twitter.Twitter4jConnectionsCache;
 import xyz.nedderhoff.citytweets.converter.UserConverter;
 import xyz.nedderhoff.citytweets.domain.twitter.User;
 import xyz.nedderhoff.citytweets.domain.twitter.http.userlookup.UserLookupResponse;
-import xyz.nedderhoff.citytweets.service.AccountService;
+import xyz.nedderhoff.citytweets.service.twitter.TwitterAccountService;
 
 @Component
 public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
@@ -27,15 +26,14 @@ public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
     private final UserConverter userConverter;
     private final HttpEntity<UserLookupResponse> userResponseEntity;
 
-    @Autowired
     public UserEndpoint(
             Twitter twitter,
             RestTemplate rt,
             Twitter4jConnectionsCache connections,
-            AccountService accountService,
+            TwitterAccountService twitterAccountService,
             UserConverter userConverter
     ) {
-        super(rt, accountService);
+        super(rt, twitterAccountService);
         this.connections = connections;
         this.userConverter = userConverter;
         this.userResponseEntity = getResponseHttpEntity();

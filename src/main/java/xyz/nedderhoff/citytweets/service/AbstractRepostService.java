@@ -1,11 +1,10 @@
-package xyz.nedderhoff.citytweets.service.impl;
+package xyz.nedderhoff.citytweets.service;
 
 import xyz.nedderhoff.citytweets.cache.RepostCache;
-import xyz.nedderhoff.citytweets.service.RepostService;
 
 public abstract class AbstractRepostService<K, T extends RepostCache<K>> implements RepostService {
 
-    T repostCache;
+    final T repostCache;
 
     public AbstractRepostService(T repostCache) {
         this.repostCache = repostCache;

@@ -2,7 +2,6 @@ package xyz.nedderhoff.citytweets.api.twitter.api2;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +11,7 @@ import xyz.nedderhoff.citytweets.api.twitter.TwitterApi2Endpoint;
 import xyz.nedderhoff.citytweets.converter.RecentTweetsConverter;
 import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
 import xyz.nedderhoff.citytweets.domain.twitter.http.recentsearch.RecentSearchResponse;
-import xyz.nedderhoff.citytweets.service.AccountService;
+import xyz.nedderhoff.citytweets.service.twitter.TwitterAccountService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +24,12 @@ public class RecentTweetsEndpoint extends TwitterApi2Endpoint<RecentSearchRespon
     private final RecentTweetsConverter recentTweetsConverter;
     private final HttpEntity<RecentSearchResponse> recentTweetsResponseEntity;
 
-    @Autowired
     public RecentTweetsEndpoint(
             RecentTweetsConverter recentTweetsConverter,
             RestTemplate rt,
-            AccountService accountService
+            TwitterAccountService twitterAccountService
     ) {
-        super(rt, accountService);
+        super(rt, twitterAccountService);
         this.recentTweetsConverter = recentTweetsConverter;
         this.recentTweetsResponseEntity = getResponseHttpEntity();
     }
