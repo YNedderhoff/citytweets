@@ -72,9 +72,18 @@ public class RetweetJob {
 
     @Scheduled(fixedRate = FETCHING_RATE)
     public void run() {
-        runTwitter();
-        //TODO enable Mastodon if boost API ever becomes accessible without user auth
-        //runMastodon();
+        if (accountService.getTwitterAccounts() == null) {
+            logger.info("No Twitter accounts configured - skipping ...");
+        } else {
+            runTwitter();
+        }
+        if (accountService.getMastodonAccounts() == null) {
+            logger.info("No Mastodon accounts configured - skipping ...");
+        } else {
+            //TODO enable Mastodon if boost API ever becomes accessible without user auth
+            logger.warn("Mastodon accounts configured, but skipped in code!");
+            //runMastodon();
+        }
     }
 
     public void runTwitter() {
