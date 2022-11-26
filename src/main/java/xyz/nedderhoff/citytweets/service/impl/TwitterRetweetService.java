@@ -36,7 +36,15 @@ public class TwitterRetweetService extends AbstractRepostService<Long, RetweetCa
     }
 
     @Override
-    public void run() {
+    public void repost() {
+        if (accountService.getTwitterAccounts() == null) {
+            logger.info("No Twitter accounts configured - skipping ...");
+        }
+
+        retweet();
+    }
+
+    private void retweet() {
         accountService.getTwitterAccounts().forEach(account -> {
             logger.info("Looking for unseen tweets for search {} on Twitter account {}", account.search(), account.name());
             final long myId;

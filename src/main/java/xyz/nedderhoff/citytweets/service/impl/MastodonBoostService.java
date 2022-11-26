@@ -16,7 +16,7 @@ import xyz.nedderhoff.citytweets.service.RepostService;
 import java.util.Collections;
 
 @Component
-public class MastodonBoostService extends  AbstractRepostService<String, RetootCache> implements RepostService {
+public class MastodonBoostService extends AbstractRepostService<String, RetootCache> implements RepostService {
     private static final Logger logger = LoggerFactory.getLogger(MastodonBoostService.class);
 
     private final AccountService accountService;
@@ -42,7 +42,16 @@ public class MastodonBoostService extends  AbstractRepostService<String, RetootC
         this.statusEndpoint = statusEndpoint;
     }
 
-    public void run() {
+    public void repost() {
+        if (accountService.getMastodonAccounts() == null) {
+            logger.info("No Mastodon accounts configured - skipping ...");
+        } else {
+            logger.warn("Mastodon accounts configured, but skipped in code!");
+            // boost();
+        }
+    }
+
+    private void boost() {
         accountService.getMastodonAccounts().forEach(mastodonAccount -> {
             logger.info("Looking for unseen toots mentioning Mastodon account {}", mastodonAccount.name());
             authEndpoint.getHttpHeadersWithAuth(mastodonAccount)
