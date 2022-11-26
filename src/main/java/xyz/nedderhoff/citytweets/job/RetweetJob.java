@@ -73,7 +73,8 @@ public class RetweetJob {
     @Scheduled(fixedRate = FETCHING_RATE)
     public void run() {
         runTwitter();
-        runMastodon();
+        //TODO enable Mastodon if boost API ever becomes accessible without user auth
+        //runMastodon();
     }
 
     public void runTwitter() {
