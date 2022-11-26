@@ -32,7 +32,7 @@ public class StatusEndpoint extends MastodonApi1Endpoint<Account[]> {
         String requestUri = String.format(
                 BASE_MASTODON_API_1_URI_TEMPLATE,
                 mastodonAccount.instance(),
-                String.format("statuses/:id/reblog", status.id())
+                String.format("statuses/%s/reblog", status.id())
         );
 
         String requestUriTemplate = UriComponentsBuilder.fromHttpUrl(requestUri)
@@ -41,7 +41,7 @@ public class StatusEndpoint extends MastodonApi1Endpoint<Account[]> {
 
         final ResponseEntity<Status> response = rt.exchange(
                 requestUriTemplate,
-                HttpMethod.GET,
+                HttpMethod.POST,
                 request,
                 Status.class
         );
