@@ -5,10 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.api.twitter.TwitterApi1Endpoint;
 import xyz.nedderhoff.citytweets.cache.twitter.Twitter4jConnectionsCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
+import xyz.nedderhoff.citytweets.exception.twitter.TwitterException;
 
 @Component
 public class MeEndpoint extends TwitterApi1Endpoint {
@@ -24,6 +24,11 @@ public class MeEndpoint extends TwitterApi1Endpoint {
 
     public long getId(TwitterAccount account) throws TwitterException {
         logger.debug("Fetching own id for account {} ...", account.name());
-        return connections.getConnection(account).getId();
+        try {
+            return connections.getConnection(account).getId();
+        } catch (twitter4j.TwitterException e) {
+            logger.error("Exception while fetching identity for account {}", account.name());
+            throw new TwitterException("Exception while fetching identity for account " + account.name(), e);
+        }
     }
 }
