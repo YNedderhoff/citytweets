@@ -7,13 +7,13 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import twitter4j.TwitterException;
-import xyz.nedderhoff.citytweets.cache.FriendCache;
-import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
-import xyz.nedderhoff.citytweets.domain.Tweet;
+import xyz.nedderhoff.citytweets.api.twitter.api1.FollowEndpoint;
+import xyz.nedderhoff.citytweets.api.twitter.api1.MeEndpoint;
+import xyz.nedderhoff.citytweets.api.twitter.api2.RecentTweetsEndpoint;
+import xyz.nedderhoff.citytweets.cache.twitter.FriendCache;
+import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
+import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
 import xyz.nedderhoff.citytweets.service.AccountService;
-import xyz.nedderhoff.citytweets.twitter.api1.FollowEndpoint;
-import xyz.nedderhoff.citytweets.twitter.api1.MeEndpoint;
-import xyz.nedderhoff.citytweets.twitter.api2.RecentTweetsEndpoint;
 
 @Component
 @EnableScheduling
@@ -44,7 +44,7 @@ public class FollowJob {
 
     @Scheduled(fixedRate = FOLLOW_RATE)
     public void findPotentialFollowers() {
-        accountService.getAccounts().forEach(account -> {
+        accountService.getTwitterAccounts().forEach(account -> {
             logger.info("Looking for tweets for search {} in order to find followers for account {}", account.locationSearch(), account.name());
             final long myId;
             try {
@@ -61,7 +61,7 @@ public class FollowJob {
         });
     }
 
-    private boolean shouldFollow(Tweet tweet, long myId, Account account) {
+    private boolean shouldFollow(Tweet tweet, long myId, TwitterAccount account) {
         return !isTweetFromMe(tweet, myId)
                 && isMaybeFromDesiredLocation(tweet, account)
                 && !hasBeenSeen(tweet, account);
@@ -72,11 +72,11 @@ public class FollowJob {
         return tweet.user().id() == myId;
     }
 
-    private boolean isMaybeFromDesiredLocation(Tweet tweet, Account account) {
+    private boolean isMaybeFromDesiredLocation(Tweet tweet, TwitterAccount account) {
         return tweet.user().location().toLowerCase().contains(account.locationToFollow().toLowerCase());
     }
 
-    private boolean hasBeenSeen(Tweet tweet, Account account) {
+    private boolean hasBeenSeen(Tweet tweet, TwitterAccount account) {
         return friendCache.contains(tweet.user().id(), account);
     }
 }

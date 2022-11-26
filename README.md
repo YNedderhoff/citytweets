@@ -5,7 +5,7 @@
 ![Build, Test and Publish](https://github.com/ynedderhoff/citytweets/workflows/Build,%20Test%20and%20Publish/badge.svg) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d8280dad48c6491caa91e7241c48ccb1)](https://app.codacy.com/manual/YNedderhoff/citytweets?utm_source=github.com&utm_medium=referral&utm_content=YNedderhoff/citytweets&utm_campaign=Badge_Grade_Dashboard)
 
 ## About
-citytweets is a Twitter (and soon to be Mastodon) retweet bot currently powering my accounts listed below. In addition 
+citytweets is a Twitter retweet bot currently powering my accounts listed below. In addition 
 to my accounts, it also powers [@TweetsFuerMiLB](https://twitter.com/TweetsFuerMiLB), which is not owned by me.
 
 It retweets everything the search finds. It is intended to be used with searches like `@mindentweets` so that everyone 
@@ -24,7 +24,7 @@ For other calls, and especially the calls that actually search for new tweets, i
 calls are made without any library help. Further migration will happen over time.
 
 ### Mastodon
-Work to start using the [Mastodon API](https://docs.joinmastodon.org/api/) is underway.
+The important parts of the [Mastodon API](https://docs.joinmastodon.org/api/) are implemented. Unfortunately, currently the Mastodon API doesn't allow for boosts via the API without manual user approval for every boost, so until further notice I won't be able to finish the Mastodon side of the bot.
 
 ## Owned Accounts
 

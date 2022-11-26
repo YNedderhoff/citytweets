@@ -1,9 +1,9 @@
 package xyz.nedderhoff.citytweets.converter;
 
 import org.springframework.stereotype.Component;
-import xyz.nedderhoff.citytweets.cache.UserCache;
-import xyz.nedderhoff.citytweets.domain.Tweet;
-import xyz.nedderhoff.citytweets.domain.http.recentsearch.RecentSearchData;
+import xyz.nedderhoff.citytweets.cache.twitter.UserCache;
+import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
+import xyz.nedderhoff.citytweets.domain.twitter.http.recentsearch.RecentSearchData;
 
 import java.util.List;
 
