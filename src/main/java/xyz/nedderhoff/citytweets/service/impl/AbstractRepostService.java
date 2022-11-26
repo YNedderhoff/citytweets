@@ -5,7 +5,7 @@ import xyz.nedderhoff.citytweets.service.RepostService;
 
 public abstract class AbstractRepostService<K, T extends RepostCache<K>> implements RepostService {
 
-    T repostCache;
+    final T repostCache;
 
     public AbstractRepostService(T repostCache) {
         this.repostCache = repostCache;
