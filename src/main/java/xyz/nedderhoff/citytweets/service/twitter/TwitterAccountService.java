@@ -16,6 +16,7 @@ public class TwitterAccountService implements AccountService<TwitterAccount> {
         this.twitterAccounts = accountProperties.twitter();
     }
 
+    @Override
     public List<TwitterAccount> getAccounts() {
         return twitterAccounts;
     }

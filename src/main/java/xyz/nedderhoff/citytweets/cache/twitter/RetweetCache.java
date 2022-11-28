@@ -13,10 +13,12 @@ public class RetweetCache implements RepostCache<Long> {
     private static final Logger logger = LoggerFactory.getLogger(RetweetCache.class);
     private static final Set<Long> cache = new HashSet<>();
 
+    @Override
     public boolean contains(Long id) {
         return cache.contains(id);
     }
 
+    @Override
     public void add(Long id) {
         logger.info("Adding tweet {}", id);
         cache.add(id);

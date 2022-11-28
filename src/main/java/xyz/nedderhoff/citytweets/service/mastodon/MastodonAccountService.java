@@ -15,6 +15,7 @@ public class MastodonAccountService implements AccountService<MastodonAccount> {
         this.mastodonAccounts = accountProperties.mastodon();
     }
 
+    @Override
     public List<MastodonAccount> getAccounts() {
         return mastodonAccounts;
     }

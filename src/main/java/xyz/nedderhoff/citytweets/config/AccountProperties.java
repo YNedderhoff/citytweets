@@ -20,12 +20,16 @@ public record AccountProperties(
     }
 
     public record TwitterAccount(
+            @Override
             String name,
             String bearerToken,
             Twitter4j twitter4j,
             String search,
+            @Override
             String locationSearch,
+            @Override
             String locationToFollow,
+            @Override
             List<String> ignoredAccounts
     ) implements Account {
         public record Twitter4j(
@@ -42,12 +46,16 @@ public record AccountProperties(
     }
 
     public record MastodonAccount(
+            @Override
             String name,
             String instance,
             Oauth oauth,
             String redirectUri,
+            @Override
             String locationSearch,
+            @Override
             String locationToFollow,
+            @Override
             List<String> ignoredAccounts
     ) implements Account {
 
