@@ -2,6 +2,7 @@ package xyz.nedderhoff.citytweets.cache.twitter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import twitter4j.Twitter;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+@Lazy
 @Component
 public class Twitter4jConnectionsCache {
     private static final Logger logger = LoggerFactory.getLogger(Twitter4jConnectionsCache.class);
@@ -21,6 +23,7 @@ public class Twitter4jConnectionsCache {
     private final Map<String, Twitter> connections = new HashMap<>();
 
     public Twitter4jConnectionsCache(TwitterAccountService twitterAccountService) {
+        logger.info("Setting up Twitter connections cache");
         twitterAccountService.getAccounts()
                 .forEach(account -> connections.put(account.name(), createTwitter4jConnection(account)));
     }

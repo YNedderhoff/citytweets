@@ -4,12 +4,14 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import xyz.nedderhoff.citytweets.api.twitter.api2.UserEndpoint;
 import xyz.nedderhoff.citytweets.domain.twitter.User;
 
 import java.util.concurrent.TimeUnit;
 
+@Lazy
 @Component
 public class UserCache {
     private static final Logger logger = LoggerFactory.getLogger(UserCache.class);
@@ -17,6 +19,7 @@ public class UserCache {
     private final LoadingCache<String, User> cacheByName;
 
     public UserCache(UserEndpoint userEndpoint) {
+        logger.info("Setting up user cache");
         cacheById = Caffeine
                 .newBuilder()
                 .expireAfterWrite(365, TimeUnit.DAYS)
