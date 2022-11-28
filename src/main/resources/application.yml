@@ -24,44 +24,47 @@ spring:
 
 account-properties:
   twitter:
-    -
-      name: stupidAccount
-      bearerToken: stupidbearerToken
-      twitter4j:
-        oauth:
-          accessToken: stupidAccessToken
-          accessTokenSecret: stupidAccessTokenSecret
-          consumerKey: stupidConsumerKey
-          consumerSecret: stupidConsumerSecret
-      search: stupidSearchThatHopefullyNeverMatches
-      location-search: stupidLocationSearchThatHopefullyNeverMatches
-      location-to-follow: stupidLocationToFollowThatHopefullyNeverMatches
-      ignored-accounts:
-        - stupidAccount1ThatHopefullyNeverMatches
-        - stupidAccount2ThatHopefullyNeverMatches
-    - name: stupidAccount
-      bearerToken: stupidbearerToken
-      twitter4j:
-        oauth:
-          accessToken: stupidAccessToken
-          accessTokenSecret: stupidAccessTokenSecret
-          consumerKey: stupidConsumerKey
-          consumerSecret: stupidConsumerSecret
-      search: stupidSearchThatHopefullyNeverMatches
-      location-search: stupidLocationSearchThatHopefullyNeverMatches
-      location-to-follow: stupidLocationToFollowThatHopefullyNeverMatches
-      ignored-accounts:
-        - stupidAccount1ThatHopefullyNeverMatches
-        - stupidAccount2ThatHopefullyNeverMatches
+    ignored-accounts:
+    accounts:
+      - name: stupidAccount
+        bearerToken: stupidbearerToken
+        twitter4j:
+          oauth:
+            accessToken: stupidAccessToken
+            accessTokenSecret: stupidAccessTokenSecret
+            consumerKey: stupidConsumerKey
+            consumerSecret: stupidConsumerSecret
+        search: stupidSearchThatHopefullyNeverMatches
+        location-search: stupidLocationSearchThatHopefullyNeverMatches
+        location-to-follow: stupidLocationToFollowThatHopefullyNeverMatches
+        ignored-accounts:
+          - stupidAccount1ThatHopefullyNeverMatches
+          - stupidAccount2ThatHopefullyNeverMatches
+      - name: stupidAccount
+        bearerToken: stupidbearerToken
+        twitter4j:
+          oauth:
+            accessToken: stupidAccessToken
+            accessTokenSecret: stupidAccessTokenSecret
+            consumerKey: stupidConsumerKey
+            consumerSecret: stupidConsumerSecret
+        search: stupidSearchThatHopefullyNeverMatches
+        location-search: stupidLocationSearchThatHopefullyNeverMatches
+        location-to-follow: stupidLocationToFollowThatHopefullyNeverMatches
+        ignored-accounts:
+          - stupidAccount1ThatHopefullyNeverMatches
+          - stupidAccount2ThatHopefullyNeverMatches
   mastodon:
-    - name: stupidAccount
-      instance: stupidInstance
-      oauth:
-        accessToken: stupidAccessToken
-        accessTokenSecret: stupidAccessTokenSecret
-      redirectUri: stupidRedirectUri
-      location-search: stupidLocationSearchThatHopefullyNeverMatches
-      location-to-follow: stupidLocationToFollowThatHopefullyNeverMatches
-      ignored-accounts:
-        - stupidAccount1ThatHopefullyNeverMatches
-        - stupidAccount2ThatHopefullyNeverMatches
+    ignored-accounts:
+    accounts:
+      - name: stupidAccount
+        instance: stupidInstance
+        oauth:
+          accessToken: stupidAccessToken
+          accessTokenSecret: stupidAccessTokenSecret
+        redirectUri: stupidRedirectUri
+        location-search: stupidLocationSearchThatHopefullyNeverMatches
+        location-to-follow: stupidLocationToFollowThatHopefullyNeverMatches
+        ignored-accounts:
+          - stupidAccount1ThatHopefullyNeverMatches
+          - stupidAccount2ThatHopefullyNeverMatches

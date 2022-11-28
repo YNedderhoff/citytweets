@@ -6,26 +6,40 @@ import java.util.List;
 
 @ConfigurationProperties(prefix = "account-properties")
 public record AccountProperties(
-        List<TwitterAccount> twitter,
-        List<MastodonAccount> mastodon
+        TwitterProperties twitter,
+        MastodonProperties mastodon
 ) {
-    public interface Account {
-        String name();
-
-        String locationSearch();
-
-        String locationToFollow();
+    public interface PlatformProperties<T extends Account> {
+        List<T> accounts();
 
         List<String> ignoredAccounts();
     }
 
+    public record TwitterProperties(
+            @Override
+            List<TwitterAccount> accounts,
+            List<String> ignoredAccounts
+    ) implements PlatformProperties<TwitterAccount> {
+    }
+
+    public record MastodonProperties(
+            @Override
+            List<MastodonAccount> accounts,
+            List<String> ignoredAccounts
+    ) implements PlatformProperties<MastodonAccount> {
+    }
+
     public record TwitterAccount(
+            @Override
             String name,
             String bearerToken,
             Twitter4j twitter4j,
             String search,
+            @Override
             String locationSearch,
+            @Override
             String locationToFollow,
+            @Override
             List<String> ignoredAccounts
     ) implements Account {
         public record Twitter4j(
@@ -41,13 +55,28 @@ public record AccountProperties(
         }
     }
 
+    public interface Account {
+        String name();
+
+        String locationSearch();
+
+        String locationToFollow();
+
+        List<String> ignoredAccounts();
+    }
+
+
     public record MastodonAccount(
+            @Override
             String name,
             String instance,
             Oauth oauth,
             String redirectUri,
+            @Override
             String locationSearch,
+            @Override
             String locationToFollow,
+            @Override
             List<String> ignoredAccounts
     ) implements Account {
 

@@ -1,21 +1,15 @@
 package xyz.nedderhoff.citytweets.service.mastodon;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import xyz.nedderhoff.citytweets.config.AccountProperties;
 import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonAccount;
-import xyz.nedderhoff.citytweets.service.AccountService;
+import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonProperties;
+import xyz.nedderhoff.citytweets.service.AbstractAccountService;
 
-import java.util.List;
-
-@Component
-public class MastodonAccountService implements AccountService<MastodonAccount> {
-    private final List<MastodonAccount> mastodonAccounts;
+@Service
+public class MastodonAccountService extends AbstractAccountService<MastodonAccount, MastodonProperties> {
 
     public MastodonAccountService(AccountProperties accountProperties) {
-        this.mastodonAccounts = accountProperties.mastodon();
-    }
-
-    public List<MastodonAccount> getAccounts() {
-        return mastodonAccounts;
+        super(accountProperties.mastodon());
     }
 }

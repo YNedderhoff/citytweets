@@ -2,24 +2,21 @@ package xyz.nedderhoff.citytweets.service.mastodon;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import xyz.nedderhoff.citytweets.api.mastodon.api1.AccountsEndpoint;
 import xyz.nedderhoff.citytweets.api.mastodon.api1.StatusEndpoint;
 import xyz.nedderhoff.citytweets.api.mastodon.api2.AuthEndpoint;
 import xyz.nedderhoff.citytweets.api.mastodon.api2.SearchEndpoint;
 import xyz.nedderhoff.citytweets.cache.mastodon.RetootCache;
-import xyz.nedderhoff.citytweets.config.AccountProperties;
+import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonAccount;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Status;
 import xyz.nedderhoff.citytweets.service.AbstractRepostService;
-import xyz.nedderhoff.citytweets.service.RepostService;
 
 import java.util.Collections;
 
-@Component
-public class MastodonBoostService extends AbstractRepostService<String, RetootCache> implements RepostService {
+@Service
+public class MastodonBoostService extends AbstractRepostService<String, RetootCache, MastodonAccount, MastodonAccountService> {
     private static final Logger logger = LoggerFactory.getLogger(MastodonBoostService.class);
-
-    private final MastodonAccountService mastodonAccountService;
     private final AuthEndpoint authEndpoint;
     private final SearchEndpoint searchEndpoint;
     private final AccountsEndpoint accountsEndpoint;
@@ -27,15 +24,14 @@ public class MastodonBoostService extends AbstractRepostService<String, RetootCa
 
 
     public MastodonBoostService(
-            MastodonAccountService twitterAccountService,
+            MastodonAccountService accountService,
             AuthEndpoint authEndpoint,
             SearchEndpoint searchEndpoint,
             AccountsEndpoint accountsEndpoint,
             StatusEndpoint statusEndpoint,
             RetootCache retootCache
     ) {
-        super(retootCache);
-        this.mastodonAccountService = twitterAccountService;
+        super(retootCache, accountService);
         this.authEndpoint = authEndpoint;
         this.searchEndpoint = searchEndpoint;
         this.accountsEndpoint = accountsEndpoint;
@@ -44,7 +40,7 @@ public class MastodonBoostService extends AbstractRepostService<String, RetootCa
 
     @Override
     public void repost() {
-        if (mastodonAccountService.getAccounts() == null) {
+        if (accountService.getAccounts() == null) {
             logger.info("No Mastodon accounts configured - skipping ...");
         } else {
             logger.warn("Mastodon accounts configured, but skipped in code!");
@@ -53,7 +49,7 @@ public class MastodonBoostService extends AbstractRepostService<String, RetootCa
     }
 
     private void boost() {
-        mastodonAccountService.getAccounts().forEach(mastodonAccount -> {
+        accountService.getAccounts().forEach(mastodonAccount -> {
             logger.info("Looking for unseen toots mentioning Mastodon account {}", mastodonAccount.name());
             authEndpoint.getHttpHeadersWithAuth(mastodonAccount)
                     .ifPresent(authedHeaders -> searchEndpoint.searchAccountId(authedHeaders, mastodonAccount)
@@ -71,19 +67,20 @@ public class MastodonBoostService extends AbstractRepostService<String, RetootCa
         });
     }
 
-    private boolean statusMentionsOwnAccount(Status status, AccountProperties.MastodonAccount account) {
+    private boolean statusMentionsOwnAccount(Status status, MastodonAccount account) {
         return status.mentions().stream()
                 .anyMatch(mention -> mention.username().equals(account.name()));
     }
 
-    private boolean shouldRetoot(Status status, AccountProperties.MastodonAccount account) {
+    private boolean shouldRetoot(Status status, MastodonAccount account) {
         return statusMentionsOwnAccount(status, account)
                 && !isFromMe(status, account)
-                && !hasBeenSeen(status.id());
+                && !hasBeenSeen(status.id())
+                && !isAuthorBlocked(status.account().webfingerUri(), account);
     }
 
 
-    protected boolean isFromMe(Status status, AccountProperties.MastodonAccount account) {
+    protected boolean isFromMe(Status status, MastodonAccount account) {
         return status.account().webfingerUri().equals(account.name() + "@" + account.instance());
     }
 }
