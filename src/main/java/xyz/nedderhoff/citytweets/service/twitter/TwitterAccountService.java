@@ -1,6 +1,6 @@
 package xyz.nedderhoff.citytweets.service.twitter;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import xyz.nedderhoff.citytweets.config.AccountProperties;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
 import xyz.nedderhoff.citytweets.service.AccountService;
@@ -8,7 +8,7 @@ import xyz.nedderhoff.citytweets.service.AccountService;
 import java.util.List;
 import java.util.Random;
 
-@Component
+@Service
 public class TwitterAccountService implements AccountService<TwitterAccount> {
     private final List<TwitterAccount> twitterAccounts;
 

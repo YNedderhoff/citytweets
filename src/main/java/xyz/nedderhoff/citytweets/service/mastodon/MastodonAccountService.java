@@ -1,13 +1,13 @@
 package xyz.nedderhoff.citytweets.service.mastodon;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import xyz.nedderhoff.citytweets.config.AccountProperties;
 import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonAccount;
 import xyz.nedderhoff.citytweets.service.AccountService;
 
 import java.util.List;
 
-@Component
+@Service
 public class MastodonAccountService implements AccountService<MastodonAccount> {
     private final List<MastodonAccount> mastodonAccounts;
 
