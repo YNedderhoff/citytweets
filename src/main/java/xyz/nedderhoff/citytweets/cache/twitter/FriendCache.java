@@ -2,6 +2,7 @@ package xyz.nedderhoff.citytweets.cache.twitter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListMap;
 
+@Lazy
 @Component
 @EnableScheduling
 public class FriendCache {
@@ -25,6 +27,8 @@ public class FriendCache {
     private final TwitterAccountService twitterAccountService;
 
     public FriendCache(FriendsEndpoint friendsEndpoint, TwitterAccountService twitterAccountService) {
+        logger.info("Setting up FriendCache");
+
         this.friendsEndpoint = friendsEndpoint;
         this.twitterAccountService = twitterAccountService;
     }
