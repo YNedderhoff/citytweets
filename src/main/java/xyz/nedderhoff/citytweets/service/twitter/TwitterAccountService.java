@@ -3,36 +3,23 @@ package xyz.nedderhoff.citytweets.service.twitter;
 import org.springframework.stereotype.Service;
 import xyz.nedderhoff.citytweets.config.AccountProperties;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
-import xyz.nedderhoff.citytweets.service.AccountService;
+import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterProperties;
+import xyz.nedderhoff.citytweets.service.AbstractAccountService;
 
-import java.util.List;
 import java.util.Random;
 
 @Service
-public class TwitterAccountService implements AccountService<TwitterAccount> {
-    private final List<TwitterAccount> twitterAccounts;
-    private final List<String> ignoredAccounts;
+public class TwitterAccountService extends AbstractAccountService<TwitterAccount, TwitterProperties> {
 
     public TwitterAccountService(AccountProperties accountProperties) {
-        this.twitterAccounts = accountProperties.twitter().accounts();
-        this.ignoredAccounts = accountProperties.twitter().ignoredAccounts();
-    }
-
-    @Override
-    public List<TwitterAccount> getAccounts() {
-        return twitterAccounts;
-    }
-
-    @Override
-    public List<String> getIgnoredAccounts() {
-        return ignoredAccounts;
+        super(accountProperties.twitter());
     }
 
     public String getRandomBearerTokenTwitter() {
-        int size = twitterAccounts.size();
+        int size = this.accounts.size();
         int randIdx = new Random().nextInt(size);
 
-        TwitterAccount randomAccount = twitterAccounts.get(randIdx);
+        TwitterAccount randomAccount = this.accounts.get(randIdx);
 
         return randomAccount.bearerToken();
     }
