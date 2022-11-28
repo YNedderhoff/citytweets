@@ -4,8 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import twitter4j.Twitter;
-import twitter4j.TwitterFactory;
-import twitter4j.conf.ConfigurationBuilder;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount.Twitter4j.Oauth;
 import xyz.nedderhoff.citytweets.service.twitter.TwitterAccountService;
@@ -45,13 +43,10 @@ public class Twitter4jConnectionsCache {
     private static Twitter createTwitter4jConnection(TwitterAccount account) {
         logger.info("Creating Twitter4J connection for account {}", account.name());
         final Oauth oauth = account.twitter4j().oauth();
-        ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setDebugEnabled(true)
-                .setOAuthConsumerKey(oauth.consumerKey())
-                .setOAuthConsumerSecret(oauth.consumerSecret())
-                .setOAuthAccessToken(oauth.accessToken())
-                .setOAuthAccessTokenSecret(oauth.accessTokenSecret());
-        TwitterFactory tf = new TwitterFactory(cb.build());
-        return tf.getInstance();
+
+        return Twitter.newBuilder()
+                .oAuthConsumer(oauth.consumerKey(), oauth.consumerSecret())
+                .oAuthAccessToken(oauth.accessToken(), oauth.accessTokenSecret())
+                .build();
     }
 }

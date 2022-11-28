@@ -7,7 +7,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.api.twitter.TwitterApi2Endpoint;
 import xyz.nedderhoff.citytweets.cache.twitter.Twitter4jConnectionsCache;
@@ -27,7 +26,6 @@ public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
     private final HttpEntity<UserLookupResponse> userResponseEntity;
 
     public UserEndpoint(
-            Twitter twitter,
             RestTemplate rt,
             Twitter4jConnectionsCache connections,
             TwitterAccountService twitterAccountService,
@@ -40,7 +38,7 @@ public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
     }
 
     public long getId() throws TwitterException {
-        return connections.getRandomConnection().getId();
+        return connections.getRandomConnection().v1().users().verifyCredentials().getId();
     }
 
     public User getById(long id) {

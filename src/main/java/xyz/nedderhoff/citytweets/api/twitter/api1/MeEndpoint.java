@@ -23,7 +23,7 @@ public class MeEndpoint extends TwitterApi1Endpoint {
     public long getId(TwitterAccount account) throws TwitterException {
         logger.debug("Fetching own id for account {} ...", account.name());
         try {
-            return connections.getConnection(account).getId();
+            return connections.getConnection(account).v1().users().verifyCredentials().getId();
         } catch (twitter4j.TwitterException e) {
             logger.error("Exception while fetching identity for account {}", account.name());
             throw new TwitterException("Exception while fetching identity for account " + account.name(), e);

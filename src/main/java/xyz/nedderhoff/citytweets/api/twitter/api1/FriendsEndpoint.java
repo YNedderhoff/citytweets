@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import twitter4j.IDs;
 import twitter4j.TwitterException;
+import twitter4j.v1.IDs;
 import xyz.nedderhoff.citytweets.api.twitter.TwitterApi1Endpoint;
 import xyz.nedderhoff.citytweets.cache.twitter.Twitter4jConnectionsCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
@@ -32,7 +32,7 @@ public class FriendsEndpoint extends TwitterApi1Endpoint {
         Set<Long> friendIds = new HashSet<>();
         while (!finished) {
             logger.info("Doing iteration with cursor {} for account {}", cursor, account.name());
-            IDs friends = connections.getConnection(account).getFriendsIDs(cursor);
+            IDs friends = connections.getConnection(account).v1().friendsFollowers().getFriendsIDs(cursor);
             long[] ids = friends.getIDs();
             if (ids.length == 0) {
                 logger.info("Full friends list fetched for account {}, total size: {}", account.name(), friendIds.size());
