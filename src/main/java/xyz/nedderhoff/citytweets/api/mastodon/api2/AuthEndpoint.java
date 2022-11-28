@@ -1,5 +1,6 @@
 package xyz.nedderhoff.citytweets.api.mastodon.api2;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -9,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import twitter4j.JSONObject;
 import xyz.nedderhoff.citytweets.api.mastodon.MastodonApi2Endpoint;
 import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonAccount;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Auth;

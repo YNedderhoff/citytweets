@@ -25,7 +25,7 @@ public class RetweetEndpoint extends TwitterApi1Endpoint {
         final long id = tweet.id();
         logger.info("Retweeting tweet with id {} ...", id);
         try {
-            connections.getConnection(account).retweetStatus(id);
+            connections.getConnection(account).v1().tweets().retweetStatus(id);
             logger.info("Successfully retweeted tweet {}", id);
             return tweet;
         } catch (twitter4j.TwitterException e) {
