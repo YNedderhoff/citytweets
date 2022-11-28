@@ -10,16 +10,17 @@ import xyz.nedderhoff.citytweets.cache.twitter.FriendCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties;
 import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
 import xyz.nedderhoff.citytweets.exception.twitter.TwitterException;
-import xyz.nedderhoff.citytweets.service.FollowService;
+import xyz.nedderhoff.citytweets.service.AbstractFollowService;
 
-public class TwitterFollowService implements FollowService {
+@Service
+public class TwitterFollowService extends AbstractFollowService<AccountProperties.TwitterAccount, TwitterAccountService> {
     private static final Logger logger = LoggerFactory.getLogger(TwitterFollowService.class);
 
     private final MeEndpoint meEndpoint;
     private final RecentTweetsEndpoint recentTweetsEndpoint;
     private final FollowEndpoint followEndpoint;
     private final FriendCache friendCache;
-    private final TwitterAccountService twitterAccountService;
+
 
     public TwitterFollowService(
             MeEndpoint meEndpoint,
@@ -28,16 +29,16 @@ public class TwitterFollowService implements FollowService {
             FriendCache friendCache,
             TwitterAccountService twitterAccountService
     ) {
+        super(twitterAccountService);
         this.meEndpoint = meEndpoint;
         this.recentTweetsEndpoint = recentTweetsEndpoint;
         this.followEndpoint = followEndpoint;
         this.friendCache = friendCache;
-        this.twitterAccountService = twitterAccountService;
     }
 
     @Override
     public void follow() {
-        twitterAccountService.getAccounts().forEach(account -> {
+        accountService.getAccounts().forEach(account -> {
             logger.info("Looking for tweets for search {} in order to find followers for account {}", account.locationSearch(), account.name());
             final long myId;
             try {
@@ -57,7 +58,8 @@ public class TwitterFollowService implements FollowService {
     private boolean shouldFollow(Tweet tweet, long myId, AccountProperties.TwitterAccount account) {
         return !isTweetFromMe(tweet, myId)
                 && isMaybeFromDesiredLocation(tweet, account)
-                && !hasBeenSeen(tweet, account);
+                && !hasBeenSeen(tweet, account)
+                && isAuthorBlocked(tweet.user().username(), account);
 
     }
 

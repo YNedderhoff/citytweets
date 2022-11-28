@@ -7,29 +7,27 @@ import xyz.nedderhoff.citytweets.api.twitter.api1.MeEndpoint;
 import xyz.nedderhoff.citytweets.api.twitter.api1.RetweetEndpoint;
 import xyz.nedderhoff.citytweets.api.twitter.api2.RecentTweetsEndpoint;
 import xyz.nedderhoff.citytweets.cache.twitter.RetweetCache;
+import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
 import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
 import xyz.nedderhoff.citytweets.exception.twitter.TwitterException;
 import xyz.nedderhoff.citytweets.service.AbstractRepostService;
-import xyz.nedderhoff.citytweets.service.RepostService;
 
-@Component
-public class TwitterRetweetService extends AbstractRepostService<Long, RetweetCache> implements RepostService {
+@Service
+public class TwitterRetweetService extends AbstractRepostService<Long, RetweetCache, TwitterAccount, TwitterAccountService> {
     private static final Logger logger = LoggerFactory.getLogger(TwitterRetweetService.class);
 
-    private final TwitterAccountService twitterAccountService;
     private final RecentTweetsEndpoint recentTweetsEndpoint;
     private final RetweetEndpoint retweetEndpoint;
     private final MeEndpoint meEndpoint;
 
     public TwitterRetweetService(
-            TwitterAccountService twitterAccountService,
+            TwitterAccountService accountService,
             RecentTweetsEndpoint recentTweetsEndpoint,
             RetweetEndpoint retweetEndpoint,
             MeEndpoint meEndpoint,
             RetweetCache retweetCache
     ) {
-        super(retweetCache);
-        this.twitterAccountService = twitterAccountService;
+        super(retweetCache, accountService);
         this.recentTweetsEndpoint = recentTweetsEndpoint;
         this.retweetEndpoint = retweetEndpoint;
         this.meEndpoint = meEndpoint;
@@ -37,7 +35,7 @@ public class TwitterRetweetService extends AbstractRepostService<Long, RetweetCa
 
     @Override
     public void repost() {
-        if (twitterAccountService.getAccounts() == null) {
+        if (accountService.getAccounts() == null) {
             logger.info("No Twitter accounts configured - skipping ...");
         }
 
@@ -45,13 +43,13 @@ public class TwitterRetweetService extends AbstractRepostService<Long, RetweetCa
     }
 
     private void retweet() {
-        twitterAccountService.getAccounts().forEach(account -> {
+        accountService.getAccounts().forEach(account -> {
             logger.info("Looking for unseen tweets for search {} on Twitter account {}", account.search(), account.name());
             final long myId;
             try {
                 myId = meEndpoint.getId(account);
                 recentTweetsEndpoint.search(account.search()).stream()
-                        .filter(tweet -> shouldRetweet(tweet, myId))
+                        .filter(tweet -> shouldRetweet(tweet, myId, account))
                         .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
                                 tweet.id(), tweet.user().name(), tweet.lang(), tweet.user().location(), tweet.text())
                         )
@@ -63,10 +61,11 @@ public class TwitterRetweetService extends AbstractRepostService<Long, RetweetCa
         });
     }
 
-    private boolean shouldRetweet(Tweet tweet, long myId) {
+    private boolean shouldRetweet(Tweet tweet, long myId, TwitterAccount account) {
         return !isFromMe(tweet, myId)
                 && !isRetweet(tweet)
-                && !hasBeenSeen(tweet.id());
+                && !hasBeenSeen(tweet.id())
+                && !isAuthorBlocked(tweet.user().username(), account);
     }
 
     protected boolean isFromMe(Tweet postUserId, long myUserId) {

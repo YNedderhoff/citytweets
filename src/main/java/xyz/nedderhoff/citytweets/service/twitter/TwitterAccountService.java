@@ -11,14 +11,21 @@ import java.util.Random;
 @Service
 public class TwitterAccountService implements AccountService<TwitterAccount> {
     private final List<TwitterAccount> twitterAccounts;
+    private final List<String> ignoredAccounts;
 
     public TwitterAccountService(AccountProperties accountProperties) {
-        this.twitterAccounts = accountProperties.twitter();
+        this.twitterAccounts = accountProperties.twitter().accounts();
+        this.ignoredAccounts = accountProperties.twitter().ignoredAccounts();
     }
 
     @Override
     public List<TwitterAccount> getAccounts() {
         return twitterAccounts;
+    }
+
+    @Override
+    public List<String> getIgnoredAccounts() {
+        return ignoredAccounts;
     }
 
     public String getRandomBearerTokenTwitter() {

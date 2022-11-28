@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface AccountService<T extends Account> {
     List<T> getAccounts();
+
+    List<String> getIgnoredAccounts();
 }
