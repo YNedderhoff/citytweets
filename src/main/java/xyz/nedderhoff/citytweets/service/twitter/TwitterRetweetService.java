@@ -13,7 +13,7 @@ import xyz.nedderhoff.citytweets.exception.twitter.TwitterException;
 import xyz.nedderhoff.citytweets.service.AbstractRepostService;
 
 @Service
-public class TwitterRetweetService extends AbstractRepostService<Long, RetweetCache, TwitterAccount, TwitterAccountService> {
+public class TwitterRetweetService extends AbstractRepostService<Long, TwitterAccount, RetweetCache, TwitterAccountService> {
     private static final Logger logger = LoggerFactory.getLogger(TwitterRetweetService.class);
 
     private final RecentTweetsEndpoint recentTweetsEndpoint;

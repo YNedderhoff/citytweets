@@ -7,13 +7,13 @@ import xyz.nedderhoff.citytweets.api.twitter.api1.FollowEndpoint;
 import xyz.nedderhoff.citytweets.api.twitter.api1.MeEndpoint;
 import xyz.nedderhoff.citytweets.api.twitter.api2.RecentTweetsEndpoint;
 import xyz.nedderhoff.citytweets.cache.twitter.FriendCache;
-import xyz.nedderhoff.citytweets.config.AccountProperties;
+import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
 import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
 import xyz.nedderhoff.citytweets.exception.twitter.TwitterException;
 import xyz.nedderhoff.citytweets.service.AbstractFollowService;
 
 @Service
-public class TwitterFollowService extends AbstractFollowService<AccountProperties.TwitterAccount, TwitterAccountService> {
+public class TwitterFollowService extends AbstractFollowService<TwitterAccount, TwitterAccountService> {
     private static final Logger logger = LoggerFactory.getLogger(TwitterFollowService.class);
 
     private final MeEndpoint meEndpoint;
@@ -55,7 +55,7 @@ public class TwitterFollowService extends AbstractFollowService<AccountPropertie
         });
     }
 
-    private boolean shouldFollow(Tweet tweet, long myId, AccountProperties.TwitterAccount account) {
+    private boolean shouldFollow(Tweet tweet, long myId, TwitterAccount account) {
         return !isTweetFromMe(tweet, myId)
                 && isMaybeFromDesiredLocation(tweet, account)
                 && !hasBeenSeen(tweet, account)
@@ -67,11 +67,11 @@ public class TwitterFollowService extends AbstractFollowService<AccountPropertie
         return tweet.user().id() == myId;
     }
 
-    private boolean isMaybeFromDesiredLocation(Tweet tweet, AccountProperties.TwitterAccount account) {
+    private boolean isMaybeFromDesiredLocation(Tweet tweet, TwitterAccount account) {
         return tweet.user().location().toLowerCase().contains(account.locationToFollow().toLowerCase());
     }
 
-    private boolean hasBeenSeen(Tweet tweet, AccountProperties.TwitterAccount account) {
+    private boolean hasBeenSeen(Tweet tweet, TwitterAccount account) {
         return friendCache.contains(tweet.user().id(), account);
     }
 }

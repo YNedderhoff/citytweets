@@ -7,14 +7,17 @@ import xyz.nedderhoff.citytweets.config.AccountProperties.PlatformProperties;
 
 import java.util.List;
 
-public abstract class AbstractAccountService<K extends Account, T extends PlatformProperties<K>>
-        implements AccountService<K> {
+public abstract class AbstractAccountService<
+        AccountType extends Account,
+        PlatformPropertiesType extends PlatformProperties<AccountType>
+        >
+        implements AccountService<AccountType> {
     private static final Logger logger = LoggerFactory.getLogger(AbstractAccountService.class);
 
-    protected final List<K> accounts;
+    protected final List<AccountType> accounts;
     protected final List<String> ignoredAccounts;
 
-    public AbstractAccountService(T properties) {
+    public AbstractAccountService(PlatformPropertiesType properties) {
         this.accounts = properties.accounts();
         this.ignoredAccounts = properties.ignoredAccounts();
 
@@ -28,7 +31,7 @@ public abstract class AbstractAccountService<K extends Account, T extends Platfo
     }
 
     @Override
-    public List<K> getAccounts() {
+    public List<AccountType> getAccounts() {
         return this.accounts;
     }
 
