@@ -9,8 +9,8 @@ public record AccountProperties(
         TwitterProperties twitter,
         MastodonProperties mastodon
 ) {
-    public interface PlatformProperties<T extends Account> {
-        List<T> accounts();
+    public interface PlatformProperties<AccountType extends Account> {
+        List<AccountType> accounts();
 
         List<String> ignoredAccounts();
     }

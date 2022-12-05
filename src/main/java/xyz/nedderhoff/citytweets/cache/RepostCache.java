@@ -1,7 +1,7 @@
 package xyz.nedderhoff.citytweets.cache;
 
-public interface RepostCache<T> {
+public interface RepostCache<IdType> {
 
-    boolean contains(T id);
-    void add(T id);
+    boolean contains(IdType id);
+    void add(IdType id);
 }

@@ -1,6 +1,6 @@
 package xyz.nedderhoff.citytweets.exception.twitter;
 
-public class TwitterException extends RuntimeException{
+public class TwitterException extends RuntimeException {
     public TwitterException(String message) {
         super(message);
     }

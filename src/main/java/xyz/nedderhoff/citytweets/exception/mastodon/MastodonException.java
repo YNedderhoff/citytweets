@@ -1,6 +1,6 @@
 package xyz.nedderhoff.citytweets.exception.mastodon;
 
-public class MastodonException extends RuntimeException{
+public class MastodonException extends RuntimeException {
     public MastodonException(String message) {
         super(message);
     }

@@ -15,7 +15,7 @@ import xyz.nedderhoff.citytweets.service.AbstractRepostService;
 import java.util.Collections;
 
 @Service
-public class MastodonBoostService extends AbstractRepostService<String, RetootCache, MastodonAccount, MastodonAccountService> {
+public class MastodonBoostService extends AbstractRepostService<String, MastodonAccount, RetootCache, MastodonAccountService> {
     private static final Logger logger = LoggerFactory.getLogger(MastodonBoostService.class);
     private final AuthEndpoint authEndpoint;
     private final SearchEndpoint searchEndpoint;
