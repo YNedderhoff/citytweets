@@ -9,6 +9,7 @@ public record Status(
         String id,
         String uri,
         String url,
+        String spoiler_text,
         Account account,
         List<Mention> mentions
 ) {
