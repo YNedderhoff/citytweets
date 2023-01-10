@@ -12,6 +12,8 @@ import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
 import xyz.nedderhoff.citytweets.exception.twitter.TwitterException;
 import xyz.nedderhoff.citytweets.service.AbstractRepostService;
 
+import java.util.function.Consumer;
+
 @Service
 public class TwitterRetweetService extends AbstractRepostService<Long, TwitterAccount, RetweetCache, TwitterAccountService> {
     private static final Logger logger = LoggerFactory.getLogger(TwitterRetweetService.class);
@@ -62,17 +64,30 @@ public class TwitterRetweetService extends AbstractRepostService<Long, TwitterAc
     }
 
     private boolean shouldRetweet(Tweet tweet, long myId, TwitterAccount account) {
+        final Consumer<Long> hasBeenSeenLogger = (id) ->
+                logger.warn("Tweet {} from user {} was already reposted:\n{}", id, tweet.user().username(), tweet.text());
+        final Consumer<String> authorBlockedLogger = (username) ->
+                logger.warn("Tweet {} from user {} can't be reposted as author is blocked:\n{}", tweet.id(), username, tweet.text());
+
         return !isFromMe(tweet, myId)
                 && !isRetweet(tweet)
-                && !hasBeenSeen(tweet.id())
-                && !isAuthorBlocked(tweet.user().username(), account);
+                && !hasBeenSeen(tweet.id(), hasBeenSeenLogger)
+                && !isAuthorBlocked(tweet.user().username(), account, authorBlockedLogger);
     }
 
-    protected boolean isFromMe(Tweet postUserId, long myUserId) {
-        return postUserId.user().id() == myUserId;
+    protected boolean isFromMe(Tweet tweet, long myUserId) {
+        final boolean isFromMe = tweet.user().id() == myUserId;
+        if (isFromMe) {
+            logger.warn("Tweet {} from user {} is from me:\n{}", tweet.id(), tweet.user().username(), tweet.text());
+        }
+        return isFromMe;
     }
 
     private boolean isRetweet(Tweet tweet) {
-        return tweet.text().startsWith("RT @");
+        final boolean isRetweet = tweet.text().startsWith("RT @");
+        if (isRetweet) {
+            logger.warn("Tweet {} from user {} is retweet:\n{}", tweet.id(), tweet.user().username(), tweet.text());
+        }
+        return isRetweet;
     }
 }

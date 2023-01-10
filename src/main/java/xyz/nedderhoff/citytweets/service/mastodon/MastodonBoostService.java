@@ -13,6 +13,7 @@ import xyz.nedderhoff.citytweets.domain.mastodon.http.Status;
 import xyz.nedderhoff.citytweets.service.AbstractRepostService;
 
 import java.util.Collections;
+import java.util.function.Consumer;
 
 @Service
 public class MastodonBoostService extends AbstractRepostService<String, MastodonAccount, RetootCache, MastodonAccountService> {
@@ -68,19 +69,32 @@ public class MastodonBoostService extends AbstractRepostService<String, Mastodon
     }
 
     private boolean statusMentionsOwnAccount(Status status, MastodonAccount account) {
-        return status.mentions().stream()
+        final boolean mentionsOwnAccount = status.mentions().stream()
                 .anyMatch(mention -> mention.username().equals(account.name()));
+        if (mentionsOwnAccount) {
+            logger.warn("Toot {} from user {} mentions own account:\n{}", status.id(), status.account().webfingerUri(), status.spoiler_text());
+        }
+        return mentionsOwnAccount;
     }
 
     private boolean shouldRetoot(Status status, MastodonAccount account) {
+        final Consumer<String> hasBeenSeenLogger = (id) ->
+                logger.warn("Toot {} from user {} was already reposted:\n{}", id, status.account().webfingerUri(), status.spoiler_text());
+        final Consumer<String> authorBlockedLogger = (username) ->
+                logger.warn("Toot {} from user {} can't be reposted as author is blocked:\n{}", status.id(), username, status.spoiler_text());
+
         return statusMentionsOwnAccount(status, account)
                 && !isFromMe(status, account)
-                && !hasBeenSeen(status.id())
-                && !isAuthorBlocked(status.account().webfingerUri(), account);
+                && !hasBeenSeen(status.id(), hasBeenSeenLogger)
+                && !isAuthorBlocked(status.account().webfingerUri(), account, authorBlockedLogger);
     }
 
 
     protected boolean isFromMe(Status status, MastodonAccount account) {
-        return status.account().webfingerUri().equals(account.name() + "@" + account.instance());
+        final boolean isFromMe = status.account().webfingerUri().equals(account.name() + "@" + account.instance());
+        if (isFromMe) {
+            logger.warn("Toot {} from user {} is from me:\n{}", status.id(), status.account().webfingerUri(), status.spoiler_text());
+        }
+        return isFromMe;
     }
 }
