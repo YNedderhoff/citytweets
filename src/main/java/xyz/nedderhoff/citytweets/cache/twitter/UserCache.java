@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 @Lazy
 @Component
+// TODO implement for multiple accounts
 public class UserCache {
     private static final Logger logger = LoggerFactory.getLogger(UserCache.class);
     private final LoadingCache<Long, User> cacheById;
