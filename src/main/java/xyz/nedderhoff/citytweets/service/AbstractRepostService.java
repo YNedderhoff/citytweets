@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 public abstract class AbstractRepostService<
         IdType,
         AccountType extends Account,
-        RepostCacheType extends RepostCache<IdType>,
+        RepostCacheType extends RepostCache<IdType, AccountType>,
         AccountServiceType extends AccountService<AccountType>
         >
         implements RepostService {
@@ -25,8 +25,8 @@ public abstract class AbstractRepostService<
         this.accountService = accountService;
     }
 
-    protected boolean hasBeenSeen(IdType id, Consumer<IdType> hasBeenSeenLogger) {
-        final boolean hasBeenSeen = repostCache.contains(id);
+    protected boolean hasBeenSeen(IdType id, AccountType account, Consumer<IdType> hasBeenSeenLogger) {
+        final boolean hasBeenSeen = repostCache.contains(id, account);
         if (hasBeenSeen) {
             hasBeenSeenLogger.accept(id);
 
@@ -43,8 +43,8 @@ public abstract class AbstractRepostService<
         return isAuthorBlocked;
     }
 
-    protected void cache(IdType id) {
-        repostCache.add(id);
+    protected void cache(IdType id, AccountType account) {
+        repostCache.add(id, account);
     }
 
 }

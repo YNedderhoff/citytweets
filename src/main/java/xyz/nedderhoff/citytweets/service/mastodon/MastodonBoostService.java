@@ -64,7 +64,7 @@ public class MastodonBoostService extends AbstractRepostService<String, Mastodon
                             .flatMap(follower -> accountsEndpoint.getStatuses(follower, authedHeaders, mastodonAccount).stream())
                             .filter(status -> shouldRetoot(status, mastodonAccount))
                             .map(status -> statusEndpoint.boost(status, authedHeaders, mastodonAccount))
-                            .forEach(status -> cache(status.id())));
+                            .forEach(status -> cache(status.id(), mastodonAccount)));
         });
     }
 
@@ -85,7 +85,7 @@ public class MastodonBoostService extends AbstractRepostService<String, Mastodon
 
         return statusMentionsOwnAccount(status, account)
                 && !isFromMe(status, account)
-                && !hasBeenSeen(status.id(), hasBeenSeenLogger)
+                && !hasBeenSeen(status.id(), account, hasBeenSeenLogger)
                 && !isAuthorBlocked(status.account().webfingerUri(), account, authorBlockedLogger);
     }
 

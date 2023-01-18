@@ -1,30 +1,33 @@
 package xyz.nedderhoff.citytweets.cache.mastodon;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import xyz.nedderhoff.citytweets.cache.RepostCache;
-
-import java.util.HashSet;
-import java.util.Set;
+import xyz.nedderhoff.citytweets.cache.AbstractRepostCache;
+import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonAccount;
+import xyz.nedderhoff.citytweets.config.Service;
+import xyz.nedderhoff.citytweets.exception.mastodon.NonExistingMastodonCacheException;
+import xyz.nedderhoff.citytweets.service.mastodon.MastodonAccountService;
 
 @Lazy
 @Component
-public class RetootCache implements RepostCache<String> {
-    private static final Logger logger = LoggerFactory.getLogger(RetootCache.class);
-    private static final Set<String> cache = new HashSet<>();
+public class RetootCache extends AbstractRepostCache<
+        String,
+        MastodonAccount,
+        MastodonAccountService,
+        NonExistingMastodonCacheException
+        > {
 
-    public RetootCache() {
-        logger.info("Setting up retoot cache");
+    public RetootCache(MastodonAccountService accountService) {
+        super(Service.MASTODON, accountService);
     }
 
-    public boolean contains(String id) {
-        return cache.contains(id);
+    @Override
+    protected NonExistingMastodonCacheException getException(String s) {
+        return new NonExistingMastodonCacheException(s);
     }
 
-    public void add(String id) {
-        logger.info("Adding toot {}", id);
-        cache.add(id);
+    @Override
+    protected String getExceptionMessage(MastodonAccount account) {
+        return String.format(CACHE_INEXISTENT_EXCEPTION_MESSAGE, "twitter", account.name());
     }
 }

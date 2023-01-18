@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 @Lazy
 @Component
 @EnableScheduling
+// TODO implement for multiple accounts
 public class FriendCache {
     private static final Logger logger = LoggerFactory.getLogger(FriendCache.class);
     private static final int FRIEND_UPDATE_RATE = 1000 * 60 * 60 * 24;

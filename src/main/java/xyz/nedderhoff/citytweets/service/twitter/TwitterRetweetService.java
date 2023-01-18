@@ -56,7 +56,7 @@ public class TwitterRetweetService extends AbstractRepostService<Long, TwitterAc
                                 tweet.id(), tweet.user().name(), tweet.lang(), tweet.user().location(), tweet.text())
                         )
                         .map(tweet -> retweetEndpoint.retweet(tweet, account))
-                        .forEach(tweet -> cache(tweet.id()));
+                        .forEach(tweet -> cache(tweet.id(), account));
             } catch (TwitterException e) {
                 logger.error("Exception during retweet job", e);
             }
@@ -71,7 +71,7 @@ public class TwitterRetweetService extends AbstractRepostService<Long, TwitterAc
 
         return !isFromMe(tweet, myId)
                 && !isRetweet(tweet)
-                && !hasBeenSeen(tweet.id(), hasBeenSeenLogger)
+                && !hasBeenSeen(tweet.id(), account, hasBeenSeenLogger)
                 && !isAuthorBlocked(tweet.user().username(), account, authorBlockedLogger);
     }
 

@@ -1,32 +1,33 @@
 package xyz.nedderhoff.citytweets.cache.twitter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import xyz.nedderhoff.citytweets.cache.RepostCache;
-
-import java.util.HashSet;
-import java.util.Set;
+import xyz.nedderhoff.citytweets.cache.AbstractRepostCache;
+import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
+import xyz.nedderhoff.citytweets.config.Service;
+import xyz.nedderhoff.citytweets.exception.twitter.NonExistingTwitterCacheException;
+import xyz.nedderhoff.citytweets.service.twitter.TwitterAccountService;
 
 @Lazy
 @Component
-public class RetweetCache implements RepostCache<Long> {
-    private static final Logger logger = LoggerFactory.getLogger(RetweetCache.class);
-    private static final Set<Long> cache = new HashSet<>();
+public class RetweetCache extends AbstractRepostCache<
+        Long,
+        TwitterAccount,
+        TwitterAccountService,
+        NonExistingTwitterCacheException
+        > {
 
-    public RetweetCache() {
-        logger.info("Setting up retweet cache");
+    public RetweetCache(TwitterAccountService accountService) {
+        super(Service.TWITTER, accountService);
     }
 
     @Override
-    public boolean contains(Long id) {
-        return cache.contains(id);
+    protected NonExistingTwitterCacheException getException(String s) {
+        return new NonExistingTwitterCacheException(s);
     }
 
     @Override
-    public void add(Long id) {
-        logger.info("Adding tweet {}", id);
-        cache.add(id);
+    protected String getExceptionMessage(TwitterAccount account) {
+        return String.format(CACHE_INEXISTENT_EXCEPTION_MESSAGE, "twitter", account.name());
     }
 }

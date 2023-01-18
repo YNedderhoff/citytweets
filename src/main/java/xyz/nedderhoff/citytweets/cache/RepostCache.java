@@ -1,7 +1,10 @@
 package xyz.nedderhoff.citytweets.cache;
 
-public interface RepostCache<IdType> {
+import xyz.nedderhoff.citytweets.config.AccountProperties;
 
-    boolean contains(IdType id);
-    void add(IdType id);
+public interface RepostCache<IdType, AccountType extends AccountProperties.Account> {
+
+    boolean contains(IdType id, AccountType account);
+
+    void add(IdType id, AccountType accountType);
 }
