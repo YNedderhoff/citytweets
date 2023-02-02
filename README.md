@@ -29,11 +29,13 @@ For other calls, and especially the calls that actually search for new tweets, i
 [Twitter API 2.0](https://developer.twitter.com/en/docs/twitter-api/early-access) to which I got early access. These
 calls are made without any library help. Further migration will happen over time.
 
+
+
 ### Mastodon
 
-The important parts of the [Mastodon API](https://docs.joinmastodon.org/api/) are implemented. Unfortunately, currently
-the Mastodon API doesn't allow for boosts via the API without manual user approval for every boost, so until further
-notice I won't be able to finish the Mastodon side of the bot.
+The important parts of the [Mastodon API](https://docs.joinmastodon.org/api/) are implemented. It currently still relies 
+on parsing its followers' toots and reposting those in case there is a mention, instead of using the search including 
+webfinger lookup.
 
 ## Owned Accounts
 
