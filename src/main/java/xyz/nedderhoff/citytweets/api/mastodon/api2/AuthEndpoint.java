@@ -29,8 +29,9 @@ public class AuthEndpoint extends MastodonApi2Endpoint<Auth> {
         body.put("client_id", mastodonAccount.oauth().accessToken());
         body.put("client_secret", mastodonAccount.oauth().accessTokenSecret());
         body.put("redirect_uri", mastodonAccount.redirectUri());
+        body.put("code", mastodonAccount.oauth().authorizationCode());
         body.put("scope", "read write follow");
-        body.put("grant_type", "client_credentials");
+        body.put("grant_type", "authorization_code");
 
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

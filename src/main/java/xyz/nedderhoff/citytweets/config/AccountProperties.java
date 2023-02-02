@@ -82,7 +82,8 @@ public record AccountProperties(
 
         public record Oauth(
                 String accessToken,
-                String accessTokenSecret
+                String accessTokenSecret,
+                String authorizationCode
         ) {
         }
 

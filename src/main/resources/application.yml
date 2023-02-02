@@ -62,6 +62,7 @@ account-properties:
         oauth:
           accessToken: stupidAccessToken
           accessTokenSecret: stupidAccessTokenSecret
+          authorizationCode: stupidAuthorizationCode
         redirectUri: stupidRedirectUri
         location-search: stupidLocationSearchThatHopefullyNeverMatches
         location-to-follow: stupidLocationToFollowThatHopefullyNeverMatches

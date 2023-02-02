@@ -45,7 +45,7 @@ public class MastodonBoostService extends AbstractRepostService<String, Mastodon
             logger.info("No Mastodon accounts configured - skipping ...");
         } else {
             logger.warn("Mastodon accounts configured, but skipped in code!");
-            // boost();
+            boost();
         }
     }
 
