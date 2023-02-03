@@ -59,4 +59,4 @@ webfinger lookup.
 | Mastodon     | @rahdentoots     | Rahden Toots          | <a rel="me" href="https://nrw.social/@rahdentoots"> nrw.social/@rahdentoots </a>         | Inactive, profile exists |
 
 [^1]: It was originally hosted on <a rel="me" href="https://fosstodon.org/@citytoots">
-fosstodon.org/@citytoots</a> but had to be moved, as fosstodon.org community guidelines don't allow posts in German language.
+fosstodon.org/@citytoots</a> but had to be moved, as [fosstodon.org](https://fosstodon.org)'s [Code Of Conduct](https://hub.fosstodon.org/coc/) does not allow posts in German language.
