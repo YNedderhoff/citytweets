@@ -57,6 +57,7 @@ webfinger lookup.
 | Mastodon     | @portatoots      | Porta Toots           | <a rel="me" href="https://nrw.social/@portatoots"> nrw.social/@portatoots </a>           | Inactive, profile exists |
 | Mastodon     | @hilletoots      | Hille Toots           | <a rel="me" href="https://nrw.social/@hilletoots"> nrw.social/@hilletoots </a>           | Inactive, profile exists |
 | Mastodon     | @rahdentoots     | Rahden Toots          | <a rel="me" href="https://nrw.social/@rahdentoots"> nrw.social/@rahdentoots </a>         | Inactive, profile exists |
+| Mastodon     | @milktoots       | Minden-Lübbecke Toots | <a rel="me" href="https://nrw.social/@milktoots"> nrw.social/@milktoots </a>             | Inactive, profile exists |
 
 [^1]: It was originally hosted on <a rel="me" href="https://fosstodon.org/@citytoots">
 fosstodon.org/@citytoots</a> but had to be moved, as [fosstodon.org](https://fosstodon.org)'s [Code Of Conduct](https://hub.fosstodon.org/coc/) does not allow posts in German language.
