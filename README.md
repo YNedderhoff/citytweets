@@ -13,7 +13,7 @@ It retweets everything the search finds. It is intended to be used with searches
 can at-mention the account `@mindentweets` and will get a retweet, thus reach every follower of `@mindentweets`.
 
 The bot's own Twitter account can be found at <a rel="me" href="https://twitter.com/citytweets_bot">
-@citytweets_bot </a>.
+@citytweets_bot</a>.
 The respective Mastodon account is hosted on <a rel="me" href="https://troet.cafe/@citytoots">
 troet.cafe/@citytoots</a>[^1].
 
