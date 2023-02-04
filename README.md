@@ -13,9 +13,9 @@ It retweets everything the search finds. It is intended to be used with searches
 can at-mention the account `@mindentweets` and will get a retweet, thus reach every follower of `@mindentweets`.
 
 The bot's own Twitter account can be found at <a rel="me" href="https://twitter.com/citytweets_bot">
-@citytweets_bot </a>.
-The respective Mastodon account is hosted on <a rel="me" href="https://fosstodon.org/@citytoots">
-fosstodon.org/@citytoots</a>.
+@citytweets_bot</a>.
+The respective Mastodon account is hosted on <a rel="me" href="https://troet.cafe/@citytoots">
+troet.cafe/@citytoots</a>[^1].
 
 ## Tech
 
@@ -57,3 +57,7 @@ webfinger lookup.
 | Mastodon     | @portatoots      | Porta Toots           | <a rel="me" href="https://nrw.social/@portatoots"> nrw.social/@portatoots </a>           | Inactive, profile exists |
 | Mastodon     | @hilletoots      | Hille Toots           | <a rel="me" href="https://nrw.social/@hilletoots"> nrw.social/@hilletoots </a>           | Inactive, profile exists |
 | Mastodon     | @rahdentoots     | Rahden Toots          | <a rel="me" href="https://nrw.social/@rahdentoots"> nrw.social/@rahdentoots </a>         | Inactive, profile exists |
+| Mastodon     | @milktoots       | Minden-Lübbecke Toots | <a rel="me" href="https://nrw.social/@milktoots"> nrw.social/@milktoots </a>             | Inactive, profile exists |
+
+[^1]: It was originally hosted on <a rel="me" href="https://fosstodon.org/@citytoots">
+fosstodon.org/@citytoots</a> but had to be moved, as [fosstodon.org](https://fosstodon.org)'s [Code Of Conduct](https://hub.fosstodon.org/coc/) does not allow posts in German language.
