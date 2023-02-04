@@ -1,8 +1,9 @@
 # citytweets/citytoots
 
-<img src="img/citytweets/logo.png" width="200"> <img src="img/citytoots/logo.png" width="200">
+<img src="img/citytweets/logo.png" width="200" title="citytweets logo"> <img src="img/citytoots/logo.png" width="200" title="citytoots logo">
 
-![Build, Test and Publish](https://github.com/ynedderhoff/citytweets/workflows/Build,%20Test%20and%20Publish/badge.svg) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d8280dad48c6491caa91e7241c48ccb1)](https://app.codacy.com/manual/YNedderhoff/citytweets?utm_source=github.com&utm_medium=referral&utm_content=YNedderhoff/citytweets&utm_campaign=Badge_Grade_Dashboard)
+![Build, Test and Publish](https://github.com/ynedderhoff/citytweets/workflows/Build,%20Test%20and%20Publish/badge.svg) 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d8280dad48c6491caa91e7241c48ccb1)](https://app.codacy.com/manual/YNedderhoff/citytweets?utm_source=github.com&utm_medium=referral&utm_content=YNedderhoff/citytweets&utm_campaign=Badge_Grade_Dashboard)
 
 ## About
 
@@ -60,4 +61,5 @@ webfinger lookup.
 | Mastodon     | @milktoots       | Minden-Lübbecke Toots | <a rel="me" href="https://nrw.social/@milktoots"> nrw.social/@milktoots </a>             | Inactive, profile exists |
 
 [^1]: It was originally hosted on <a rel="me" href="https://fosstodon.org/@citytoots">
-fosstodon.org/@citytoots</a> but had to be moved, as [fosstodon.org](https://fosstodon.org)'s [Code Of Conduct](https://hub.fosstodon.org/coc/) does not allow posts in German language.
+fosstodon.org/@citytoots</a> but had to be moved, as [fosstodon.org](https://fosstodon.org)'s 
+[Code Of Conduct](https://hub.fosstodon.org/coc/) does not allow posts in German language.
