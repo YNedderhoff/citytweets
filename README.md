@@ -1,16 +1,16 @@
-# citytweets
+# citytweets/citytoots
 
-![citytweets logo](img/logo.png "citytweets logo")
+<img src="img/citytweets/logo.png" width="200"> <img src="img/citytoots/logo.png" width="200">
 
 ![Build, Test and Publish](https://github.com/ynedderhoff/citytweets/workflows/Build,%20Test%20and%20Publish/badge.svg) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d8280dad48c6491caa91e7241c48ccb1)](https://app.codacy.com/manual/YNedderhoff/citytweets?utm_source=github.com&utm_medium=referral&utm_content=YNedderhoff/citytweets&utm_campaign=Badge_Grade_Dashboard)
 
 ## About
 
-citytweets is a Twitter retweet bot currently powering my accounts listed below. In addition
+citytweets is a Twitter and Mastodon repost bot currently powering my accounts listed below. In addition
 to my accounts, it also powers [@TweetsFuerMiLB](https://twitter.com/TweetsFuerMiLB), which is not owned by me.
 
-It retweets everything the search finds. It is intended to be used with searches like `@mindentweets` so that everyone
-can at-mention the account `@mindentweets` and will get a retweet, thus reach every follower of `@mindentweets`.
+It reposts everything the search finds. It is intended to be used with searches like `@mindentweets` so that everyone
+can at-mention the account `@mindentweets` and will get a repost, thus reach every follower of `@mindentweets`.
 
 The bot's own Twitter account can be found at <a rel="me" href="https://twitter.com/citytweets_bot">
 @citytweets_bot</a>.
