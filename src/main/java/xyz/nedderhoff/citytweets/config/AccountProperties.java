@@ -81,9 +81,7 @@ public record AccountProperties(
     ) implements Account {
 
         public record Oauth(
-                String accessToken,
-                String accessTokenSecret,
-                String authorizationCode
+                String bearerToken
         ) {
         }
 
