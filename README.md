@@ -2,7 +2,7 @@
 
 <img src="img/citytweets/logo.png" width="200" title="citytweets logo"> <img src="img/citytoots/logo.png" width="200" title="citytoots logo">
 
-![Build, Test and Publish](https://github.com/ynedderhoff/citytweets/workflows/Build,%20Test%20and%20Publish/badge.svg) 
+![Build, Test and Publish](https://github.com/ynedderhoff/citytweets/workflows/Build,%20Test%20and%20Publish/badge.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d8280dad48c6491caa91e7241c48ccb1)](https://app.codacy.com/manual/YNedderhoff/citytweets?utm_source=github.com&utm_medium=referral&utm_content=YNedderhoff/citytweets&utm_campaign=Badge_Grade_Dashboard)
 
 ## About
@@ -32,16 +32,16 @@ calls are made without any library help. Further migration will happen over time
 
 #### Twitter API Deprecation
 
-On February 2nd 2023, Twitter announced the deprecation of their v1.1 and v2 APIs effective February 9th. 
+On February 2nd 2023, Twitter announced the deprecation of their v1.1 and v2 APIs effective February 9th.
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Starting February 9, we will no longer support free access to the Twitter API, both v2 and v1.1. A paid basic tier will be available instead 🧵</p>&mdash; Twitter Dev (@TwitterDev) <a href="https://twitter.com/TwitterDev/status/1621026986784337922?ref_src=twsrc%5Etfw">February 2, 2023</a></blockquote>
 
-These are the two APIs citytweets relies on to work for Twitter, so unless Twitter changes that policy, any Twitter 
+These are the two APIs citytweets relies on to work for Twitter, so unless Twitter changes that policy, any Twitter
 retweet account will stop working on that date.
 
 ### Mastodon
 
-The important parts of the [Mastodon API](https://docs.joinmastodon.org/api/) are implemented. It currently still relies 
-on parsing its followers' toots and reposting those in case there is a mention, instead of using the search including 
+The important parts of the [Mastodon API](https://docs.joinmastodon.org/api/) are implemented. It currently still relies
+on parsing its followers' toots and reposting those in case there is a mention, instead of using the search including
 webfinger lookup.
 
 ## Owned Accounts
@@ -56,16 +56,16 @@ webfinger lookup.
 | Twitter      | @portatweets     | Porta Tweets          | <a rel="me" href="https://twitter.com/portatweets"> twitter.com/portatweets </a>         | Inactive, profile exists |
 | Twitter      | @hilletweets     | Hille Tweets          | <a rel="me" href="https://twitter.com/hilletweets"> twitter.com/hilletweets </a>         | Inactive, profile exists |
 | Twitter      | @rahdentweets    | Rahden Tweets         | <a rel="me" href="https://twitter.com/rahdentweets"> twitter.com/rahdentweets </a>       | Inactive, profile exists |
-| Mastodon     | @mindentoots     | Minden Toots          | <a rel="me" href="https://nrw.social/@mindentoots"> nrw.social/@mindentoots </a>         | Inactive, profile exists |
-| Mastodon     | @luebbecketoots  | Lübbecke Toots        | <a rel="me" href="https://nrw.social/@luebbecketoots"> nrw.social/@luebbecketoots </a>   | Inactive, profile exists |
-| Mastodon     | @herfordtoots    | Herford Toots         | <a rel="me" href="https://nrw.social/@herfordtoots"> nrw.social/@herfordtoots </a>       | Inactive, profile exists |
-| Mastodon     | @badoeyntoots    | Bad Oeynhausen Toots  | <a rel="me" href="https://nrw.social/@badoeyntoots"> nrw.social/@badoeyntoots </a>       | Inactive, profile exists |
-| Mastodon     | @espelkamptoots  | Espelkamp Toots       | <a rel="me" href="https://nrw.social/@espelkamptoots"> nrw.social/@espelkamptoots </a>   | Inactive, profile exists |
-| Mastodon     | @portatoots      | Porta Toots           | <a rel="me" href="https://nrw.social/@portatoots"> nrw.social/@portatoots </a>           | Inactive, profile exists |
-| Mastodon     | @hilletoots      | Hille Toots           | <a rel="me" href="https://nrw.social/@hilletoots"> nrw.social/@hilletoots </a>           | Inactive, profile exists |
-| Mastodon     | @rahdentoots     | Rahden Toots          | <a rel="me" href="https://nrw.social/@rahdentoots"> nrw.social/@rahdentoots </a>         | Inactive, profile exists |
-| Mastodon     | @milktoots       | Minden-Lübbecke Toots | <a rel="me" href="https://nrw.social/@milktoots"> nrw.social/@milktoots </a>             | Inactive, profile exists |
+| Mastodon     | @mindentoots     | Minden Toots          | <a rel="me" href="https://nrw.social/@mindentoots"> nrw.social/@mindentoots </a>         | Active                   |
+| Mastodon     | @luebbecketoots  | Lübbecke Toots        | <a rel="me" href="https://nrw.social/@luebbecketoots"> nrw.social/@luebbecketoots </a>   | Active                   |
+| Mastodon     | @herfordtoots    | Herford Toots         | <a rel="me" href="https://nrw.social/@herfordtoots"> nrw.social/@herfordtoots </a>       | Active                   |
+| Mastodon     | @badoeyntoots    | Bad Oeynhausen Toots  | <a rel="me" href="https://nrw.social/@badoeyntoots"> nrw.social/@badoeyntoots </a>       | Active                   |
+| Mastodon     | @espelkamptoots  | Espelkamp Toots       | <a rel="me" href="https://nrw.social/@espelkamptoots"> nrw.social/@espelkamptoots </a>   | Active                   |
+| Mastodon     | @portatoots      | Porta Toots           | <a rel="me" href="https://nrw.social/@portatoots"> nrw.social/@portatoots </a>           | Active                   |
+| Mastodon     | @hilletoots      | Hille Toots           | <a rel="me" href="https://nrw.social/@hilletoots"> nrw.social/@hilletoots </a>           | Active                   |
+| Mastodon     | @rahdentoots     | Rahden Toots          | <a rel="me" href="https://nrw.social/@rahdentoots"> nrw.social/@rahdentoots </a>         | Active                   |
+| Mastodon     | @milktoots       | Minden-Lübbecke Toots | <a rel="me" href="https://nrw.social/@milktoots"> nrw.social/@milktoots </a>             | Active                   |
 
 [^1]: It was originally hosted on <a rel="me" href="https://fosstodon.org/@citytoots">
-fosstodon.org/@citytoots</a> but had to be moved, as [fosstodon.org](https://fosstodon.org)'s 
+fosstodon.org/@citytoots</a> but had to be moved, as [fosstodon.org](https://fosstodon.org)'s
 [Code Of Conduct](https://hub.fosstodon.org/coc/) does not allow posts in German language.
