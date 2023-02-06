@@ -30,7 +30,13 @@ For other calls, and especially the calls that actually search for new tweets, i
 [Twitter API 2.0](https://developer.twitter.com/en/docs/twitter-api/early-access) to which I got early access. These
 calls are made without any library help. Further migration will happen over time.
 
+#### Twitter API Deprecation
 
+On February 2nd 2023, Twitter announced the deprecation of their v1.1 and v2 APIs effective February 9th. 
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Starting February 9, we will no longer support free access to the Twitter API, both v2 and v1.1. A paid basic tier will be available instead 🧵</p>&mdash; Twitter Dev (@TwitterDev) <a href="https://twitter.com/TwitterDev/status/1621026986784337922?ref_src=twsrc%5Etfw">February 2, 2023</a></blockquote>
+
+These are the two APIs citytweets relies on to work for Twitter, so unless Twitter changes that policy, any Twitter 
+retweet account will stop working on that date.
 
 ### Mastodon
 
