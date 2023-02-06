@@ -60,9 +60,10 @@ account-properties:
       - name: stupidAccount
         instance: stupidInstance
         oauth:
-          accessToken: stupidAccessToken
-          accessTokenSecret: stupidAccessTokenSecret
-          authorizationCode: stupidAuthorizationCode
+          # retrieve by authorizing the user with GET /oauth/authorize, and then
+          # getting the bearer token with POST /oauth/token. It doesn't currently
+          # expire as per https://github.com/mastodon/mastodon/discussions/23377#discussioncomment-4872882.
+          bearerToken: stupidUserToken
         redirectUri: stupidRedirectUri
         location-search: stupidLocationSearchThatHopefullyNeverMatches
         location-to-follow: stupidLocationToFollowThatHopefullyNeverMatches
