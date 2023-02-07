@@ -37,6 +37,7 @@ public class TwitterRetweetService extends AbstractRepostService<Long, TwitterAc
 
     @Override
     public void repost() {
+        logger.info("Running Twitter repost job in thread {}", Thread.currentThread().getName());
         if (accountService.getAccounts() == null) {
             logger.info("No Twitter accounts configured - skipping ...");
         }

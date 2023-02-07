@@ -36,6 +36,7 @@ public class FriendCache {
 
     @Scheduled(fixedRate = FRIEND_UPDATE_RATE)
     private void fetchFollowers() {
+        logger.info("Running FriendCache scheduled job in thread {}", Thread.currentThread().getName());
         twitterAccountService.getAccounts().forEach(account -> {
             logger.info("Populating Friends Cache for account {}", account.name());
             try {
