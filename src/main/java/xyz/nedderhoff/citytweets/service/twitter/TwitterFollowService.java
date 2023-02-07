@@ -45,7 +45,7 @@ public class TwitterFollowService extends AbstractFollowService<TwitterAccount, 
                 myId = meEndpoint.getId(account);
                 recentTweetsEndpoint.search(account.locationSearch()).stream()
                         .filter(tweet -> shouldFollow(tweet, myId, account))
-                        .peek(tweet -> logger.info("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
+                        .peek(tweet -> logger.debug("Found Tweet: ID \"{}\", Author \"{}\", Language \"{}\", Location \"{}\", Text \"{}\".",
                                 tweet.id(), tweet.user().name(), tweet.lang(), tweet.user().location(), tweet.text())
                         )
                         .forEach(tweet -> followEndpoint.follow(tweet.user(), account));
