@@ -39,6 +39,7 @@ public class MastodonBoostService extends AbstractRepostService<String, Mastodon
 
     @Override
     public void repost() {
+        logger.info("Running Mastodon repost job in thread {}", Thread.currentThread().getName());
         if (accountService.getAccounts() == null) {
             logger.info("No Mastodon accounts configured - skipping ...");
         } else {

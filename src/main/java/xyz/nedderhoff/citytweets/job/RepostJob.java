@@ -26,6 +26,7 @@ public class RepostJob {
 
     @Scheduled(fixedRate = FETCHING_RATE)
     public void run() {
+        logger.info("Running RepostCache scheduled job in thread {}", Thread.currentThread().getName());
         repostServices.stream()
                 .map(repostService -> repostJobExecutorService.submit(repostService::repost));
     }
