@@ -1,7 +1,5 @@
 package xyz.nedderhoff.citytweets.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import xyz.nedderhoff.citytweets.cache.RepostCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
 
@@ -14,8 +12,6 @@ public abstract class AbstractRepostService<
         AccountServiceType extends AccountService<AccountType>
         >
         implements RepostService {
-
-    private static final Logger logger = LoggerFactory.getLogger(AbstractRepostService.class);
 
     protected final RepostCacheType repostCache;
     protected final AccountServiceType accountService;
