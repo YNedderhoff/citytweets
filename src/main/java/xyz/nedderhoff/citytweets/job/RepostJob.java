@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import xyz.nedderhoff.citytweets.service.RepostService;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 
 @Component
@@ -28,6 +29,6 @@ public class RepostJob {
     public void run() {
         logger.info("Running RepostJob scheduled job in thread {}", Thread.currentThread().getName());
         repostServices.stream()
-                .map(repostService -> repostJobExecutorService.submit(repostService::repost));
+                .map(repostService -> CompletableFuture.runAsync(repostService::repost, repostJobExecutorService));
     }
 }
