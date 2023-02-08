@@ -3,14 +3,14 @@
 
 FROM openjdk:17-slim as builder
 
-WORKDIR application
+WORKDIR /application
 ARG JAR_FILE=target/citytweets-*[0-9T].jar
 COPY ${JAR_FILE} citytweets.jar
 RUN java -Djarmode=layertools -jar citytweets.jar extract
 
 FROM openjdk:17-slim
 
-WORKDIR application
+WORKDIR /application
 
 RUN mkdir /dumps
 RUN mkdir /opt/java
