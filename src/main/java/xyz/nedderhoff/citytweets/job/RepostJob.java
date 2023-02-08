@@ -9,6 +9,7 @@ import xyz.nedderhoff.citytweets.service.RepostService;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 
 @Component
@@ -26,9 +27,14 @@ public class RepostJob {
     }
 
     @Scheduled(fixedRate = FETCHING_RATE)
-    public void run() {
+    public void run() throws ExecutionException, InterruptedException {
         logger.info("Running RepostJob scheduled job in thread {}", Thread.currentThread().getName());
-        repostServices.stream()
-                .map(repostService -> CompletableFuture.runAsync(repostService::repost, repostJobExecutorService));
+        final List<CompletableFuture<Void>> completableFutures = repostServices.stream()
+                .map(repostService -> CompletableFuture.runAsync(repostService::repost, repostJobExecutorService))
+                .toList();
+
+        final Void unused = CompletableFuture.allOf(completableFutures.toArray(CompletableFuture[]::new)).get();
+        logger.info("Finished RepostJob scheduled job in thread {}, all jobs complete", Thread.currentThread().getName());
+
     }
 }
