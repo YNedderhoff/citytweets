@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
-public class AbstractFollowerCache<
+public abstract class AbstractFollowerCache<
         IdType,
         AccountType extends AccountProperties.Account,
         AccountServiceType extends AccountService<AccountType>,
