@@ -1,7 +1,6 @@
 package xyz.nedderhoff.citytweets.service;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
 
 public abstract class AbstractFollowService<
@@ -10,7 +9,7 @@ public abstract class AbstractFollowService<
         >
         implements FollowService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractFollowService.class);
+    private final Logger logger = getLogger();
 
     protected final AccountServiceType accountService;
 
@@ -30,4 +29,6 @@ public abstract class AbstractFollowService<
         }
         return false;
     }
+
+    protected abstract Logger getLogger();
 }

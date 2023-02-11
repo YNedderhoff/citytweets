@@ -1,5 +1,7 @@
 package xyz.nedderhoff.citytweets.cache.mastodon;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import xyz.nedderhoff.citytweets.cache.AbstractRepostCache;
@@ -16,6 +18,7 @@ public class RetootCache extends AbstractRepostCache<
         MastodonAccountService,
         NonExistingMastodonCacheException
         > {
+    private static final Logger logger = LoggerFactory.getLogger(RetootCache.class);
 
     public RetootCache(MastodonAccountService accountService) {
         super(Service.MASTODON, accountService);
@@ -29,5 +32,10 @@ public class RetootCache extends AbstractRepostCache<
     @Override
     protected String getExceptionMessage(MastodonAccount account) {
         return String.format(CACHE_INEXISTENT_EXCEPTION_MESSAGE, "twitter", account.name());
+    }
+
+    @Override
+    protected Logger getLogger() {
+        return logger;
     }
 }

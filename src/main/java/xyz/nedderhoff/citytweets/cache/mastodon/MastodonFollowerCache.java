@@ -25,4 +25,9 @@ private static final Logger logger = LoggerFactory.getLogger(MastodonFollowerCac
     public MastodonFollowerCache(AccountsEndpoint accountsEndpoint, MastodonAccountService accountService) {
         super(accountService, accountsEndpoint::getFollowers);
     }
+
+    @Override
+    protected Logger getLogger() {
+        return logger;
+    }
 }

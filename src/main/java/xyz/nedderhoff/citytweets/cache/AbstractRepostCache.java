@@ -1,7 +1,6 @@
 package xyz.nedderhoff.citytweets.cache;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
 import xyz.nedderhoff.citytweets.config.Service;
 import xyz.nedderhoff.citytweets.exception.NonExistingCacheException;
@@ -19,15 +18,15 @@ public abstract class AbstractRepostCache<
         AccountServiceType extends AccountService<AccountType>,
         ExceptionType extends NonExistingCacheException
         > implements RepostCache<IdType, AccountType, AccountServiceType, ExceptionType> {
-    private static final Logger logger = LoggerFactory.getLogger(AbstractRepostCache.class);
     protected static final String CACHE_INEXISTENT_EXCEPTION_MESSAGE = "No cache exists for %s account %s";
     private final Map<AccountType, Set<IdType>> cache = new ConcurrentHashMap<>();
+    private final Logger logger = getLogger();
 
 
     public AbstractRepostCache(Service type, AccountServiceType accountService) {
-        logger.info("Setting up repost cache for {}", type.getName());
+        this.logger.info("Setting up repost cache for {}", type.getName());
         accountService.getAccounts().forEach(account -> {
-            logger.info("Preparing {} repost cache for account {}", type.getName(), account.name());
+            this.logger.info("Preparing {} repost cache for account {}", type.getName(), account.name());
             cache.computeIfAbsent(account, a -> new HashSet<>());
         });
     }
@@ -55,4 +54,6 @@ public abstract class AbstractRepostCache<
     protected abstract ExceptionType getException(String s);
 
     protected abstract String getExceptionMessage(AccountType account);
+
+    protected abstract Logger getLogger();
 }

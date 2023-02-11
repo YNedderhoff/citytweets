@@ -25,4 +25,9 @@ private static final Logger logger = LoggerFactory.getLogger(TwitterFollowerCach
     public TwitterFollowerCache(FriendsEndpoint friendsEndpoint, TwitterAccountService twitterAccountService) {
         super(twitterAccountService, friendsEndpoint::getFriends);
     }
+
+    @Override
+    protected Logger getLogger() {
+        return logger;
+    }
 }

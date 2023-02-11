@@ -1,7 +1,6 @@
 package xyz.nedderhoff.citytweets.service;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
 import xyz.nedderhoff.citytweets.config.AccountProperties.PlatformProperties;
 import xyz.nedderhoff.citytweets.config.Service;
@@ -13,7 +12,7 @@ public abstract class AbstractAccountService<
         PlatformPropertiesType extends PlatformProperties<AccountType>
         >
         implements AccountService<AccountType> {
-    private static final Logger logger = LoggerFactory.getLogger(AbstractAccountService.class);
+    private final Logger logger = getLogger();
 
     protected final List<AccountType> accounts;
     protected final List<String> ignoredAccounts;
@@ -47,4 +46,6 @@ public abstract class AbstractAccountService<
     public Service getService(){
         return service;
     }
+
+    protected abstract Logger getLogger();
 }
