@@ -4,13 +4,13 @@ public enum Service {
     TWITTER("twitter"),
     MASTODON("mastodon");
 
-    private final String type;
+    private final String name;
 
     Service(String type) {
-        this.type = type;
+        this.name = type;
     }
 
-    public String getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 }

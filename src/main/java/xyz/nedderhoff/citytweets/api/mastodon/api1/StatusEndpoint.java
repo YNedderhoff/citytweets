@@ -17,16 +17,16 @@ import xyz.nedderhoff.citytweets.domain.mastodon.http.Status;
 import xyz.nedderhoff.citytweets.exception.mastodon.MastodonException;
 
 @Component
-public class StatusEndpoint extends MastodonApi1Endpoint<Account[]> {
+public class StatusEndpoint extends MastodonApi1Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(StatusEndpoint.class);
 
     public StatusEndpoint(RestTemplate rt) {
         super(rt);
     }
-    //POST https://mastodon.example/api/v1/statuses/:id/reblog HTTP/1.1
-    public Status boost(Status status, HttpHeaders authedHeaders, MastodonAccount mastodonAccount) throws MastodonException {
-        logger.info("Boosting status {} for {}", status.uri(), mastodonAccount.name());
 
+    public Status boost(Status status, MastodonAccount mastodonAccount) throws MastodonException {
+        logger.info("Boosting status {} for {}", status.uri(), mastodonAccount.name());
+        final HttpHeaders authedHeaders = getHttpHeadersWithAuth(mastodonAccount);
         final HttpEntity<Account[]> request = new HttpEntity<>(authedHeaders);
 
         String requestUri = String.format(

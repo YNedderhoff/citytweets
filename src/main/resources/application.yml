@@ -59,6 +59,7 @@ account-properties:
     accounts:
       - name: stupidAccount
         instance: stupidInstance
+        id: stupidId
         oauth:
           # retrieve by authorizing the user with GET /oauth/authorize, and then
           # getting the bearer token with POST /oauth/token. It doesn't currently
