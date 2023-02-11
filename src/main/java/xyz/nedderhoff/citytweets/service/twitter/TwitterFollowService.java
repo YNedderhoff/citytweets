@@ -74,4 +74,9 @@ public class TwitterFollowService extends AbstractFollowService<TwitterAccount, 
     private boolean hasBeenSeen(Tweet tweet, TwitterAccount account) {
         return followerCache.contains(tweet.user().id(), account);
     }
+
+    @Override
+    protected Logger getLogger() {
+        return logger;
+    }
 }

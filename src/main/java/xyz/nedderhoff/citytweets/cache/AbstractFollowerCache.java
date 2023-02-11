@@ -1,9 +1,7 @@
 package xyz.nedderhoff.citytweets.cache;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
-import xyz.nedderhoff.citytweets.cache.twitter.TwitterFollowerCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties;
 import xyz.nedderhoff.citytweets.exception.NonExistingCacheException;
 import xyz.nedderhoff.citytweets.service.AccountService;
@@ -21,12 +19,12 @@ public abstract class AbstractFollowerCache<
         ExceptionType extends NonExistingCacheException
         > implements FollowerCache<IdType, AccountType, AccountServiceType, ExceptionType> {
 
-    private static final Logger logger = LoggerFactory.getLogger(TwitterFollowerCache.class);
     private static final int FOLLOWER_UPDATE_RATE = 1000 * 60 * 60 * 24;
-    
+
     private final AccountServiceType accountService;
     private final Function<AccountType, Set<IdType>> friendsFetcher;
     private final Map<AccountType, Set<IdType>> cache = new ConcurrentHashMap<>();
+    private final Logger logger = getLogger();
 
     public AbstractFollowerCache(
             AccountServiceType accountService,
@@ -35,13 +33,13 @@ public abstract class AbstractFollowerCache<
         this.accountService = accountService;
         this.friendsFetcher = friendsFetcher;
 
-        logger.info("Initialising ...");
+        this.logger.info("Initialising ...");
         accountService.getAccounts().forEach(account -> {
-            logger.info("Preparing cache for account {}", account.name());
+            this.logger.info("Preparing cache for account {}", account.name());
             cache.computeIfAbsent(account, a -> new HashSet<>());
         });
 
-        logger.info("Warming up ...");
+        this.logger.info("Warming up ...");
         populateCache();
     }
 
@@ -62,7 +60,7 @@ public abstract class AbstractFollowerCache<
         cache.get(account).add(id);
     }
 
-    private void populateCache(){
+    private void populateCache() {
         accountService.getAccounts().forEach(account -> {
             logger.info("Populating cache for account {}", account.name());
             try {
@@ -73,4 +71,6 @@ public abstract class AbstractFollowerCache<
             }
         });
     }
+
+    protected abstract Logger getLogger();
 }
