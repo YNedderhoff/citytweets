@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import xyz.nedderhoff.citytweets.api.twitter.api1.FollowEndpoint;
 import xyz.nedderhoff.citytweets.api.twitter.api1.MeEndpoint;
 import xyz.nedderhoff.citytweets.api.twitter.api2.RecentTweetsEndpoint;
-import xyz.nedderhoff.citytweets.cache.twitter.FriendCache;
+import xyz.nedderhoff.citytweets.cache.twitter.TwitterFollowerCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
 import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
 import xyz.nedderhoff.citytweets.exception.twitter.TwitterException;
@@ -19,21 +19,21 @@ public class TwitterFollowService extends AbstractFollowService<TwitterAccount, 
     private final MeEndpoint meEndpoint;
     private final RecentTweetsEndpoint recentTweetsEndpoint;
     private final FollowEndpoint followEndpoint;
-    private final FriendCache friendCache;
+    private final TwitterFollowerCache followerCache;
 
 
     public TwitterFollowService(
             MeEndpoint meEndpoint,
             RecentTweetsEndpoint recentTweetsEndpoint,
             FollowEndpoint followEndpoint,
-            FriendCache friendCache,
+            TwitterFollowerCache followerCache,
             TwitterAccountService twitterAccountService
     ) {
         super(twitterAccountService);
         this.meEndpoint = meEndpoint;
         this.recentTweetsEndpoint = recentTweetsEndpoint;
         this.followEndpoint = followEndpoint;
-        this.friendCache = friendCache;
+        this.followerCache = followerCache;
     }
 
     @Override
@@ -72,6 +72,6 @@ public class TwitterFollowService extends AbstractFollowService<TwitterAccount, 
     }
 
     private boolean hasBeenSeen(Tweet tweet, TwitterAccount account) {
-        return friendCache.contains(tweet.user().id(), account);
+        return followerCache.contains(tweet.user().id(), account);
     }
 }
