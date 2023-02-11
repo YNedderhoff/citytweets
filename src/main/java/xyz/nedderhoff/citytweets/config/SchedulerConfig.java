@@ -13,13 +13,13 @@ public class SchedulerConfig implements SchedulingConfigurer {
     private static final int POOL_SIZE = 3;
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
-        logger.info("Creating scheduled pool of size {}", POOL_SIZE);
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-
         threadPoolTaskScheduler.setPoolSize(POOL_SIZE);
         threadPoolTaskScheduler.setThreadNamePrefix("scheduled-task-pool-");
         threadPoolTaskScheduler.initialize();
 
+        taskRegistrar.setScheduler(threadPoolTaskScheduler);
 
+        logger.info("Successfully created scheduled task thread pool with size {}", threadPoolTaskScheduler.getPoolSize());
     }
 }
