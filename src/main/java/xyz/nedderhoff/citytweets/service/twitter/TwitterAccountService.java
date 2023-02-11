@@ -8,11 +8,13 @@ import xyz.nedderhoff.citytweets.service.AbstractAccountService;
 
 import java.util.Random;
 
+import static xyz.nedderhoff.citytweets.config.Service.TWITTER;
+
 @Service
 public class TwitterAccountService extends AbstractAccountService<TwitterAccount, TwitterProperties> {
 
     public TwitterAccountService(AccountProperties accountProperties) {
-        super(accountProperties.twitter());
+        super(accountProperties.twitter(), TWITTER);
     }
 
     public String getRandomBearerTokenTwitter() {

@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 public abstract class AbstractRepostService<
         IdType,
         AccountType extends Account,
-        RepostCacheType extends RepostCache<IdType, AccountType>,
+        RepostCacheType extends RepostCache<IdType, AccountType, AccountServiceType, ?>,
         AccountServiceType extends AccountService<AccountType>
         >
         implements RepostService {

@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
-public class SearchEndpoint extends MastodonApi2Endpoint<Search> {
+public class SearchEndpoint extends MastodonApi2Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(SearchEndpoint.class);
 
     public SearchEndpoint(RestTemplate rt) {

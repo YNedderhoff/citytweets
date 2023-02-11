@@ -17,23 +17,26 @@ import xyz.nedderhoff.citytweets.domain.mastodon.http.Status;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
-public class AccountsEndpoint extends MastodonApi1Endpoint<Account[]> {
+public class AccountsEndpoint extends MastodonApi1Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(AccountsEndpoint.class);
 
     public AccountsEndpoint(RestTemplate rt) {
         super(rt);
     }
 
-    public List<Account> getFollowers(String mastodonAccountId, HttpHeaders authedHeaders, MastodonAccount mastodonAccount) {
+    public Set<String> getFollowers(MastodonAccount mastodonAccount) {
         logger.info("Fetching followers for account {}", mastodonAccount.name());
+        final HttpHeaders authedHeaders = getHttpHeadersWithAuth(mastodonAccount);
         final HttpEntity<Account[]> request = new HttpEntity<>(authedHeaders);
 
         String requestUri = String.format(
                 BASE_MASTODON_API_1_URI_TEMPLATE,
                 mastodonAccount.instance(),
-                String.format("accounts/%s/followers", mastodonAccountId)
+                String.format("accounts/%s/followers", mastodonAccount.id())
         );
 
         String requestUriTemplate = UriComponentsBuilder.fromHttpUrl(requestUri)
@@ -49,20 +52,21 @@ public class AccountsEndpoint extends MastodonApi1Endpoint<Account[]> {
 
         if (response.getBody() == null) {
             logger.warn("Got response with status {}: {}", response.getStatusCode(), response);
-            return Collections.emptyList();
+            return Collections.emptySet();
         }
 
-        return Arrays.asList(response.getBody());
+        return Arrays.stream(response.getBody()).map(Account::id).collect(Collectors.toSet());
     }
 
-    public List<Status> getStatuses(Account account, HttpHeaders oauthTokenHeaders, MastodonAccount mastodonAccount) {
-        logger.info("Fetching statuses for follower {} of account {}", account.id(), mastodonAccount.name());
-        final HttpEntity<Account[]> request = new HttpEntity<>(oauthTokenHeaders);
+    public List<Status> getStatuses(String followerId, MastodonAccount mastodonAccount) {
+        logger.info("Fetching statuses for follower {} of account {}", followerId, mastodonAccount.name());
+        final HttpHeaders authedHeaders = getHttpHeadersWithAuth(mastodonAccount);
+        final HttpEntity<Account[]> request = new HttpEntity<>(authedHeaders);
 
         String requestUri = String.format(
                 BASE_MASTODON_API_1_URI_TEMPLATE,
                 mastodonAccount.instance(),
-                String.format("accounts/%s/statuses", account.id())
+                String.format("accounts/%s/statuses", followerId)
         );
 
         final String requestUriTemplate = UriComponentsBuilder.fromHttpUrl(requestUri)

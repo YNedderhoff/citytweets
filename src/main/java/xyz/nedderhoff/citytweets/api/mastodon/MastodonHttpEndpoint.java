@@ -1,15 +1,23 @@
 package xyz.nedderhoff.citytweets.api.mastodon;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 import xyz.nedderhoff.citytweets.api.HttpEndpoint;
+import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonAccount;
 
 // https://docs.joinmastodon.org/
-public abstract sealed class MastodonHttpEndpoint<T> extends HttpEndpoint permits MastodonApi1Endpoint, MastodonApi2Endpoint {
+public abstract sealed class MastodonHttpEndpoint extends HttpEndpoint permits MastodonApi1Endpoint, MastodonApi2Endpoint {
     protected static final String BASE_MASTODON_API_URI_TEMPLATE = "https://%s/api/";
 
     public MastodonHttpEndpoint(RestTemplate rt) {
         super(rt);
     }
 
-
+    protected HttpHeaders getHttpHeadersWithAuth(MastodonAccount mastodonAccount) {
+        final HttpHeaders authedHeaders = new HttpHeaders();
+        authedHeaders.setContentType(MediaType.APPLICATION_JSON);
+        authedHeaders.set("Authorization", "Bearer " + mastodonAccount.oauth().bearerToken());
+        return authedHeaders;
+    }
 }

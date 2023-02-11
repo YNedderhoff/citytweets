@@ -70,6 +70,7 @@ public record AccountProperties(
             @Override
             String name,
             String instance,
+            String id,
             Oauth oauth,
             String redirectUri,
             @Override

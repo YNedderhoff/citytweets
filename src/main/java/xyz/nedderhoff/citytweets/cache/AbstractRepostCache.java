@@ -18,16 +18,16 @@ public abstract class AbstractRepostCache<
         AccountType extends Account,
         AccountServiceType extends AccountService<AccountType>,
         ExceptionType extends NonExistingCacheException
-        > implements RepostCache<IdType, AccountType> {
+        > implements RepostCache<IdType, AccountType, AccountServiceType, ExceptionType> {
     private static final Logger logger = LoggerFactory.getLogger(AbstractRepostCache.class);
     protected static final String CACHE_INEXISTENT_EXCEPTION_MESSAGE = "No cache exists for %s account %s";
     private final Map<AccountType, Set<IdType>> cache = new ConcurrentHashMap<>();
 
 
     public AbstractRepostCache(Service type, AccountServiceType accountService) {
-        logger.info("Setting up repost cache for {}", type.getType());
+        logger.info("Setting up repost cache for {}", type.getName());
         accountService.getAccounts().forEach(account -> {
-            logger.info("Preparing {} repost cache for account {}", type.getType(), account.name());
+            logger.info("Preparing {} repost cache for account {}", type.getName(), account.name());
             cache.computeIfAbsent(account, a -> new HashSet<>());
         });
     }
@@ -45,11 +45,11 @@ public abstract class AbstractRepostCache<
     public void add(IdType id, AccountType account) {
         logger.info("Adding tweet {}", id);
 
-        cache.computeIfPresent(account, (t, s) -> {
-            s.add(id);
-            return s;
+        cache.computeIfPresent(account, (a, reposts) -> {
+            reposts.add(id);
+            return reposts;
         });
-        cache.computeIfAbsent(account, t -> new HashSet<>(List.of(id)));
+        cache.computeIfAbsent(account, a -> new HashSet<>(List.of(id)));
     }
 
     protected abstract ExceptionType getException(String s);
