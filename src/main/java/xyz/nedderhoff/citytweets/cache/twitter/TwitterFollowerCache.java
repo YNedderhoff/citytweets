@@ -20,7 +20,7 @@ public class TwitterFollowerCache extends AbstractFollowerCache<
         TwitterAccountService,
         NonExistingTwitterCacheException
         > {
-private static final Logger logger = LoggerFactory.getLogger(TwitterFollowerCache.class);
+    private static final Logger logger = LoggerFactory.getLogger(TwitterFollowerCache.class);
 
     public TwitterFollowerCache(FriendsEndpoint friendsEndpoint, TwitterAccountService twitterAccountService) {
         super(twitterAccountService, friendsEndpoint::getFriends);

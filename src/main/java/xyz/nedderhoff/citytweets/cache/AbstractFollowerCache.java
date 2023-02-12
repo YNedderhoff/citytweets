@@ -1,5 +1,6 @@
 package xyz.nedderhoff.citytweets.cache;
 
+import com.google.common.base.Stopwatch;
 import org.slf4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 import xyz.nedderhoff.citytweets.config.AccountProperties;
@@ -10,6 +11,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 public abstract class AbstractFollowerCache<
@@ -33,17 +35,22 @@ public abstract class AbstractFollowerCache<
         this.accountService = accountService;
         this.friendsFetcher = friendsFetcher;
 
-        this.logger.info("Initialising ...");
+        this.logger.debug("Initialising ...");
         accountService.getAccounts().forEach(account -> {
-            this.logger.info("Preparing cache for account {}", account.name());
+            this.logger.debug("Preparing cache for account {}", account.name());
             cache.computeIfAbsent(account, a -> new HashSet<>());
         });
+        this.logger.debug("Finished initialisation.");
 
         this.logger.info("Warming up ...");
+        final Stopwatch timer = Stopwatch.createStarted();
         populateCache();
+        timer.stop();
+        this.logger.info("Warmed up in {}s", timer.elapsed(TimeUnit.SECONDS));
     }
 
-    @Scheduled(fixedRate = FOLLOWER_UPDATE_RATE)
+    // initial delay equals rate because the first population run happens in constructor
+    @Scheduled(initialDelay = FOLLOWER_UPDATE_RATE, fixedRate = FOLLOWER_UPDATE_RATE)
     private void fetchFollowers() {
         logger.info("Running scheduled job in thread {}: fetchFollowers", Thread.currentThread().getName());
         populateCache();
@@ -56,13 +63,13 @@ public abstract class AbstractFollowerCache<
 
     @Override
     public void add(IdType id, AccountType account) {
-        logger.info("Adding friend {} to account {}", id, account.name());
+        logger.info("Adding friend {} of account {}", id, account.name());
         cache.get(account).add(id);
     }
 
     private void populateCache() {
         accountService.getAccounts().forEach(account -> {
-            logger.info("Populating cache for account {}", account.name());
+            logger.debug("Populating cache for account {}", account.name());
             try {
                 cache.get(account).addAll(friendsFetcher.apply(account));
                 logger.info("Cache updated for account {}, total size: {}", account.name(), cache.get(account).size());

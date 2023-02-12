@@ -44,7 +44,7 @@ public class Twitter4jConnectionsCache {
     }
 
     private static Twitter createTwitter4jConnection(TwitterAccount account) {
-        logger.info("Creating Twitter4J connection for account {}", account.name());
+        logger.debug("Creating Twitter4J connection for account {}", account.name());
         final Oauth oauth = account.twitter4j().oauth();
 
         return Twitter.newBuilder()

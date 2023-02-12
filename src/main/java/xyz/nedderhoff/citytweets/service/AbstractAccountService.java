@@ -43,7 +43,7 @@ public abstract class AbstractAccountService<
     }
 
     @Override
-    public Service getService(){
+    public Service getService() {
         return service;
     }
 

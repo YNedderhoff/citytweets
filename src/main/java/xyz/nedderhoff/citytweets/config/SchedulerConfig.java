@@ -11,6 +11,7 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 public class SchedulerConfig implements SchedulingConfigurer {
     private static final Logger logger = LoggerFactory.getLogger(ConcurrencyConfig.class);
     private static final int POOL_SIZE = 3;
+
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();

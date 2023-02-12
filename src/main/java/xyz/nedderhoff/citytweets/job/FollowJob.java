@@ -23,7 +23,7 @@ public class FollowJob {
 
     @Scheduled(fixedRate = FOLLOW_RATE)
     public void run() {
-        logger.info("Running FollowJob scheduled job in thread {}", Thread.currentThread().getName());
+        logger.info("Running scheduled job in thread {}: follow", Thread.currentThread().getName());
         followServices.forEach(FollowService::follow);
     }
 }

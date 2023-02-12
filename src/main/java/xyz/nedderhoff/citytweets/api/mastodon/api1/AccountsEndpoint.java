@@ -29,7 +29,7 @@ public class AccountsEndpoint extends MastodonApi1Endpoint {
     }
 
     public Set<String> getFollowers(MastodonAccount mastodonAccount) {
-        logger.info("Fetching followers for account {}", mastodonAccount.name());
+        logger.debug("Fetching followers for account {}", mastodonAccount.name());
         final HttpHeaders authedHeaders = getHttpHeadersWithAuth(mastodonAccount);
         final HttpEntity<Account[]> request = new HttpEntity<>(authedHeaders);
 
@@ -59,7 +59,7 @@ public class AccountsEndpoint extends MastodonApi1Endpoint {
     }
 
     public List<Status> getStatuses(String followerId, MastodonAccount mastodonAccount) {
-        logger.info("Fetching statuses for follower {} of account {}", followerId, mastodonAccount.name());
+        logger.debug("Fetching statuses for follower {} of account {}", followerId, mastodonAccount.name());
         final HttpHeaders authedHeaders = getHttpHeadersWithAuth(mastodonAccount);
         final HttpEntity<Account[]> request = new HttpEntity<>(authedHeaders);
 
