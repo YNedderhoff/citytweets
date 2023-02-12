@@ -20,7 +20,7 @@ public class MastodonFollowerCache extends AbstractFollowerCache<
         MastodonAccountService,
         NonExistingTwitterCacheException
         > {
-private static final Logger logger = LoggerFactory.getLogger(MastodonFollowerCache.class);
+    private static final Logger logger = LoggerFactory.getLogger(MastodonFollowerCache.class);
 
     public MastodonFollowerCache(AccountsEndpoint accountsEndpoint, MastodonAccountService accountService) {
         super(accountService, accountsEndpoint::getFollowers);

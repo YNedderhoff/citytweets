@@ -20,7 +20,7 @@ public class UserCache {
     private final LoadingCache<String, User> cacheByName;
 
     public UserCache(UserEndpoint userEndpoint) {
-        logger.info("Setting up user cache");
+        logger.debug("Initialising ...");
         cacheById = Caffeine
                 .newBuilder()
                 .expireAfterWrite(365, TimeUnit.DAYS)

@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import xyz.nedderhoff.citytweets.cache.AbstractRepostCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonAccount;
-import xyz.nedderhoff.citytweets.config.Service;
 import xyz.nedderhoff.citytweets.exception.mastodon.NonExistingMastodonCacheException;
 import xyz.nedderhoff.citytweets.service.mastodon.MastodonAccountService;
 
@@ -21,7 +20,7 @@ public class RetootCache extends AbstractRepostCache<
     private static final Logger logger = LoggerFactory.getLogger(RetootCache.class);
 
     public RetootCache(MastodonAccountService accountService) {
-        super(Service.MASTODON, accountService);
+        super(accountService);
     }
 
     @Override

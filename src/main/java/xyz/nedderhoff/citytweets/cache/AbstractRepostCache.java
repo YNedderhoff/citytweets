@@ -2,7 +2,6 @@ package xyz.nedderhoff.citytweets.cache;
 
 import org.slf4j.Logger;
 import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
-import xyz.nedderhoff.citytweets.config.Service;
 import xyz.nedderhoff.citytweets.exception.NonExistingCacheException;
 import xyz.nedderhoff.citytweets.service.AccountService;
 
@@ -23,10 +22,10 @@ public abstract class AbstractRepostCache<
     private final Logger logger = getLogger();
 
 
-    public AbstractRepostCache(Service type, AccountServiceType accountService) {
-        this.logger.info("Setting up repost cache for {}", type.getName());
+    public AbstractRepostCache(AccountServiceType accountService) {
+        this.logger.debug("Initialising ...");
         accountService.getAccounts().forEach(account -> {
-            this.logger.info("Preparing {} repost cache for account {}", type.getName(), account.name());
+            this.logger.debug("Preparing cache for account {}", account.name());
             cache.computeIfAbsent(account, a -> new HashSet<>());
         });
     }

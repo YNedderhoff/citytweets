@@ -28,13 +28,13 @@ public class RepostJob {
 
     @Scheduled(fixedRate = FETCHING_RATE)
     public void run() throws ExecutionException, InterruptedException {
-        logger.info("Running RepostJob scheduled job in thread {}", Thread.currentThread().getName());
+        logger.info("Running scheduled job in thread {}: repost", Thread.currentThread().getName());
         final List<CompletableFuture<Void>> completableFutures = repostServices.stream()
                 .map(repostService -> CompletableFuture.runAsync(repostService::repost, repostJobExecutorService))
                 .toList();
 
         final Void unused = CompletableFuture.allOf(completableFutures.toArray(CompletableFuture[]::new)).get();
-        logger.info("Finished RepostJob scheduled job in thread {}, all jobs complete", Thread.currentThread().getName());
+        logger.info("Finished scheduled job in thread {}: repost. All executor jobs complete.", Thread.currentThread().getName());
 
     }
 }

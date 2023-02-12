@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import xyz.nedderhoff.citytweets.cache.AbstractRepostCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
-import xyz.nedderhoff.citytweets.config.Service;
 import xyz.nedderhoff.citytweets.exception.twitter.NonExistingTwitterCacheException;
 import xyz.nedderhoff.citytweets.service.twitter.TwitterAccountService;
 
@@ -21,7 +20,7 @@ public class RetweetCache extends AbstractRepostCache<
     private static final Logger logger = LoggerFactory.getLogger(RetweetCache.class);
 
     public RetweetCache(TwitterAccountService accountService) {
-        super(Service.TWITTER, accountService);
+        super(accountService);
     }
 
     @Override

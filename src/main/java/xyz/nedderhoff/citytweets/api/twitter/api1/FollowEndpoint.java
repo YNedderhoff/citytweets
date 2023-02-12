@@ -26,7 +26,7 @@ public class FollowEndpoint extends TwitterApi1Endpoint {
     }
 
     public void follow(User user, TwitterAccount account) {
-        logger.info("Following user \"{}\" for account {}", user.name(), account.name());
+        logger.debug("Following user \"{}\" for account {}", user.name(), account.name());
         try {
             connections.getConnection(account).v1().friendsFollowers().createFriendship(user.id());
             logger.info("Successfully followed user {} for account {}", user.name(), account.name());

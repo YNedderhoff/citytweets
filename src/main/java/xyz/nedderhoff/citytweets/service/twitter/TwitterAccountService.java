@@ -16,6 +16,7 @@ import static xyz.nedderhoff.citytweets.config.Service.TWITTER;
 public class TwitterAccountService extends AbstractAccountService<TwitterAccount, TwitterProperties> {
 
     private static final Logger logger = LoggerFactory.getLogger(TwitterAccountService.class);
+
     public TwitterAccountService(AccountProperties accountProperties) {
         super(accountProperties.twitter(), TWITTER);
     }
