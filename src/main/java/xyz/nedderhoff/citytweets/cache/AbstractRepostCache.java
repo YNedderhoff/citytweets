@@ -41,7 +41,7 @@ public abstract class AbstractRepostCache<
 
     @Override
     public void add(IdType id, AccountType account) {
-        logger.info("Adding tweet {}", id);
+        logger.info("Adding post {}", id);
 
         cache.computeIfPresent(account, (a, reposts) -> {
             reposts.add(id);
