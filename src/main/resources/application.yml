@@ -11,6 +11,10 @@ management:
     endpoint:
       health:
         show-details: always
+      metrics:
+        enabled: true
+      prometheus:
+        enabled: true
 
 spring:
   ### Profiles
