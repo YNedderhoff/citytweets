@@ -1,7 +1,6 @@
 package xyz.nedderhoff.citytweets.monitoring;
 
 import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.DistributionSummary;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Timer;
@@ -27,15 +26,6 @@ public class MetricService {
     public void time(String name, Iterable<Tag> tags, long t) {
         final Timer timer = timer(name, tags).register(meterRegistry);
         timer.record(t, DEFAULT_TIME_UNIT);
-    }
-
-    public void distributionSummarise(String name, long t) {
-        distributionSummarise(name, Collections.emptySet(), t);
-    }
-
-    public void distributionSummarise(String name, Iterable<Tag> tags, Long t) {
-        final DistributionSummary timer = distributionSummary(name, tags).register(meterRegistry);
-        timer.record(t.doubleValue());
     }
 
     public void count(String name, int amount) {
@@ -64,13 +54,4 @@ public class MetricService {
         return Counter.builder(name)
                 .tags(tags);
     }
-    private DistributionSummary.Builder distributionSummary(String name) {
-        return DistributionSummary.builder(name);
-    }
-
-    private DistributionSummary.Builder distributionSummary(String name, Iterable<Tag> tags) {
-        return DistributionSummary.builder(name)
-                .tags(tags);
-    }
-
 }
