@@ -1,15 +1,16 @@
 package xyz.nedderhoff.citytweets.cache;
 
 import com.google.common.base.Stopwatch;
-import io.micrometer.core.instrument.Metrics;
-import io.micrometer.core.instrument.Timer;
+import io.micrometer.core.instrument.Tag;
 import org.slf4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 import xyz.nedderhoff.citytweets.config.AccountProperties;
 import xyz.nedderhoff.citytweets.exception.NonExistingCacheException;
+import xyz.nedderhoff.citytweets.monitoring.MetricService;
 import xyz.nedderhoff.citytweets.service.AccountService;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,21 +28,17 @@ public abstract class AbstractFollowerCache<
 
     private final AccountServiceType accountService;
     private final Function<AccountType, Set<IdType>> friendsFetcher;
+    private final MetricService metricService;
     private final Map<AccountType, Set<IdType>> cache = new ConcurrentHashMap<>();
     private final Logger logger = getLogger();
 
-    final Timer populatingCacheTotal;
-    final Timer populatingCache;
-
     public AbstractFollowerCache(
             AccountServiceType accountService,
-            Function<AccountType, Set<IdType>> friendsFetcher
-    ) {
+            Function<AccountType, Set<IdType>> friendsFetcher,
+            MetricService metricService) {
         this.accountService = accountService;
         this.friendsFetcher = friendsFetcher;
-
-        this.populatingCacheTotal = Metrics.timer("populating_cache_total");
-        this.populatingCache = Metrics.timer("populating_cache");
+        this.metricService = metricService;
 
         this.logger.debug("Initialising ...");
         accountService.getAccounts().forEach(account -> {
@@ -81,14 +78,18 @@ public abstract class AbstractFollowerCache<
                 final Stopwatch timer = Stopwatch.createStarted();
                 cache.get(account).addAll(friendsFetcher.apply(account));
                 timer.stop();
-                populatingCache.record(timer.elapsed(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
+                metricService.time(
+                        "populate_cache",
+                        List.of(Tag.of("account", account.name())),
+                        timer.elapsed(TimeUnit.MILLISECONDS)
+                );
                 logger.info("Cache updated for account {}, total size: {}", account.name(), cache.get(account).size());
             } catch (Exception e) {
                 logger.error("Exception occurred while fetching friend list for account {}", account.name(), e);
             }
         });
         totalTimer.stop();
-        populatingCacheTotal.record(totalTimer.elapsed(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
+        metricService.time("populate_cache_total", totalTimer.elapsed(TimeUnit.MILLISECONDS));
         this.logger.info("Warmed up in {}s", totalTimer.elapsed(TimeUnit.SECONDS));
     }
 
