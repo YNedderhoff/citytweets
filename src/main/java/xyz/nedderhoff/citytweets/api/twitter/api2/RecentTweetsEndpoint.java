@@ -1,7 +1,6 @@
 package xyz.nedderhoff.citytweets.api.twitter.api2;
 
 import com.google.common.base.Stopwatch;
-import io.micrometer.core.instrument.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import xyz.nedderhoff.citytweets.api.twitter.TwitterApi2Endpoint;
-import xyz.nedderhoff.citytweets.config.Service;
 import xyz.nedderhoff.citytweets.converter.RecentTweetsConverter;
 import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
 import xyz.nedderhoff.citytweets.domain.twitter.http.recentsearch.RecentSearchResponse;
@@ -51,14 +49,7 @@ public class RecentTweetsEndpoint extends TwitterApi2Endpoint<RecentSearchRespon
                 RecentSearchResponse.class
         );
         timer.stop();
-        metricService.time(
-                "api_latency",
-                List.of(
-                        Tag.of("service", Service.TWITTER.getName()),
-                        Tag.of("endpoint", "search")
-                ),
-                timer.elapsed(TimeUnit.MILLISECONDS)
-        );
+        metricService.timeTwitterEndpoint("search", timer.elapsed(TimeUnit.MILLISECONDS));
 
         List<Tweet> result = new ArrayList<>();
         if (response.getBody() != null && response.getBody().data() != null) {

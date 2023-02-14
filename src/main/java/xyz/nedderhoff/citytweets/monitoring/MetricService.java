@@ -5,8 +5,10 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Timer;
 import org.springframework.stereotype.Component;
+import xyz.nedderhoff.citytweets.config.Service;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -17,6 +19,25 @@ public class MetricService {
 
     public MetricService(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
+    }
+
+    public void timeTwitterEndpoint(String name, long t) {
+        timeEndpoint(name, t, Service.TWITTER);
+    }
+
+    public void timeMastodonEndpoint(String name, long t) {
+        timeEndpoint(name, t, Service.MASTODON);
+    }
+
+    public void timeEndpoint(String name, long t, Service service) {
+        time(
+                "api_latency",
+                List.of(
+                        Tag.of("service", service.getName()),
+                        Tag.of("endpoint", name)
+                ),
+                t
+        );
     }
 
     public void time(String name, long t) {

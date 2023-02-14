@@ -1,7 +1,6 @@
 package xyz.nedderhoff.citytweets.api.twitter.api1;
 
 import com.google.common.base.Stopwatch;
-import io.micrometer.core.instrument.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -10,13 +9,11 @@ import twitter4j.v1.IDs;
 import xyz.nedderhoff.citytweets.api.twitter.TwitterApi1Endpoint;
 import xyz.nedderhoff.citytweets.cache.twitter.Twitter4jConnectionsCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
-import xyz.nedderhoff.citytweets.config.Service;
 import xyz.nedderhoff.citytweets.exception.twitter.TwitterException;
 import xyz.nedderhoff.citytweets.monitoring.MetricService;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -57,14 +54,7 @@ public class FriendsEndpoint extends TwitterApi1Endpoint {
             throw new TwitterException(e);
         }
         timer.stop();
-        metricService.time(
-                "api_latency",
-                List.of(
-                        Tag.of("service", Service.TWITTER.getName()),
-                        Tag.of("endpoint", "get_followers")
-                ),
-                timer.elapsed(TimeUnit.MILLISECONDS)
-        );
+        metricService.timeTwitterEndpoint("get_followers", timer.elapsed(TimeUnit.MILLISECONDS));
 
         return friendIds;
     }
