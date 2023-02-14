@@ -1,5 +1,7 @@
 package xyz.nedderhoff.citytweets.api.twitter.api2;
 
+import com.google.common.base.Stopwatch;
+import io.micrometer.core.instrument.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -10,11 +12,15 @@ import org.springframework.web.client.RestTemplate;
 import twitter4j.TwitterException;
 import xyz.nedderhoff.citytweets.api.twitter.TwitterApi2Endpoint;
 import xyz.nedderhoff.citytweets.cache.twitter.Twitter4jConnectionsCache;
+import xyz.nedderhoff.citytweets.config.Service;
 import xyz.nedderhoff.citytweets.converter.UserConverter;
 import xyz.nedderhoff.citytweets.domain.twitter.User;
 import xyz.nedderhoff.citytweets.domain.twitter.http.userlookup.UserLookupResponse;
 import xyz.nedderhoff.citytweets.monitoring.MetricService;
 import xyz.nedderhoff.citytweets.service.twitter.TwitterAccountService;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
@@ -47,11 +53,22 @@ public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
         logger.debug("Requesting user by id {}", id);
 
         final String uri = String.format(BASE_QUERY_USER_BY_ID, id);
+
+        Stopwatch timer = Stopwatch.createStarted();
         final ResponseEntity<UserLookupResponse> response = rt.exchange(
                 uri,
                 HttpMethod.GET,
                 userResponseEntity,
                 UserLookupResponse.class
+        );
+        timer.stop();
+        metricService.time(
+                "api_latency",
+                List.of(
+                        Tag.of("service", Service.TWITTER.getName()),
+                        Tag.of("endpoint", "get_user_by_id")
+                ),
+                timer.elapsed(TimeUnit.MILLISECONDS)
         );
 
         User result = null;
@@ -67,11 +84,22 @@ public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
         logger.debug("Requesting user by name {}", name);
 
         final String uri = String.format(BASE_QUERY_USER_BY_NAME, name);
+
+        Stopwatch timer = Stopwatch.createStarted();
         final ResponseEntity<UserLookupResponse> response = rt.exchange(
                 uri,
                 HttpMethod.GET,
                 userResponseEntity,
                 UserLookupResponse.class
+        );
+        timer.stop();
+        metricService.time(
+                "api_latency",
+                List.of(
+                        Tag.of("service", Service.TWITTER.getName()),
+                        Tag.of("endpoint", "get_user_by_name")
+                ),
+                timer.elapsed(TimeUnit.MILLISECONDS)
         );
 
         User result = null;

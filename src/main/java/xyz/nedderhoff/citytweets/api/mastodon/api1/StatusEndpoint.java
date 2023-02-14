@@ -1,5 +1,7 @@
 package xyz.nedderhoff.citytweets.api.mastodon.api1;
 
+import com.google.common.base.Stopwatch;
+import io.micrometer.core.instrument.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -12,10 +14,14 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import xyz.nedderhoff.citytweets.api.mastodon.MastodonApi1Endpoint;
 import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonAccount;
+import xyz.nedderhoff.citytweets.config.Service;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Account;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Status;
 import xyz.nedderhoff.citytweets.exception.mastodon.MastodonException;
 import xyz.nedderhoff.citytweets.monitoring.MetricService;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class StatusEndpoint extends MastodonApi1Endpoint {
@@ -40,12 +46,23 @@ public class StatusEndpoint extends MastodonApi1Endpoint {
                 .encode()
                 .toUriString();
 
+        Stopwatch timer = Stopwatch.createStarted();
         final ResponseEntity<Status> response = rt.exchange(
                 requestUriTemplate,
                 HttpMethod.POST,
                 request,
                 Status.class
         );
+        timer.stop();
+        metricService.time(
+                "api_latency",
+                List.of(
+                        Tag.of("service", Service.MASTODON.getName()),
+                        Tag.of("endpoint", "repost_status")
+                ),
+                timer.elapsed(TimeUnit.MILLISECONDS)
+        );
+
 
         if (response.getBody() == null) {
             final HttpStatusCode statusCode = response.getStatusCode();
