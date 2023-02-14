@@ -25,6 +25,7 @@ public abstract class AbstractFollowerCache<
         > implements FollowerCache<IdType, AccountType, AccountServiceType, ExceptionType> {
 
     private static final int FOLLOWER_UPDATE_RATE = 1000 * 60 * 60 * 24;
+    private static final int METRICS_REPORT_RATE = 1000 * 60;
 
     private final AccountServiceType accountService;
     private final Function<AccountType, Set<IdType>> friendsFetcher;
@@ -57,6 +58,11 @@ public abstract class AbstractFollowerCache<
     private void fetchFollowers() {
         logger.info("Running scheduled job in thread {}: fetchFollowers", Thread.currentThread().getName());
         populateCache();
+    }
+
+    @Scheduled(initialDelay = FOLLOWER_UPDATE_RATE, fixedRate = FOLLOWER_UPDATE_RATE)
+    private void reportCacheMetrics() {
+        cache.forEach((key, value) -> metricService.count(key.name(), value.size()));
     }
 
     @Override
