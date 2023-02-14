@@ -60,7 +60,7 @@ public abstract class AbstractFollowerCache<
         populateCache();
     }
 
-    @Scheduled(initialDelay = FOLLOWER_UPDATE_RATE, fixedRate = FOLLOWER_UPDATE_RATE)
+    @Scheduled(fixedRate = METRICS_REPORT_RATE)
     private void reportCacheMetrics() {
         cache.forEach((key, value) -> metricService.count(key.name(), value.size()));
     }
@@ -84,7 +84,7 @@ public abstract class AbstractFollowerCache<
                 final Stopwatch timer = Stopwatch.createStarted();
                 cache.get(account).addAll(friendsFetcher.apply(account));
                 timer.stop();
-                metricService.time(
+                metricService.distributionSummarise(
                         "populate_cache",
                         List.of(Tag.of("account", account.name())),
                         timer.elapsed(TimeUnit.MILLISECONDS)
@@ -95,7 +95,7 @@ public abstract class AbstractFollowerCache<
             }
         });
         totalTimer.stop();
-        metricService.time("populate_cache_total", totalTimer.elapsed(TimeUnit.MILLISECONDS));
+        metricService.distributionSummarise("populate_cache_total", totalTimer.elapsed(TimeUnit.MILLISECONDS));
         this.logger.info("Warmed up in {}s", totalTimer.elapsed(TimeUnit.SECONDS));
     }
 
