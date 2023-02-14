@@ -60,7 +60,7 @@ public abstract class AbstractFollowerCache<
         populateCache();
     }
 
-    @Scheduled(initialDelay = FOLLOWER_UPDATE_RATE, fixedRate = FOLLOWER_UPDATE_RATE)
+    @Scheduled(fixedRate = METRICS_REPORT_RATE)
     private void reportCacheMetrics() {
         cache.forEach((key, value) -> metricService.count(key.name(), value.size()));
     }
