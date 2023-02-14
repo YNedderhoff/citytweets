@@ -60,11 +60,6 @@ public abstract class AbstractFollowerCache<
         populateCache();
     }
 
-    @Scheduled(fixedRate = METRICS_REPORT_RATE)
-    private void reportCacheMetrics() {
-        cache.forEach((key, value) -> metricService.count(key.name(), value.size()));
-    }
-
     @Override
     public boolean contains(IdType id, AccountType account) {
         return cache.get(account).contains(id);
@@ -100,4 +95,27 @@ public abstract class AbstractFollowerCache<
     }
 
     protected abstract Logger getLogger();
+
+    @Scheduled(fixedRate = METRICS_REPORT_RATE)
+    private void reportCacheMetrics() {
+        cache.forEach((key, value) -> metricService.count(
+                "follower_cache_size",
+                List.of(
+                        Tag.of("account", key.name()),
+                        Tag.of("service", accountService.getService().getName().toLowerCase())
+                ),
+                value.size())
+        );
+
+        metricService.count(
+                "follower_cache_size_total",
+                List.of(
+                        Tag.of("service", accountService.getService().getName().toLowerCase())
+                ),
+                cache.values().stream()
+                        .map(Set::size)
+                        .mapToInt(Integer::intValue)
+                        .sum()
+        );
+    }
 }
