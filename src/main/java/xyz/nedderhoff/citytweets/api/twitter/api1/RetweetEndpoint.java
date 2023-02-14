@@ -9,6 +9,7 @@ import xyz.nedderhoff.citytweets.cache.twitter.Twitter4jConnectionsCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
 import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
 import xyz.nedderhoff.citytweets.exception.twitter.TwitterException;
+import xyz.nedderhoff.citytweets.monitoring.MetricService;
 
 @Component
 public class RetweetEndpoint extends TwitterApi1Endpoint {
@@ -16,9 +17,10 @@ public class RetweetEndpoint extends TwitterApi1Endpoint {
 
     public RetweetEndpoint(
             RestTemplate rt,
+            MetricService metricService,
             Twitter4jConnectionsCache connections
     ) {
-        super(rt, connections);
+        super(rt, metricService, connections);
     }
 
     public Tweet retweet(Tweet tweet, TwitterAccount account) throws TwitterException {

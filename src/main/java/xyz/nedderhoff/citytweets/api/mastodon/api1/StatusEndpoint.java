@@ -15,13 +15,14 @@ import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonAccount;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Account;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Status;
 import xyz.nedderhoff.citytweets.exception.mastodon.MastodonException;
+import xyz.nedderhoff.citytweets.monitoring.MetricService;
 
 @Component
 public class StatusEndpoint extends MastodonApi1Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(StatusEndpoint.class);
 
-    public StatusEndpoint(RestTemplate rt) {
-        super(rt);
+    public StatusEndpoint(RestTemplate rt, MetricService metricService) {
+        super(rt, metricService);
     }
 
     public Status boost(Status status, MastodonAccount mastodonAccount) throws MastodonException {

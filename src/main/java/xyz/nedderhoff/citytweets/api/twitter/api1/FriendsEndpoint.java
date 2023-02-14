@@ -9,6 +9,7 @@ import xyz.nedderhoff.citytweets.api.twitter.TwitterApi1Endpoint;
 import xyz.nedderhoff.citytweets.cache.twitter.Twitter4jConnectionsCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
 import xyz.nedderhoff.citytweets.exception.twitter.TwitterException;
+import xyz.nedderhoff.citytweets.monitoring.MetricService;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -20,9 +21,10 @@ public class FriendsEndpoint extends TwitterApi1Endpoint {
 
     public FriendsEndpoint(
             RestTemplate rt,
+            MetricService metricService,
             Twitter4jConnectionsCache connections
     ) {
-        super(rt, connections);
+        super(rt, metricService, connections);
     }
 
     public Set<Long> getFriends(TwitterAccount account) {

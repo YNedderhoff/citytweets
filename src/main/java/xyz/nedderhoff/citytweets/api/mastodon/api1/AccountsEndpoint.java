@@ -13,6 +13,7 @@ import xyz.nedderhoff.citytweets.api.mastodon.MastodonApi1Endpoint;
 import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonAccount;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Account;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Status;
+import xyz.nedderhoff.citytweets.monitoring.MetricService;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,8 +25,8 @@ import java.util.stream.Collectors;
 public class AccountsEndpoint extends MastodonApi1Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(AccountsEndpoint.class);
 
-    public AccountsEndpoint(RestTemplate rt) {
-        super(rt);
+    public AccountsEndpoint(RestTemplate rt, MetricService metricService) {
+        super(rt, metricService);
     }
 
     public Set<String> getFollowers(MastodonAccount mastodonAccount) {

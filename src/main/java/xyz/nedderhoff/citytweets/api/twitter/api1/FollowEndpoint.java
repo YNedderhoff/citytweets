@@ -10,6 +10,7 @@ import xyz.nedderhoff.citytweets.cache.twitter.Twitter4jConnectionsCache;
 import xyz.nedderhoff.citytweets.cache.twitter.TwitterFollowerCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
 import xyz.nedderhoff.citytweets.domain.twitter.User;
+import xyz.nedderhoff.citytweets.monitoring.MetricService;
 
 @Component
 public class FollowEndpoint extends TwitterApi1Endpoint {
@@ -19,9 +20,10 @@ public class FollowEndpoint extends TwitterApi1Endpoint {
     public FollowEndpoint(
             TwitterFollowerCache followerCache,
             RestTemplate rt,
+            MetricService metricService,
             Twitter4jConnectionsCache connections
     ) {
-        super(rt, connections);
+        super(rt, metricService, connections);
         this.followerCache = followerCache;
     }
 

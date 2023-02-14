@@ -8,6 +8,7 @@ import xyz.nedderhoff.citytweets.api.twitter.TwitterApi1Endpoint;
 import xyz.nedderhoff.citytweets.cache.twitter.Twitter4jConnectionsCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
 import xyz.nedderhoff.citytweets.exception.twitter.TwitterException;
+import xyz.nedderhoff.citytweets.monitoring.MetricService;
 
 @Component
 public class MeEndpoint extends TwitterApi1Endpoint {
@@ -15,9 +16,10 @@ public class MeEndpoint extends TwitterApi1Endpoint {
 
     public MeEndpoint(
             RestTemplate rt,
+            MetricService metricService,
             Twitter4jConnectionsCache connections
     ) {
-        super(rt, connections);
+        super(rt, metricService, connections);
     }
 
     public long getId(TwitterAccount account) throws TwitterException {

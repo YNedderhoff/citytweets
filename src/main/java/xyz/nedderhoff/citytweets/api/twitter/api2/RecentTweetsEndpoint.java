@@ -11,6 +11,7 @@ import xyz.nedderhoff.citytweets.api.twitter.TwitterApi2Endpoint;
 import xyz.nedderhoff.citytweets.converter.RecentTweetsConverter;
 import xyz.nedderhoff.citytweets.domain.twitter.Tweet;
 import xyz.nedderhoff.citytweets.domain.twitter.http.recentsearch.RecentSearchResponse;
+import xyz.nedderhoff.citytweets.monitoring.MetricService;
 import xyz.nedderhoff.citytweets.service.twitter.TwitterAccountService;
 
 import java.util.ArrayList;
@@ -27,9 +28,10 @@ public class RecentTweetsEndpoint extends TwitterApi2Endpoint<RecentSearchRespon
     public RecentTweetsEndpoint(
             RecentTweetsConverter recentTweetsConverter,
             RestTemplate rt,
+            MetricService metricService,
             TwitterAccountService twitterAccountService
     ) {
-        super(rt, twitterAccountService);
+        super(rt, metricService, twitterAccountService);
         this.recentTweetsConverter = recentTweetsConverter;
         this.recentTweetsResponseEntity = getResponseHttpEntity();
     }

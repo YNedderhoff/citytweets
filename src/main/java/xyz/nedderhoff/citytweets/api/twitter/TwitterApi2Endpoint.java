@@ -4,6 +4,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
+import xyz.nedderhoff.citytweets.monitoring.MetricService;
 import xyz.nedderhoff.citytweets.service.twitter.TwitterAccountService;
 
 
@@ -14,9 +15,10 @@ public abstract non-sealed class TwitterApi2Endpoint<T> extends TwitterHttpEndpo
 
     public TwitterApi2Endpoint(
             RestTemplate rt,
+            MetricService metricService,
             TwitterAccountService twitterAccountService
     ) {
-        super(rt);
+        super(rt, metricService);
         this.twitterAccountService = twitterAccountService;
     }
 

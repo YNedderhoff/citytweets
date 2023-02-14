@@ -13,6 +13,7 @@ import xyz.nedderhoff.citytweets.cache.twitter.Twitter4jConnectionsCache;
 import xyz.nedderhoff.citytweets.converter.UserConverter;
 import xyz.nedderhoff.citytweets.domain.twitter.User;
 import xyz.nedderhoff.citytweets.domain.twitter.http.userlookup.UserLookupResponse;
+import xyz.nedderhoff.citytweets.monitoring.MetricService;
 import xyz.nedderhoff.citytweets.service.twitter.TwitterAccountService;
 
 @Component
@@ -27,11 +28,12 @@ public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
 
     public UserEndpoint(
             RestTemplate rt,
+            MetricService metricService,
             Twitter4jConnectionsCache connections,
             TwitterAccountService twitterAccountService,
             UserConverter userConverter
     ) {
-        super(rt, twitterAccountService);
+        super(rt, metricService, twitterAccountService);
         this.connections = connections;
         this.userConverter = userConverter;
         this.userResponseEntity = getResponseHttpEntity();
