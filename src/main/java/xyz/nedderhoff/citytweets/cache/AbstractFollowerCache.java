@@ -79,8 +79,8 @@ public abstract class AbstractFollowerCache<
                 final Stopwatch timer = Stopwatch.createStarted();
                 cache.get(account).addAll(friendsFetcher.apply(account));
                 timer.stop();
-                metricService.distributionSummarise(
-                        "populate_cache",
+                metricService.time(
+                        "follower_cache_populate_time_per_account",
                         List.of(Tag.of("account", account.name())),
                         timer.elapsed(TimeUnit.MILLISECONDS)
                 );
@@ -90,7 +90,7 @@ public abstract class AbstractFollowerCache<
             }
         });
         totalTimer.stop();
-        metricService.distributionSummarise("populate_cache_total", totalTimer.elapsed(TimeUnit.MILLISECONDS));
+        metricService.time("follower_cache_populate_time_total", totalTimer.elapsed(TimeUnit.MILLISECONDS));
         this.logger.info("Warmed up in {}s", totalTimer.elapsed(TimeUnit.SECONDS));
     }
 
