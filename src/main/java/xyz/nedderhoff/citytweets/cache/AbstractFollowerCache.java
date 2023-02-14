@@ -47,14 +47,10 @@ public abstract class AbstractFollowerCache<
             cache.computeIfAbsent(account, a -> new HashSet<>());
         });
         this.logger.debug("Finished initialisation.");
-
-        this.logger.info("Warming up ...");
-
-        populateCache();
     }
 
     // initial delay equals rate because the first population run happens in constructor
-    @Scheduled(initialDelay = FOLLOWER_UPDATE_RATE, fixedRate = FOLLOWER_UPDATE_RATE)
+    @Scheduled(fixedRate = FOLLOWER_UPDATE_RATE)
     private void fetchFollowers() {
         logger.info("Running scheduled job in thread {}: fetchFollowers", Thread.currentThread().getName());
         populateCache();
