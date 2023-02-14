@@ -9,6 +9,7 @@ import xyz.nedderhoff.citytweets.api.twitter.api1.FriendsEndpoint;
 import xyz.nedderhoff.citytweets.cache.AbstractFollowerCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
 import xyz.nedderhoff.citytweets.exception.twitter.NonExistingTwitterCacheException;
+import xyz.nedderhoff.citytweets.monitoring.MetricService;
 import xyz.nedderhoff.citytweets.service.twitter.TwitterAccountService;
 
 @Lazy
@@ -22,8 +23,12 @@ public class TwitterFollowerCache extends AbstractFollowerCache<
         > {
     private static final Logger logger = LoggerFactory.getLogger(TwitterFollowerCache.class);
 
-    public TwitterFollowerCache(FriendsEndpoint friendsEndpoint, TwitterAccountService twitterAccountService) {
-        super(twitterAccountService, friendsEndpoint::getFriends);
+    public TwitterFollowerCache(
+            FriendsEndpoint friendsEndpoint,
+            TwitterAccountService twitterAccountService,
+            MetricService metricService
+    ) {
+        super(twitterAccountService, friendsEndpoint::getFriends, metricService);
     }
 
     @Override

@@ -9,6 +9,7 @@ import xyz.nedderhoff.citytweets.api.mastodon.api1.AccountsEndpoint;
 import xyz.nedderhoff.citytweets.cache.AbstractFollowerCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonAccount;
 import xyz.nedderhoff.citytweets.exception.twitter.NonExistingTwitterCacheException;
+import xyz.nedderhoff.citytweets.monitoring.MetricService;
 import xyz.nedderhoff.citytweets.service.mastodon.MastodonAccountService;
 
 @Lazy
@@ -22,8 +23,12 @@ public class MastodonFollowerCache extends AbstractFollowerCache<
         > {
     private static final Logger logger = LoggerFactory.getLogger(MastodonFollowerCache.class);
 
-    public MastodonFollowerCache(AccountsEndpoint accountsEndpoint, MastodonAccountService accountService) {
-        super(accountService, accountsEndpoint::getFollowers);
+    public MastodonFollowerCache(
+            AccountsEndpoint accountsEndpoint,
+            MastodonAccountService accountService,
+            MetricService metricService
+    ) {
+        super(accountService, accountsEndpoint::getFollowers, metricService);
     }
 
     @Override
