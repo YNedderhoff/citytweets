@@ -46,6 +46,7 @@ public class RetweetEndpoint extends TwitterApi1Endpoint {
                 return tweet;
             } else {
                 logger.error("Error trying to retweet tweet {}", id, e);
+                increment(e.getStatusCode());
                 throw new TwitterException(e);
             }
         }
