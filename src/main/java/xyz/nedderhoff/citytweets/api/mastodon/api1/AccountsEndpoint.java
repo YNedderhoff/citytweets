@@ -1,5 +1,6 @@
 package xyz.nedderhoff.citytweets.api.mastodon.api1;
 
+import com.google.common.base.Stopwatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -13,19 +14,21 @@ import xyz.nedderhoff.citytweets.api.mastodon.MastodonApi1Endpoint;
 import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonAccount;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Account;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Status;
+import xyz.nedderhoff.citytweets.monitoring.MetricService;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Component
 public class AccountsEndpoint extends MastodonApi1Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(AccountsEndpoint.class);
 
-    public AccountsEndpoint(RestTemplate rt) {
-        super(rt);
+    public AccountsEndpoint(RestTemplate rt, MetricService metricService) {
+        super(rt, metricService);
     }
 
     public Set<String> getFollowers(MastodonAccount mastodonAccount) {
@@ -43,12 +46,15 @@ public class AccountsEndpoint extends MastodonApi1Endpoint {
                 .encode()
                 .toUriString();
 
+        Stopwatch timer = Stopwatch.createStarted();
         final ResponseEntity<Account[]> response = rt.exchange(
                 requestUriTemplate,
                 HttpMethod.GET,
                 request,
                 Account[].class
         );
+        timer.stop();
+        metricService.timeMastodonEndpoint("get_followers", timer.elapsed(TimeUnit.MILLISECONDS));
 
         if (response.getBody() == null) {
             logger.warn("Got response with status {}: {}", response.getStatusCode(), response);
@@ -73,12 +79,16 @@ public class AccountsEndpoint extends MastodonApi1Endpoint {
                 .encode()
                 .toUriString();
 
+        Stopwatch timer = Stopwatch.createStarted();
         final ResponseEntity<Status[]> response = rt.exchange(
                 requestUriTemplate,
                 HttpMethod.GET,
                 request,
                 Status[].class
         );
+        timer.stop();
+        metricService.timeMastodonEndpoint("get_statuses", timer.elapsed(TimeUnit.MILLISECONDS));
+
 
         if (response.getBody() == null) {
             logger.warn("Got response with status {}: {}", response.getStatusCode(), response);

@@ -1,5 +1,6 @@
 package xyz.nedderhoff.citytweets.api.twitter.api1;
 
+import com.google.common.base.Stopwatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -8,6 +9,9 @@ import xyz.nedderhoff.citytweets.api.twitter.TwitterApi1Endpoint;
 import xyz.nedderhoff.citytweets.cache.twitter.Twitter4jConnectionsCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.TwitterAccount;
 import xyz.nedderhoff.citytweets.exception.twitter.TwitterException;
+import xyz.nedderhoff.citytweets.monitoring.MetricService;
+
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class MeEndpoint extends TwitterApi1Endpoint {
@@ -15,15 +19,21 @@ public class MeEndpoint extends TwitterApi1Endpoint {
 
     public MeEndpoint(
             RestTemplate rt,
+            MetricService metricService,
             Twitter4jConnectionsCache connections
     ) {
-        super(rt, connections);
+        super(rt, metricService, connections);
     }
 
     public long getId(TwitterAccount account) throws TwitterException {
         logger.debug("Fetching own id for account {} ...", account.name());
         try {
-            return connections.getConnection(account).v1().users().verifyCredentials().getId();
+            Stopwatch timer = Stopwatch.createStarted();
+            final long id = connections.getConnection(account).v1().users().verifyCredentials().getId();
+            timer.stop();
+            metricService.timeTwitterEndpoint("get_own_id", timer.elapsed(TimeUnit.MILLISECONDS));
+            return id;
+
         } catch (twitter4j.TwitterException e) {
             logger.error("Exception while fetching identity for account {}", account.name());
             throw new TwitterException("Exception while fetching identity for account " + account.name(), e);

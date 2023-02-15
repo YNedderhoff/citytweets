@@ -1,5 +1,6 @@
 package xyz.nedderhoff.citytweets.api.twitter.api2;
 
+import com.google.common.base.Stopwatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -13,7 +14,10 @@ import xyz.nedderhoff.citytweets.cache.twitter.Twitter4jConnectionsCache;
 import xyz.nedderhoff.citytweets.converter.UserConverter;
 import xyz.nedderhoff.citytweets.domain.twitter.User;
 import xyz.nedderhoff.citytweets.domain.twitter.http.userlookup.UserLookupResponse;
+import xyz.nedderhoff.citytweets.monitoring.MetricService;
 import xyz.nedderhoff.citytweets.service.twitter.TwitterAccountService;
+
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
@@ -27,11 +31,12 @@ public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
 
     public UserEndpoint(
             RestTemplate rt,
+            MetricService metricService,
             Twitter4jConnectionsCache connections,
             TwitterAccountService twitterAccountService,
             UserConverter userConverter
     ) {
-        super(rt, twitterAccountService);
+        super(rt, metricService, twitterAccountService);
         this.connections = connections;
         this.userConverter = userConverter;
         this.userResponseEntity = getResponseHttpEntity();
@@ -45,12 +50,16 @@ public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
         logger.debug("Requesting user by id {}", id);
 
         final String uri = String.format(BASE_QUERY_USER_BY_ID, id);
+
+        Stopwatch timer = Stopwatch.createStarted();
         final ResponseEntity<UserLookupResponse> response = rt.exchange(
                 uri,
                 HttpMethod.GET,
                 userResponseEntity,
                 UserLookupResponse.class
         );
+        timer.stop();
+        metricService.timeTwitterEndpoint("get_user_by_id", timer.elapsed(TimeUnit.MILLISECONDS));
 
         User result = null;
         if (response.getBody() != null && response.getBody().data() != null) {
@@ -65,12 +74,16 @@ public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
         logger.debug("Requesting user by name {}", name);
 
         final String uri = String.format(BASE_QUERY_USER_BY_NAME, name);
+
+        Stopwatch timer = Stopwatch.createStarted();
         final ResponseEntity<UserLookupResponse> response = rt.exchange(
                 uri,
                 HttpMethod.GET,
                 userResponseEntity,
                 UserLookupResponse.class
         );
+        timer.stop();
+        metricService.timeTwitterEndpoint("get_user_by_name", timer.elapsed(TimeUnit.MILLISECONDS));
 
         User result = null;
         if (response.getBody() != null && response.getBody().data() != null) {

@@ -47,14 +47,10 @@ public abstract class AbstractFollowerCache<
             cache.computeIfAbsent(account, a -> new HashSet<>());
         });
         this.logger.debug("Finished initialisation.");
-
-        this.logger.info("Warming up ...");
-
-        populateCache();
     }
 
     // initial delay equals rate because the first population run happens in constructor
-    @Scheduled(initialDelay = FOLLOWER_UPDATE_RATE, fixedRate = FOLLOWER_UPDATE_RATE)
+    @Scheduled(fixedRate = FOLLOWER_UPDATE_RATE)
     private void fetchFollowers() {
         logger.info("Running scheduled job in thread {}: fetchFollowers", Thread.currentThread().getName());
         populateCache();
@@ -79,8 +75,8 @@ public abstract class AbstractFollowerCache<
                 final Stopwatch timer = Stopwatch.createStarted();
                 cache.get(account).addAll(friendsFetcher.apply(account));
                 timer.stop();
-                metricService.distributionSummarise(
-                        "populate_cache",
+                metricService.time(
+                        "follower_cache_populate_time_per_account",
                         List.of(Tag.of("account", account.name())),
                         timer.elapsed(TimeUnit.MILLISECONDS)
                 );
@@ -90,7 +86,7 @@ public abstract class AbstractFollowerCache<
             }
         });
         totalTimer.stop();
-        metricService.distributionSummarise("populate_cache_total", totalTimer.elapsed(TimeUnit.MILLISECONDS));
+        metricService.time("follower_cache_populate_time_total", totalTimer.elapsed(TimeUnit.MILLISECONDS));
         this.logger.info("Warmed up in {}s", totalTimer.elapsed(TimeUnit.SECONDS));
     }
 

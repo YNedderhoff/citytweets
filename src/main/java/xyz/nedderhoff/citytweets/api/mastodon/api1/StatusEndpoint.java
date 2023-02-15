@@ -1,5 +1,6 @@
 package xyz.nedderhoff.citytweets.api.mastodon.api1;
 
+import com.google.common.base.Stopwatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -15,13 +16,16 @@ import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonAccount;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Account;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Status;
 import xyz.nedderhoff.citytweets.exception.mastodon.MastodonException;
+import xyz.nedderhoff.citytweets.monitoring.MetricService;
+
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class StatusEndpoint extends MastodonApi1Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(StatusEndpoint.class);
 
-    public StatusEndpoint(RestTemplate rt) {
-        super(rt);
+    public StatusEndpoint(RestTemplate rt, MetricService metricService) {
+        super(rt, metricService);
     }
 
     public Status boost(Status status, MastodonAccount mastodonAccount) throws MastodonException {
@@ -39,12 +43,16 @@ public class StatusEndpoint extends MastodonApi1Endpoint {
                 .encode()
                 .toUriString();
 
+        Stopwatch timer = Stopwatch.createStarted();
         final ResponseEntity<Status> response = rt.exchange(
                 requestUriTemplate,
                 HttpMethod.POST,
                 request,
                 Status.class
         );
+        timer.stop();
+        metricService.timeMastodonEndpoint("repost_status", timer.elapsed(TimeUnit.MILLISECONDS));
+
 
         if (response.getBody() == null) {
             final HttpStatusCode statusCode = response.getStatusCode();
