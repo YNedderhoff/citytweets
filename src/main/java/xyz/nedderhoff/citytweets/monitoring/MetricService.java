@@ -59,7 +59,7 @@ public class MetricService {
 
     public void incrementEndpoint(String name, int statusCode, Service service) {
         increment(
-                "api_error",
+                "api_call",
                 List.of(
                         Tag.of("service", service.getName()),
                         Tag.of("endpoint", name),
