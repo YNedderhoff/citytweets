@@ -23,9 +23,11 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+// TODO split out two endpoints into separate classes and properly use time and increment methods like elsewhere
 @Component
 public class AccountsEndpoint extends MastodonApi1Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(AccountsEndpoint.class);
+    private static final String NAME = "get_followers";
 
     public AccountsEndpoint(RestTemplate rt, MetricService metricService) {
         super(rt, metricService);
@@ -54,7 +56,8 @@ public class AccountsEndpoint extends MastodonApi1Endpoint {
                 Account[].class
         );
         timer.stop();
-        metricService.timeMastodonEndpoint("get_followers", timer.elapsed(TimeUnit.MILLISECONDS));
+        time(timer.elapsed(TimeUnit.MILLISECONDS));
+        increment(response.getStatusCode().value());
 
         if (response.getBody() == null) {
             logger.warn("Got response with status {}: {}", response.getStatusCode(), response);
@@ -88,7 +91,7 @@ public class AccountsEndpoint extends MastodonApi1Endpoint {
         );
         timer.stop();
         metricService.timeMastodonEndpoint("get_statuses", timer.elapsed(TimeUnit.MILLISECONDS));
-
+        metricService.incrementMastodonEndpoint("get_statuses", response.getStatusCode().value());
 
         if (response.getBody() == null) {
             logger.warn("Got response with status {}: {}", response.getStatusCode(), response);
@@ -96,5 +99,10 @@ public class AccountsEndpoint extends MastodonApi1Endpoint {
         }
 
         return Arrays.asList(response.getBody());
+    }
+
+    @Override
+    public String name() {
+        return NAME;
     }
 }

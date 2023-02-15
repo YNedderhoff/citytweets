@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class StatusEndpoint extends MastodonApi1Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(StatusEndpoint.class);
+    private static final String NAME = "repost_status";
 
     public StatusEndpoint(RestTemplate rt, MetricService metricService) {
         super(rt, metricService);
@@ -51,13 +52,18 @@ public class StatusEndpoint extends MastodonApi1Endpoint {
                 Status.class
         );
         timer.stop();
-        metricService.timeMastodonEndpoint("repost_status", timer.elapsed(TimeUnit.MILLISECONDS));
-
+        time(timer.elapsed(TimeUnit.MILLISECONDS));
+        increment(response.getStatusCode().value());
 
         if (response.getBody() == null) {
             final HttpStatusCode statusCode = response.getStatusCode();
             throw new MastodonException(String.format("Error boosting status. Status code %s: %s", statusCode, response));
         }
         return response.getBody();
+    }
+
+    @Override
+    public String name() {
+        return NAME;
     }
 }

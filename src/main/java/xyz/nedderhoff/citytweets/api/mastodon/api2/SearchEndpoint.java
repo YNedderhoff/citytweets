@@ -10,9 +10,14 @@ import xyz.nedderhoff.citytweets.monitoring.MetricService;
 @Component
 public class SearchEndpoint extends MastodonApi2Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(SearchEndpoint.class);
+    private static final String NAME = "search";
 
     public SearchEndpoint(RestTemplate rt, MetricService metricService) {
         super(rt, metricService);
     }
 
+    @Override
+    public String name() {
+        return NAME;
+    }
 }

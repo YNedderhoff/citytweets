@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class MeEndpoint extends TwitterApi1Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(MeEndpoint.class);
+    private static final String NAME = "get_own_id";
 
     public MeEndpoint(
             RestTemplate rt,
@@ -31,12 +32,18 @@ public class MeEndpoint extends TwitterApi1Endpoint {
             Stopwatch timer = Stopwatch.createStarted();
             final long id = connections.getConnection(account).v1().users().verifyCredentials().getId();
             timer.stop();
-            metricService.timeTwitterEndpoint("get_own_id", timer.elapsed(TimeUnit.MILLISECONDS));
+            time(timer.elapsed(TimeUnit.MILLISECONDS));
+            increment(200);
             return id;
-
         } catch (twitter4j.TwitterException e) {
             logger.error("Exception while fetching identity for account {}", account.name());
+            increment(e.getStatusCode());
             throw new TwitterException("Exception while fetching identity for account " + account.name(), e);
         }
+    }
+
+    @Override
+    public String name() {
+        return NAME;
     }
 }

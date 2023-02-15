@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class FriendsEndpoint extends TwitterApi1Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(FriendsEndpoint.class);
+    private static final String NAME = "get_followers";
 
     public FriendsEndpoint(
             RestTemplate rt,
@@ -51,11 +52,18 @@ public class FriendsEndpoint extends TwitterApi1Endpoint {
             }
         } catch (twitter4j.TwitterException e) {
             logger.error("Error trying to fetch twitter followers for account {}", account.name(), e);
+            increment(e.getStatusCode());
             throw new TwitterException(e);
         }
         timer.stop();
-        metricService.timeTwitterEndpoint("get_followers", timer.elapsed(TimeUnit.MILLISECONDS));
+        time(timer.elapsed(TimeUnit.MILLISECONDS));
+        increment(200);
 
         return friendIds;
+    }
+
+    @Override
+    public String name() {
+        return NAME;
     }
 }

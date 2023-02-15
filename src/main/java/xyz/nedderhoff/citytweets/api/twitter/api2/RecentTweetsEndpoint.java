@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RecentTweetsEndpoint extends TwitterApi2Endpoint<RecentSearchResponse> {
     private static final Logger logger = LoggerFactory.getLogger(RecentTweetsEndpoint.class);
+    private static final String NAME = "search";
     private static final String BASE_QUERY_RECENT_TWEETS = BASE_TWITTER_API_2_URI + "tweets/search/recent?tweet.fields=author_id,lang&query=";
 
     private final RecentTweetsConverter recentTweetsConverter;
@@ -49,14 +50,21 @@ public class RecentTweetsEndpoint extends TwitterApi2Endpoint<RecentSearchRespon
                 RecentSearchResponse.class
         );
         timer.stop();
-        metricService.timeTwitterEndpoint("search", timer.elapsed(TimeUnit.MILLISECONDS));
+        time(timer.elapsed(TimeUnit.MILLISECONDS));
+        increment(response.getStatusCode().value());
 
         List<Tweet> result = new ArrayList<>();
+
         if (response.getBody() != null && response.getBody().data() != null) {
             result = recentTweetsConverter.toTweets(response.getBody().data());
         }
 
         logger.info("Found {} tweets matching search {}", result.size(), query);
         return result;
+    }
+
+    @Override
+    public String name() {
+        return NAME;
     }
 }

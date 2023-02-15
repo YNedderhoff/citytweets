@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RetweetEndpoint extends TwitterApi1Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(RetweetEndpoint.class);
+    private static final String NAME = "repost_status";
 
     public RetweetEndpoint(
             RestTemplate rt,
@@ -33,18 +34,25 @@ public class RetweetEndpoint extends TwitterApi1Endpoint {
             Stopwatch timer = Stopwatch.createStarted();
             connections.getConnection(account).v1().tweets().retweetStatus(id);
             timer.stop();
-            metricService.timeTwitterEndpoint("repost_status", timer.elapsed(TimeUnit.MILLISECONDS));
+            time(timer.elapsed(TimeUnit.MILLISECONDS));
+            increment(200);
 
             logger.info("Successfully retweeted tweet {}", id);
             return tweet;
         } catch (twitter4j.TwitterException e) {
             if (e.getStatusCode() == 403 && e.getErrorCode() == 327) {
                 logger.warn("Tweet {} has already been retweeted. Skipping and adding to cache.", id);
+                increment(e.getStatusCode());
                 return tweet;
             } else {
                 logger.error("Error trying to retweet tweet {}", id, e);
                 throw new TwitterException(e);
             }
         }
+    }
+
+    @Override
+    public String name() {
+        return NAME;
     }
 }

@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
     private static final Logger logger = LoggerFactory.getLogger(UserEndpoint.class);
+    private static final String NAME = "get_user";
     public static final String BASE_QUERY_USER_BY_ID = BASE_TWITTER_API_2_URI + "users/%d?user.fields=location";
     public static final String BASE_QUERY_USER_BY_NAME = BASE_TWITTER_API_2_URI + "users/by/username/%s?user.fields=location";
 
@@ -59,7 +60,8 @@ public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
                 UserLookupResponse.class
         );
         timer.stop();
-        metricService.timeTwitterEndpoint("get_user_by_id", timer.elapsed(TimeUnit.MILLISECONDS));
+        time(timer.elapsed(TimeUnit.MILLISECONDS));
+        increment(response.getStatusCode().value());
 
         User result = null;
         if (response.getBody() != null && response.getBody().data() != null) {
@@ -83,7 +85,8 @@ public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
                 UserLookupResponse.class
         );
         timer.stop();
-        metricService.timeTwitterEndpoint("get_user_by_name", timer.elapsed(TimeUnit.MILLISECONDS));
+        time(timer.elapsed(TimeUnit.MILLISECONDS));
+        increment(response.getStatusCode().value());
 
         User result = null;
         if (response.getBody() != null && response.getBody().data() != null) {
@@ -92,5 +95,10 @@ public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
             logger.warn("No user found with name {}", name);
         }
         return result;
+    }
+
+    @Override
+    public String name() {
+        return NAME;
     }
 }

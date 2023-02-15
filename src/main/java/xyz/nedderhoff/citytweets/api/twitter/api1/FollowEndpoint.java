@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class FollowEndpoint extends TwitterApi1Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(FollowEndpoint.class);
+    private static final String NAME = "follow";
     private final TwitterFollowerCache followerCache;
 
     public FollowEndpoint(
@@ -36,12 +37,19 @@ public class FollowEndpoint extends TwitterApi1Endpoint {
             Stopwatch timer = Stopwatch.createStarted();
             connections.getConnection(account).v1().friendsFollowers().createFriendship(user.id());
             timer.stop();
-            metricService.timeTwitterEndpoint("follow", timer.elapsed(TimeUnit.MILLISECONDS));
+            time(timer.elapsed(TimeUnit.MILLISECONDS));
+            increment(200);
 
             logger.info("Successfully followed user {} for account {}", user.name(), account.name());
             followerCache.add(user.id(), account);
         } catch (TwitterException e) {
             logger.error("Error trying to follow user {} for account {}", user, account.name(), e);
+            increment(e.getStatusCode());
         }
+    }
+
+    @Override
+    public String name() {
+        return NAME;
     }
 }

@@ -49,6 +49,34 @@ public class MetricService {
         timer.record(t, DEFAULT_TIME_UNIT);
     }
 
+    public void incrementTwitterEndpoint(String name, int statusCode) {
+        incrementEndpoint(name, statusCode, Service.TWITTER);
+    }
+
+    public void incrementMastodonEndpoint(String name, int statusCode) {
+        incrementEndpoint(name, statusCode, Service.MASTODON);
+    }
+
+    public void incrementEndpoint(String name, int statusCode, Service service) {
+        increment(
+                "api_error",
+                List.of(
+                        Tag.of("service", service.getName()),
+                        Tag.of("endpoint", name),
+                        Tag.of("statusCode", String.valueOf(statusCode))
+                )
+        );
+    }
+
+    public void increment(String name) {
+        increment(name, Collections.emptySet());
+    }
+
+    public void increment(String name, Iterable<Tag> tags) {
+        final Counter counter = counter(name, tags).register(meterRegistry);
+        counter.increment();
+    }
+
     public void count(String name, int amount) {
         count(name, Collections.emptySet(), amount);
     }

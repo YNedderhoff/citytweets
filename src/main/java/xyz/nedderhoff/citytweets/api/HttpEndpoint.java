@@ -1,14 +1,9 @@
 package xyz.nedderhoff.citytweets.api;
 
-import org.springframework.web.client.RestTemplate;
-import xyz.nedderhoff.citytweets.monitoring.MetricService;
+public interface HttpEndpoint {
 
-public abstract class HttpEndpoint{
-    protected final RestTemplate rt;
-    protected final MetricService metricService;
+    void time(long t);
+    void increment(int statusCode);
 
-    public HttpEndpoint(RestTemplate rt, MetricService metricService) {
-        this.rt = rt;
-        this.metricService = metricService;
-    }
+    String name();
 }
