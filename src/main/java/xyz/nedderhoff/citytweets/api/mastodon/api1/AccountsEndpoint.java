@@ -14,7 +14,7 @@ import xyz.nedderhoff.citytweets.api.mastodon.MastodonApi1Endpoint;
 import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonAccount;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Account;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Status;
-import xyz.nedderhoff.citytweets.monitoring.MetricService;
+import xyz.nedderhoff.citytweets.monitoring.mastodon.MastodonMetricService;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,7 +29,7 @@ public class AccountsEndpoint extends MastodonApi1Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(AccountsEndpoint.class);
     private static final String NAME = "get_followers";
 
-    public AccountsEndpoint(RestTemplate rt, MetricService metricService) {
+    public AccountsEndpoint(RestTemplate rt, MastodonMetricService metricService) {
         super(rt, metricService);
     }
 
@@ -90,8 +90,8 @@ public class AccountsEndpoint extends MastodonApi1Endpoint {
                 Status[].class
         );
         timer.stop();
-        metricService.timeMastodonEndpoint("get_statuses", timer.elapsed(TimeUnit.MILLISECONDS));
-        metricService.incrementMastodonEndpoint("get_statuses", response.getStatusCode().value());
+        metricService.timeEndpoint("get_statuses", timer.elapsed(TimeUnit.MILLISECONDS));
+        metricService.incrementEndpoint("get_statuses", response.getStatusCode().value());
 
         if (response.getBody() == null) {
             logger.warn("Got response with status {}: {}", response.getStatusCode(), response);

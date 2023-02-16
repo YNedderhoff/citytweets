@@ -2,7 +2,7 @@ package xyz.nedderhoff.citytweets.api.twitter;
 
 import org.springframework.web.client.RestTemplate;
 import xyz.nedderhoff.citytweets.cache.twitter.Twitter4jConnectionsCache;
-import xyz.nedderhoff.citytweets.monitoring.MetricService;
+import xyz.nedderhoff.citytweets.monitoring.twitter.TwitterMetricService;
 
 @Deprecated(forRemoval = true)
 // https://developer.twitter.com/en/docs/twitter-api/v1
@@ -12,7 +12,7 @@ public abstract non-sealed class TwitterApi1Endpoint extends TwitterHttpEndpoint
 
     public TwitterApi1Endpoint(
             RestTemplate rt,
-            MetricService metricService,
+            TwitterMetricService metricService,
             Twitter4jConnectionsCache connections
     ) {
         super(rt, metricService);

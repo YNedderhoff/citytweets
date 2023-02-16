@@ -14,7 +14,7 @@ import xyz.nedderhoff.citytweets.cache.twitter.Twitter4jConnectionsCache;
 import xyz.nedderhoff.citytweets.converter.UserConverter;
 import xyz.nedderhoff.citytweets.domain.twitter.User;
 import xyz.nedderhoff.citytweets.domain.twitter.http.userlookup.UserLookupResponse;
-import xyz.nedderhoff.citytweets.monitoring.MetricService;
+import xyz.nedderhoff.citytweets.monitoring.twitter.TwitterMetricService;
 import xyz.nedderhoff.citytweets.service.twitter.TwitterAccountService;
 
 import java.util.concurrent.TimeUnit;
@@ -32,7 +32,7 @@ public class UserEndpoint extends TwitterApi2Endpoint<UserLookupResponse> {
 
     public UserEndpoint(
             RestTemplate rt,
-            MetricService metricService,
+            TwitterMetricService metricService,
             Twitter4jConnectionsCache connections,
             TwitterAccountService twitterAccountService,
             UserConverter userConverter

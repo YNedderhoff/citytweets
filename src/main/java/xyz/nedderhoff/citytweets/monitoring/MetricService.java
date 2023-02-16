@@ -4,32 +4,24 @@ import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Timer;
-import org.springframework.stereotype.Component;
 import xyz.nedderhoff.citytweets.config.Service;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@Component
-public class MetricService {
+public abstract class MetricService {
 
     public static final TimeUnit DEFAULT_TIME_UNIT = TimeUnit.MILLISECONDS;
     private final MeterRegistry meterRegistry;
+    private final Service service;
 
-    public MetricService(MeterRegistry meterRegistry) {
+    public MetricService(MeterRegistry meterRegistry, Service service) {
         this.meterRegistry = meterRegistry;
+        this.service = service;
     }
 
-    public void timeTwitterEndpoint(String name, long t) {
-        timeEndpoint(name, t, Service.TWITTER);
-    }
-
-    public void timeMastodonEndpoint(String name, long t) {
-        timeEndpoint(name, t, Service.MASTODON);
-    }
-
-    public void timeEndpoint(String name, long t, Service service) {
+    public void timeEndpoint(String name, long t) {
         time(
                 "api_latency",
                 List.of(
@@ -49,15 +41,7 @@ public class MetricService {
         timer.record(t, DEFAULT_TIME_UNIT);
     }
 
-    public void incrementTwitterEndpoint(String name, int statusCode) {
-        incrementEndpoint(name, statusCode, Service.TWITTER);
-    }
-
-    public void incrementMastodonEndpoint(String name, int statusCode) {
-        incrementEndpoint(name, statusCode, Service.MASTODON);
-    }
-
-    public void incrementEndpoint(String name, int statusCode, Service service) {
+    public void incrementEndpoint(String name, int statusCode) {
         increment(
                 "api_call",
                 List.of(

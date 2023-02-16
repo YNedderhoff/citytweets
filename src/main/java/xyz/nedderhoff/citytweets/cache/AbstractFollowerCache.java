@@ -21,6 +21,7 @@ public abstract class AbstractFollowerCache<
         IdType,
         AccountType extends AccountProperties.Account,
         AccountServiceType extends AccountService<AccountType>,
+        MetricServiceType extends MetricService,
         ExceptionType extends NonExistingCacheException
         > implements FollowerCache<IdType, AccountType, AccountServiceType, ExceptionType> {
 
@@ -29,14 +30,14 @@ public abstract class AbstractFollowerCache<
 
     private final AccountServiceType accountService;
     private final Function<AccountType, Set<IdType>> friendsFetcher;
-    private final MetricService metricService;
+    private final MetricServiceType metricService;
     private final Map<AccountType, Set<IdType>> cache = new ConcurrentHashMap<>();
     private final Logger logger = getLogger();
 
     public AbstractFollowerCache(
             AccountServiceType accountService,
             Function<AccountType, Set<IdType>> friendsFetcher,
-            MetricService metricService) {
+            MetricServiceType metricService) {
         this.accountService = accountService;
         this.friendsFetcher = friendsFetcher;
         this.metricService = metricService;
