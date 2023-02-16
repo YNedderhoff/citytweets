@@ -48,7 +48,7 @@ public class MastodonBoostService extends AbstractRepostService<String, Mastodon
                     .flatMap(follower -> accountsEndpoint.getStatuses(follower, mastodonAccount).stream())
                     .filter(status -> shouldRetoot(status, mastodonAccount))
                     .map(status -> statusEndpoint.boost(status, mastodonAccount))
-                    .forEach(status -> cache(status.id(), mastodonAccount));
+                    .forEach(status -> cache(status.reblog().id(), mastodonAccount));
         });
     }
 
