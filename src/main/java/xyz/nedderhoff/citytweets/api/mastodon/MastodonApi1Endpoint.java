@@ -1,7 +1,7 @@
 package xyz.nedderhoff.citytweets.api.mastodon;
 
 import org.springframework.web.client.RestTemplate;
-import xyz.nedderhoff.citytweets.monitoring.MetricService;
+import xyz.nedderhoff.citytweets.monitoring.mastodon.MastodonMetricService;
 
 @Deprecated(forRemoval = true)
 public abstract non-sealed class MastodonApi1Endpoint extends MastodonHttpEndpoint {
@@ -9,7 +9,7 @@ public abstract non-sealed class MastodonApi1Endpoint extends MastodonHttpEndpoi
 
     public MastodonApi1Endpoint(
             RestTemplate rt,
-            MetricService metricService
+            MastodonMetricService metricService
     ) {
         super(rt, metricService);
     }

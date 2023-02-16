@@ -5,13 +5,13 @@ import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 import xyz.nedderhoff.citytweets.api.AbstractHttpEndpoint;
 import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonAccount;
-import xyz.nedderhoff.citytweets.monitoring.MetricService;
+import xyz.nedderhoff.citytweets.monitoring.mastodon.MastodonMetricService;
 
 // https://docs.joinmastodon.org/
-public abstract sealed class MastodonHttpEndpoint extends AbstractHttpEndpoint permits MastodonApi1Endpoint, MastodonApi2Endpoint {
+public abstract sealed class MastodonHttpEndpoint extends AbstractHttpEndpoint<MastodonMetricService> permits MastodonApi1Endpoint, MastodonApi2Endpoint {
     protected static final String BASE_MASTODON_API_URI_TEMPLATE = "https://%s/api/";
 
-    public MastodonHttpEndpoint(RestTemplate rt, MetricService metricService) {
+    public MastodonHttpEndpoint(RestTemplate rt, MastodonMetricService metricService) {
         super(rt, metricService);
     }
 
@@ -24,11 +24,11 @@ public abstract sealed class MastodonHttpEndpoint extends AbstractHttpEndpoint p
 
     @Override
     public void time(long t) {
-        metricService.timeMastodonEndpoint(name(), t);
+        metricService.timeEndpoint(name(), t);
     }
 
     @Override
     public void increment(int statusCode) {
-        metricService.incrementMastodonEndpoint(name(), statusCode);
+        metricService.incrementEndpoint(name(), statusCode);
     }
 }

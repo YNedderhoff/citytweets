@@ -1,6 +1,8 @@
 package xyz.nedderhoff.citytweets.api;
 
-public interface HttpEndpoint {
+import xyz.nedderhoff.citytweets.monitoring.MetricService;
+
+public interface HttpEndpoint<MetricServiceType extends MetricService> {
 
     void time(long t);
     void increment(int statusCode);

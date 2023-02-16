@@ -16,7 +16,7 @@ import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonAccount;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Account;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Status;
 import xyz.nedderhoff.citytweets.exception.mastodon.MastodonException;
-import xyz.nedderhoff.citytweets.monitoring.MetricService;
+import xyz.nedderhoff.citytweets.monitoring.mastodon.MastodonMetricService;
 
 import java.util.concurrent.TimeUnit;
 
@@ -25,7 +25,7 @@ public class StatusEndpoint extends MastodonApi1Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(StatusEndpoint.class);
     private static final String NAME = "repost_status";
 
-    public StatusEndpoint(RestTemplate rt, MetricService metricService) {
+    public StatusEndpoint(RestTemplate rt, MastodonMetricService metricService) {
         super(rt, metricService);
     }
 
