@@ -30,7 +30,7 @@ public class StatusEndpoint extends MastodonApi1Endpoint {
     }
 
     public Status boost(Status status, MastodonAccount mastodonAccount) throws MastodonException {
-        logger.info("Boosting status {} for {}", status.uri(), mastodonAccount.name());
+        logger.info("Boosting status {} for {}", status.id(), mastodonAccount.name());
         final HttpHeaders authedHeaders = getHttpHeadersWithAuth(mastodonAccount);
         final HttpEntity<Account[]> request = new HttpEntity<>(authedHeaders);
 

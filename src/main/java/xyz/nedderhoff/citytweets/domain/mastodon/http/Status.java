@@ -9,10 +9,11 @@ public record Status(
         String id,
         String uri,
         String url,
-        String spoiler_text,
         Account account,
         List<Mention> mentions,
-        Reblog reblog
+        Reblog reblog,
+
+        boolean reblogged
 ) {
     public record Mention(
             String id,

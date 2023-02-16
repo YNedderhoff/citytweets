@@ -33,12 +33,7 @@ public abstract class AbstractRepostCache<
     @Override
     public boolean contains(IdType id, AccountType account) {
         if (cache.containsKey(account)) {
-            // TODO remove log
-            logger.info("Cache contains account {}", account.name());
-            final boolean contains = cache.get(account).contains(id);
-            // TODO remove log
-            logger.info("Cache contains status with id {}: {}", id, contains);
-            return contains;
+            return cache.get(account).contains(id);
         } else {
             throw getException(getExceptionMessage(account));
         }
@@ -53,9 +48,6 @@ public abstract class AbstractRepostCache<
             return reposts;
         });
         cache.computeIfAbsent(account, a -> new HashSet<>(List.of(id)));
-
-        // TODO remove call
-        contains(id, account);
     }
 
     protected abstract ExceptionType getException(String s);
