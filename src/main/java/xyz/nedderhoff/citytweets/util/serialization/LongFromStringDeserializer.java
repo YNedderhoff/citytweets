@@ -3,8 +3,6 @@ package xyz.nedderhoff.citytweets.util.serialization;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.FromStringDeserializer;
 
-import java.io.IOException;
-
 
 public class LongFromStringDeserializer extends FromStringDeserializer<Long> {
 
@@ -13,7 +11,7 @@ public class LongFromStringDeserializer extends FromStringDeserializer<Long> {
     }
 
     @Override
-    protected Long _deserialize(String s, DeserializationContext deserializationContext) throws IOException {
+    protected Long _deserialize(String s, DeserializationContext deserializationContext) {
         return Long.valueOf(s);
     }
 }
