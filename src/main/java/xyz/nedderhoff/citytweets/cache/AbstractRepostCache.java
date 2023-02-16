@@ -58,9 +58,12 @@ public abstract class AbstractRepostCache<
         repostCache.computeIfAbsent(account, a -> new HashSet<>(List.of(id)));
 
         highestIdCache.computeIfPresent(account, (a, currentHighestId) -> {
+            logger.info("adding repost {} to highestIdCache. currentHighestId is {}", id, currentHighestId);
             if (id > currentHighestId) {
+                logger.info("id {} > currentHighestId {}", id, currentHighestId);
                 return id;
             } else {
+                logger.info("id {} <= currentHighestId {}", id, currentHighestId);
                 return currentHighestId;
             }
         });
