@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import xyz.nedderhoff.citytweets.api.mastodon.api1.AccountsEndpoint;
 import xyz.nedderhoff.citytweets.api.mastodon.api1.StatusEndpoint;
+import xyz.nedderhoff.citytweets.cache.mastodon.MastodonFollowerCache;
 import xyz.nedderhoff.citytweets.cache.mastodon.RetootCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonAccount;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Status;
@@ -15,19 +16,21 @@ import java.util.function.Consumer;
 @Service
 public class MastodonBoostService extends AbstractRepostService<MastodonAccount, RetootCache, MastodonAccountService> {
     private static final Logger logger = LoggerFactory.getLogger(MastodonBoostService.class);
+    private final MastodonFollowerCache followerCache;
     private final AccountsEndpoint accountsEndpoint;
     private final StatusEndpoint statusEndpoint;
 
 
     public MastodonBoostService(
             MastodonAccountService accountService,
-            AccountsEndpoint accountsEndpoint,
+            MastodonFollowerCache followerCache,
             StatusEndpoint statusEndpoint,
-            RetootCache retootCache
-    ) {
+            RetootCache retootCache,
+            AccountsEndpoint accountsEndpoint) {
         super(retootCache, accountService);
-        this.accountsEndpoint = accountsEndpoint;
+        this.followerCache = followerCache;
         this.statusEndpoint = statusEndpoint;
+        this.accountsEndpoint = accountsEndpoint;
     }
 
     @Override
@@ -43,7 +46,7 @@ public class MastodonBoostService extends AbstractRepostService<MastodonAccount,
     private void boost() {
         accountService.getAccounts().forEach(mastodonAccount -> {
             logger.info("Looking for unseen toots mentioning Mastodon account {}", mastodonAccount.name());
-            accountsEndpoint.getFollowers(mastodonAccount)
+            followerCache.getFollowers(mastodonAccount)
                     .stream()
                     .flatMap(follower -> accountsEndpoint.getStatuses(follower, mastodonAccount).stream())
                     .filter(status -> shouldRetoot(status, mastodonAccount))

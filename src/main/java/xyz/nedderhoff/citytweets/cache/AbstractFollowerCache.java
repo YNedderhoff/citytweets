@@ -67,6 +67,10 @@ public abstract class AbstractFollowerCache<
         cache.get(account).add(id);
     }
 
+    public Set<Long> getFollowers(AccountType account) {
+        return new HashSet<>(cache.get(account));
+    }
+
     private void populateCache() {
         final Stopwatch totalTimer = Stopwatch.createStarted();
         accountService.getAccounts().forEach(account -> {
