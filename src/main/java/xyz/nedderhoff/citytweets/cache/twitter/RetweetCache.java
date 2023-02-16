@@ -12,7 +12,6 @@ import xyz.nedderhoff.citytweets.service.twitter.TwitterAccountService;
 @Lazy
 @Component
 public class RetweetCache extends AbstractRepostCache<
-        Long,
         TwitterAccount,
         TwitterAccountService,
         NonExistingTwitterCacheException

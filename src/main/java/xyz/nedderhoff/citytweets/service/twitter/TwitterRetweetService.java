@@ -15,7 +15,7 @@ import xyz.nedderhoff.citytweets.service.AbstractRepostService;
 import java.util.function.Consumer;
 
 @Service
-public class TwitterRetweetService extends AbstractRepostService<Long, TwitterAccount, RetweetCache, TwitterAccountService> {
+public class TwitterRetweetService extends AbstractRepostService<TwitterAccount, RetweetCache, TwitterAccountService> {
     private static final Logger logger = LoggerFactory.getLogger(TwitterRetweetService.class);
 
     private final RecentTweetsEndpoint recentTweetsEndpoint;

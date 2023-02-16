@@ -12,7 +12,6 @@ import xyz.nedderhoff.citytweets.service.mastodon.MastodonAccountService;
 @Lazy
 @Component
 public class RetootCache extends AbstractRepostCache<
-        String,
         MastodonAccount,
         MastodonAccountService,
         NonExistingMastodonCacheException

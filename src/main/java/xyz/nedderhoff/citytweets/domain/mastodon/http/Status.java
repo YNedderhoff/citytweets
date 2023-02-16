@@ -1,12 +1,15 @@
 package xyz.nedderhoff.citytweets.domain.mastodon.http;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.FromStringDeserializer;
 
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record Status(
-        String id,
+        @JsonDeserialize(using = FromStringDeserializer.class)
+        Long id,
         String uri,
         String url,
         Account account,
@@ -16,13 +19,15 @@ public record Status(
         boolean reblogged
 ) {
     public record Mention(
-            String id,
+            @JsonDeserialize(using = FromStringDeserializer.class)
+            Long id,
             String username
     ) {
     }
 
     public record Reblog(
-            String id
+            @JsonDeserialize(using = FromStringDeserializer.class)
+            Long id
     ) {
 
     }

@@ -13,7 +13,7 @@ import xyz.nedderhoff.citytweets.service.AbstractRepostService;
 import java.util.function.Consumer;
 
 @Service
-public class MastodonBoostService extends AbstractRepostService<String, MastodonAccount, RetootCache, MastodonAccountService> {
+public class MastodonBoostService extends AbstractRepostService<MastodonAccount, RetootCache, MastodonAccountService> {
     private static final Logger logger = LoggerFactory.getLogger(MastodonBoostService.class);
     private final AccountsEndpoint accountsEndpoint;
     private final StatusEndpoint statusEndpoint;
@@ -65,7 +65,7 @@ public class MastodonBoostService extends AbstractRepostService<String, Mastodon
     }
 
     private boolean shouldRetoot(Status status, MastodonAccount account) {
-        final Consumer<String> hasBeenSeenLogger = (id) ->
+        final Consumer<Long> hasBeenSeenLogger = (id) ->
                 logger.warn("Toot {} from user {} was already reposted: {}", id, status.account().webfingerUri(), status.url());
         final Consumer<String> authorBlockedLogger = (username) ->
                 logger.warn("Toot {} from user {} can't be reposted as author is blocked: {}", status.id(), username, status.url());

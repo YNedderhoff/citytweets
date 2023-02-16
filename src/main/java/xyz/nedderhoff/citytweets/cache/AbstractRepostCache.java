@@ -12,13 +12,12 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractRepostCache<
-        IdType,
         AccountType extends Account,
         AccountServiceType extends AccountService<AccountType>,
         ExceptionType extends NonExistingCacheException
-        > implements RepostCache<IdType, AccountType, AccountServiceType, ExceptionType> {
+        > implements RepostCache<AccountType, AccountServiceType, ExceptionType> {
     protected static final String CACHE_INEXISTENT_EXCEPTION_MESSAGE = "No cache exists for %s account %s";
-    private final Map<AccountType, Set<IdType>> cache = new ConcurrentHashMap<>();
+    private final Map<AccountType, Set<Long>> cache = new ConcurrentHashMap<>();
     private final Logger logger = getLogger();
 
 
@@ -31,7 +30,7 @@ public abstract class AbstractRepostCache<
     }
 
     @Override
-    public boolean contains(IdType id, AccountType account) {
+    public boolean contains(Long id, AccountType account) {
         if (cache.containsKey(account)) {
             return cache.get(account).contains(id);
         } else {
@@ -40,7 +39,7 @@ public abstract class AbstractRepostCache<
     }
 
     @Override
-    public void add(IdType id, AccountType account) {
+    public void add(Long id, AccountType account) {
         logger.info("Adding post {}", id);
 
         cache.computeIfPresent(account, (a, reposts) -> {
