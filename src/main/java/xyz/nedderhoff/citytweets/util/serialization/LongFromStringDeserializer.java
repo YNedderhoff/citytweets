@@ -5,10 +5,11 @@ import com.fasterxml.jackson.databind.deser.std.FromStringDeserializer;
 
 import java.io.IOException;
 
+
 public class LongFromStringDeserializer extends FromStringDeserializer<Long> {
 
-    protected LongFromStringDeserializer(Class<?> vc) {
-        super(vc);
+    public LongFromStringDeserializer() {
+        super(Long.class);
     }
 
     @Override
