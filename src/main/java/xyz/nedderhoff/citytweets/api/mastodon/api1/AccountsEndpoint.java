@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import xyz.nedderhoff.citytweets.api.mastodon.MastodonApi1Endpoint;
+import xyz.nedderhoff.citytweets.cache.mastodon.RetootCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonAccount;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Account;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Status;
@@ -29,11 +30,14 @@ public class AccountsEndpoint extends MastodonApi1Endpoint {
     private static final Logger logger = LoggerFactory.getLogger(AccountsEndpoint.class);
     private static final String NAME = "get_followers";
 
-    public AccountsEndpoint(RestTemplate rt, MastodonMetricService metricService) {
+    private final RetootCache retootCache;
+
+    public AccountsEndpoint(RestTemplate rt, MastodonMetricService metricService, RetootCache retootCache) {
         super(rt, metricService);
+        this.retootCache = retootCache;
     }
 
-    public Set<String> getFollowers(MastodonAccount mastodonAccount) {
+    public Set<Long> getFollowers(MastodonAccount mastodonAccount) {
         logger.debug("Fetching followers for account {}", mastodonAccount.name());
         final HttpHeaders authedHeaders = getHttpHeadersWithAuth(mastodonAccount);
         final HttpEntity<Account[]> request = new HttpEntity<>(authedHeaders);
@@ -67,15 +71,17 @@ public class AccountsEndpoint extends MastodonApi1Endpoint {
         return Arrays.stream(response.getBody()).map(Account::id).collect(Collectors.toSet());
     }
 
-    public List<Status> getStatuses(String followerId, MastodonAccount mastodonAccount) {
-        logger.debug("Fetching statuses for follower {} of account {}", followerId, mastodonAccount.name());
+    public List<Status> getStatuses(Long followerId, MastodonAccount mastodonAccount) {
+        final Long highestId = retootCache.getHighestId(mastodonAccount);
+        logger.debug("Fetching statuses for follower {} of account {} with ids higher than {}",
+                followerId, mastodonAccount.name(), highestId);
         final HttpHeaders authedHeaders = getHttpHeadersWithAuth(mastodonAccount);
         final HttpEntity<Account[]> request = new HttpEntity<>(authedHeaders);
 
         String requestUri = String.format(
                 BASE_MASTODON_API_1_URI_TEMPLATE,
                 mastodonAccount.instance(),
-                String.format("accounts/%s/statuses", followerId)
+                String.format("accounts/%s/statuses?since_id=%d", followerId, highestId)
         );
 
         final String requestUriTemplate = UriComponentsBuilder.fromHttpUrl(requestUri)

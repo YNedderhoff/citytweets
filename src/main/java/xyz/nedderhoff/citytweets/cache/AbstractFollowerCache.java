@@ -18,25 +18,24 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 public abstract class AbstractFollowerCache<
-        IdType,
         AccountType extends AccountProperties.Account,
         AccountServiceType extends AccountService<AccountType>,
         MetricServiceType extends MetricService,
         ExceptionType extends NonExistingCacheException
-        > implements FollowerCache<IdType, AccountType, AccountServiceType, ExceptionType> {
+        > implements FollowerCache<AccountType, AccountServiceType, ExceptionType> {
 
     private static final int FOLLOWER_UPDATE_RATE = 1000 * 60 * 60 * 24;
     private static final int METRICS_REPORT_RATE = 1000 * 60;
 
     private final AccountServiceType accountService;
-    private final Function<AccountType, Set<IdType>> friendsFetcher;
+    private final Function<AccountType, Set<Long>> friendsFetcher;
     private final MetricServiceType metricService;
-    private final Map<AccountType, Set<IdType>> cache = new ConcurrentHashMap<>();
+    private final Map<AccountType, Set<Long>> cache = new ConcurrentHashMap<>();
     private final Logger logger = getLogger();
 
     public AbstractFollowerCache(
             AccountServiceType accountService,
-            Function<AccountType, Set<IdType>> friendsFetcher,
+            Function<AccountType, Set<Long>> friendsFetcher,
             MetricServiceType metricService) {
         this.accountService = accountService;
         this.friendsFetcher = friendsFetcher;
@@ -58,14 +57,18 @@ public abstract class AbstractFollowerCache<
     }
 
     @Override
-    public boolean contains(IdType id, AccountType account) {
+    public boolean contains(Long id, AccountType account) {
         return cache.get(account).contains(id);
     }
 
     @Override
-    public void add(IdType id, AccountType account) {
+    public void add(Long id, AccountType account) {
         logger.info("Adding friend {} of account {}", id, account.name());
         cache.get(account).add(id);
+    }
+
+    public Set<Long> getFollowers(AccountType account) {
+        return new HashSet<>(cache.get(account));
     }
 
     private void populateCache() {

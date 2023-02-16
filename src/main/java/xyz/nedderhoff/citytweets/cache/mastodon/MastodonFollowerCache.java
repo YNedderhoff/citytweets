@@ -16,7 +16,6 @@ import xyz.nedderhoff.citytweets.service.mastodon.MastodonAccountService;
 @Component
 @EnableScheduling
 public class MastodonFollowerCache extends AbstractFollowerCache<
-        String,
         MastodonAccount,
         MastodonAccountService,
         MastodonMetricService,

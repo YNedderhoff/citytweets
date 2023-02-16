@@ -6,9 +6,8 @@ import xyz.nedderhoff.citytweets.config.AccountProperties.Account;
 import java.util.function.Consumer;
 
 public abstract class AbstractRepostService<
-        IdType,
         AccountType extends Account,
-        RepostCacheType extends RepostCache<IdType, AccountType, AccountServiceType, ?>,
+        RepostCacheType extends RepostCache<AccountType, AccountServiceType, ?>,
         AccountServiceType extends AccountService<AccountType>
         >
         implements RepostService {
@@ -21,7 +20,7 @@ public abstract class AbstractRepostService<
         this.accountService = accountService;
     }
 
-    protected boolean hasBeenSeen(IdType id, AccountType account, Consumer<IdType> hasBeenSeenLogger) {
+    protected boolean hasBeenSeen(Long id, AccountType account, Consumer<Long> hasBeenSeenLogger) {
         final boolean hasBeenSeen = repostCache.contains(id, account);
         if (hasBeenSeen) {
             hasBeenSeenLogger.accept(id);
@@ -39,7 +38,7 @@ public abstract class AbstractRepostService<
         return isAuthorBlocked;
     }
 
-    protected void cache(IdType id, AccountType account) {
+    protected void cache(Long id, AccountType account) {
         repostCache.add(id, account);
     }
 

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import xyz.nedderhoff.citytweets.api.mastodon.api1.AccountsEndpoint;
 import xyz.nedderhoff.citytweets.api.mastodon.api1.StatusEndpoint;
+import xyz.nedderhoff.citytweets.cache.mastodon.MastodonFollowerCache;
 import xyz.nedderhoff.citytweets.cache.mastodon.RetootCache;
 import xyz.nedderhoff.citytweets.config.AccountProperties.MastodonAccount;
 import xyz.nedderhoff.citytweets.domain.mastodon.http.Status;
@@ -13,21 +14,23 @@ import xyz.nedderhoff.citytweets.service.AbstractRepostService;
 import java.util.function.Consumer;
 
 @Service
-public class MastodonBoostService extends AbstractRepostService<String, MastodonAccount, RetootCache, MastodonAccountService> {
+public class MastodonBoostService extends AbstractRepostService<MastodonAccount, RetootCache, MastodonAccountService> {
     private static final Logger logger = LoggerFactory.getLogger(MastodonBoostService.class);
+    private final MastodonFollowerCache followerCache;
     private final AccountsEndpoint accountsEndpoint;
     private final StatusEndpoint statusEndpoint;
 
 
     public MastodonBoostService(
             MastodonAccountService accountService,
-            AccountsEndpoint accountsEndpoint,
+            MastodonFollowerCache followerCache,
             StatusEndpoint statusEndpoint,
-            RetootCache retootCache
-    ) {
+            RetootCache retootCache,
+            AccountsEndpoint accountsEndpoint) {
         super(retootCache, accountService);
-        this.accountsEndpoint = accountsEndpoint;
+        this.followerCache = followerCache;
         this.statusEndpoint = statusEndpoint;
+        this.accountsEndpoint = accountsEndpoint;
     }
 
     @Override
@@ -43,7 +46,7 @@ public class MastodonBoostService extends AbstractRepostService<String, Mastodon
     private void boost() {
         accountService.getAccounts().forEach(mastodonAccount -> {
             logger.info("Looking for unseen toots mentioning Mastodon account {}", mastodonAccount.name());
-            accountsEndpoint.getFollowers(mastodonAccount)
+            followerCache.getFollowers(mastodonAccount)
                     .stream()
                     .flatMap(follower -> accountsEndpoint.getStatuses(follower, mastodonAccount).stream())
                     .filter(status -> shouldRetoot(status, mastodonAccount))
@@ -56,28 +59,44 @@ public class MastodonBoostService extends AbstractRepostService<String, Mastodon
         final boolean mentionsOwnAccount = status.mentions().stream()
                 .anyMatch(mention -> mention.username().equals(account.name()));
         if (mentionsOwnAccount) {
-            logger.warn("Toot {} from user {} mentions own account:\n{}", status.id(), status.account().webfingerUri(), status.spoiler_text());
+            logger.warn(
+                    "Toot {} from user {} mentions own account:{}",
+                    status.id(), status.account().webfingerUri(), status.url()
+            );
         }
         return mentionsOwnAccount;
     }
 
     private boolean shouldRetoot(Status status, MastodonAccount account) {
-        final Consumer<String> hasBeenSeenLogger = (id) ->
-                logger.warn("Toot {} from user {} was already reposted:\n{}", id, status.account().webfingerUri(), status.spoiler_text());
+        final Consumer<Long> hasBeenSeenLogger = (id) ->
+                logger.warn("Toot {} from user {} was already reposted: {}", id, status.account().webfingerUri(), status.url());
         final Consumer<String> authorBlockedLogger = (username) ->
-                logger.warn("Toot {} from user {} can't be reposted as author is blocked:\n{}", status.id(), username, status.spoiler_text());
+                logger.warn("Toot {} from user {} can't be reposted as author is blocked: {}", status.id(), username, status.url());
 
-        return statusMentionsOwnAccount(status, account)
-                && !isFromMe(status, account)
+        return !hasRebloggedStatus(status)
                 && !hasBeenSeen(status.id(), account, hasBeenSeenLogger)
+                && statusMentionsOwnAccount(status, account)
+                && !isFromMe(status, account)
                 && !isAuthorBlocked(status.account().webfingerUri(), account, authorBlockedLogger);
+    }
+
+    private static boolean hasRebloggedStatus(Status status) {
+        final boolean reblogged = status.reblogged();
+
+        if (reblogged) {
+            logger.warn(
+                    "Toot {} from user {} has been reposted already according to Mastodon: {}",
+                    status.id(), status.account().webfingerUri(), status.url()
+            );
+        }
+        return reblogged;
     }
 
 
     protected boolean isFromMe(Status status, MastodonAccount account) {
         final boolean isFromMe = status.account().webfingerUri().equals(account.name() + "@" + account.instance());
         if (isFromMe) {
-            logger.warn("Toot {} from user {} is from me:\n{}", status.id(), status.account().webfingerUri(), status.spoiler_text());
+            logger.warn("Toot {} from user {} is from me: {}", status.id(), status.account().webfingerUri(), status.url());
         }
         return isFromMe;
     }

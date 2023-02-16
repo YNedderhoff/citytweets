@@ -12,13 +12,13 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractRepostCache<
-        IdType,
         AccountType extends Account,
         AccountServiceType extends AccountService<AccountType>,
         ExceptionType extends NonExistingCacheException
-        > implements RepostCache<IdType, AccountType, AccountServiceType, ExceptionType> {
+        > implements RepostCache<AccountType, AccountServiceType, ExceptionType> {
     protected static final String CACHE_INEXISTENT_EXCEPTION_MESSAGE = "No cache exists for %s account %s";
-    private final Map<AccountType, Set<IdType>> cache = new ConcurrentHashMap<>();
+    private final Map<AccountType, Set<Long>> repostCache = new ConcurrentHashMap<>();
+    private final Map<AccountType, Long> highestIdCache = new ConcurrentHashMap<>();
     private final Logger logger = getLogger();
 
 
@@ -26,36 +26,46 @@ public abstract class AbstractRepostCache<
         this.logger.debug("Initialising ...");
         accountService.getAccounts().forEach(account -> {
             this.logger.debug("Preparing cache for account {}", account.name());
-            cache.computeIfAbsent(account, a -> new HashSet<>());
+            repostCache.computeIfAbsent(account, a -> new HashSet<>());
         });
     }
 
     @Override
-    public boolean contains(IdType id, AccountType account) {
-        if (cache.containsKey(account)) {
-            // TODO remove log
-            logger.info("Cache contains account {}", account.name());
-            final boolean contains = cache.get(account).contains(id);
-            // TODO remove log
-            logger.info("Cache contains status with id {}: {}", id, contains);
-            return contains;
+    public boolean contains(Long id, AccountType account) {
+        if (repostCache.containsKey(account)) {
+            return repostCache.get(account).contains(id);
         } else {
             throw getException(getExceptionMessage(account));
         }
     }
 
+    public Long getHighestId(AccountType accountType) {
+        if (highestIdCache.containsKey(accountType)) {
+            return highestIdCache.get(accountType);
+        }
+
+        return 0L;
+    }
+
     @Override
-    public void add(IdType id, AccountType account) {
+    public void add(Long id, AccountType account) {
         logger.info("Adding post {}", id);
 
-        cache.computeIfPresent(account, (a, reposts) -> {
+        repostCache.computeIfPresent(account, (a, reposts) -> {
             reposts.add(id);
             return reposts;
         });
-        cache.computeIfAbsent(account, a -> new HashSet<>(List.of(id)));
+        repostCache.computeIfAbsent(account, a -> new HashSet<>(List.of(id)));
 
-        // TODO remove call
-        contains(id, account);
+        highestIdCache.computeIfPresent(account, (a, currentHighestId) -> {
+            if (id > currentHighestId) {
+                return id;
+            } else {
+                return currentHighestId;
+            }
+        });
+
+        highestIdCache.computeIfAbsent(account, a -> id);
     }
 
     protected abstract ExceptionType getException(String s);

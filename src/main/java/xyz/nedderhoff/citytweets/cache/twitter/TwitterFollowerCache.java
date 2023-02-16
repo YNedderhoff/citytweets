@@ -16,7 +16,6 @@ import xyz.nedderhoff.citytweets.service.twitter.TwitterAccountService;
 @Component
 @EnableScheduling
 public class TwitterFollowerCache extends AbstractFollowerCache<
-        Long,
         TwitterAccount,
         TwitterAccountService,
         TwitterMetricService,
