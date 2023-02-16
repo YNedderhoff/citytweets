@@ -75,7 +75,9 @@ public class AccountsEndpoint extends MastodonApi1Endpoint {
 
     public List<Status> getStatuses(Long followerId, MastodonAccount mastodonAccount) {
         final Long highestId = retootCache.getHighestId(mastodonAccount);
-        logger.debug("Fetching statuses for follower {} of account {} with ids higher than {}",
+
+        // TODO consider reducing log level again
+        logger.info("Fetching statuses for follower {} of account {} with ids higher than {}",
                 followerId, mastodonAccount.name(), highestId);
         final HttpHeaders authedHeaders = getHttpHeadersWithAuth(mastodonAccount);
         final HttpEntity<Account[]> request = new HttpEntity<>(authedHeaders);
