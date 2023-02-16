@@ -19,7 +19,9 @@ import xyz.nedderhoff.citytweets.monitoring.mastodon.MastodonMetricService;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -81,19 +83,24 @@ public class AccountsEndpoint extends MastodonApi1Endpoint {
         String requestUri = String.format(
                 BASE_MASTODON_API_1_URI_TEMPLATE,
                 mastodonAccount.instance(),
-                String.format("accounts/%s/statuses?since_id=%d", followerId, highestId)
+                String.format("accounts/%s/statuses", followerId)
         );
 
         final String requestUriTemplate = UriComponentsBuilder.fromHttpUrl(requestUri)
+                .queryParam("since_id", "{sinceId}")
                 .encode()
                 .toUriString();
+
+        Map<String, Long> params = new HashMap<>();
+        params.put("sinceId", highestId);
 
         Stopwatch timer = Stopwatch.createStarted();
         final ResponseEntity<Status[]> response = rt.exchange(
                 requestUriTemplate,
                 HttpMethod.GET,
                 request,
-                Status[].class
+                Status[].class,
+                params
         );
         timer.stop();
         metricService.timeEndpoint("get_statuses", timer.elapsed(TimeUnit.MILLISECONDS));
