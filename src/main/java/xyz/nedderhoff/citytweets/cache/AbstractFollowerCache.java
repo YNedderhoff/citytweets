@@ -91,7 +91,7 @@ public abstract class AbstractFollowerCache<
         });
         totalTimer.stop();
         metricService.time("follower_cache_populate_time_total", totalTimer.elapsed(TimeUnit.MILLISECONDS));
-        this.logger.info("Warmed up in {}s", totalTimer.elapsed(TimeUnit.SECONDS));
+        this.logger.info("Populated/Refreshed in {}s", totalTimer.elapsed(TimeUnit.SECONDS));
     }
 
     protected abstract Logger getLogger();
