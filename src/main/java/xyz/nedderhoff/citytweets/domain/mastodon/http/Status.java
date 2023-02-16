@@ -11,11 +11,18 @@ public record Status(
         String url,
         String spoiler_text,
         Account account,
-        List<Mention> mentions
+        List<Mention> mentions,
+        Reblog reblog
 ) {
     public record Mention(
             String id,
             String username
     ) {
+    }
+
+    public record Reblog(
+            String id
+    ) {
+
     }
 }
